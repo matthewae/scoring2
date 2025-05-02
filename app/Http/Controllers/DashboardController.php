@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AssessmentRequest;
 
 class DashboardController extends Controller
 {
@@ -25,6 +26,7 @@ class DashboardController extends Controller
         if (Auth::user()->status !== 'user') {
             return redirect()->route('dashboard.guest');
         }
-        return view('dashboard.user.index');
+        $assessmentRequests = AssessmentRequest::with(['project', 'guest'])->get();
+        return view('dashboard.user.index', compact('assessmentRequests'));
     }
 }
