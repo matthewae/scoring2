@@ -12,16 +12,17 @@ class ProjectDocument extends Model
 
     protected $fillable = [
         'project_id',
-        'document_type',
-        'document_number',
-        'document_date',
-        'file_path',
-        'notes',
-        'status'
+        'no',
+        'tahapan',
+        'uraian',
+        'kelengkapan',
+        'catatan',
+        'sumber',
+        'file_path'
     ];
 
     protected $casts = [
-        'document_date' => 'date'
+        'kelengkapan' => 'boolean'
     ];
 
     /**

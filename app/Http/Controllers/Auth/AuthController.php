@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-
 class AuthController extends Controller
 {
     public function showLoginForm()
@@ -22,7 +20,12 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        if (Auth::attempt($credentials)) {
+        $user = User::where('username', $request->username)
+                    ->where('password', $request->password)
+                    ->first();
+
+        if ($user) {
+            Auth::login($user);
             $request->session()->regenerate();
             
             $user = Auth::user();
@@ -52,7 +55,7 @@ class AuthController extends Controller
 
         User::create([
             'username' => $request->username,
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
         ]);
 
         return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');

@@ -6,6 +6,17 @@
     <p class="text-gray-600 mb-4">Sebagai guest, Anda dapat mengajukan penilaian dokumen konstruksi dan melihat riwayat pengajuan Anda.</p>
 </div>
 
+<!-- Video Tutorial -->
+<div class="bg-white rounded-lg shadow-md p-6 mb-6">
+    <h2 class="text-xl font-semibold mb-4">
+        <i class="fas fa-video text-indigo-500 mr-2"></i>
+        Video Tutorial
+    </h2>
+    <div class="aspect-w-16 aspect-h-9">
+        <iframe class="w-full h-96 rounded-lg" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+</div>
+
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <!-- Pengajuan Dokumen -->
     <div class="bg-white rounded-lg shadow-md p-6">
@@ -14,7 +25,7 @@
             Pengajuan Dokumen
         </h3>
         <p class="text-gray-600 mb-4">Ajukan dokumen konstruksi Anda untuk dinilai oleh tim ahli kami.</p>
-        <a href="#" class="block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-center">
+        <a href="{{ route('project-documents.create') }}" class="block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-center">
             Ajukan Dokumen
         </a>
     </div>
