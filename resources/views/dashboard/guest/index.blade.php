@@ -25,7 +25,7 @@
             Pengajuan Dokumen
         </h3>
         <p class="text-gray-600 mb-4">Ajukan dokumen konstruksi Anda untuk dinilai oleh tim ahli kami.</p>
-        <a href="{{ route('project-documents.create') }}" class="block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-center">
+        <a href="{{ route('dashboard.guest.project-documents.create') }}" class="block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-center">
             Ajukan Dokumen
         </a>
     </div>
@@ -37,7 +37,7 @@
             Riwayat Pengajuan
         </h3>
         <p class="text-gray-600 mb-4">Lihat status dan riwayat pengajuan dokumen Anda.</p>
-        <a href="#" class="block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 text-center">
+        <a href="{{ route('dashboard.guest.project-documents.history') }}" class="block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 text-center">
             Lihat Riwayat
         </a>
     </div>
@@ -49,7 +49,7 @@
             Panduan Penggunaan
         </h3>
         <p class="text-gray-600 mb-4">Pelajari cara menggunakan sistem scoring dokumen konstruksi.</p>
-        <a href="#" class="block bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 text-center">
+        <a href="{{ route('dashboard.guest.guide') }}" class="block bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 text-center">
             Baca Panduan
         </a>
     </div>

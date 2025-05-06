@@ -34,9 +34,21 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-// Guest Routes
-Route::get('/dashboard/guest', [DashboardController::class, 'guestDashboard'])->name('dashboard.guest');
+Route::middleware(['auth', 'role:guest'])->prefix('dashboard/guest')->name('dashboard.guest.')->group(function () {
+    Route::get('/', [GuestDashboardController::class, 'index'])->name('index');
+    Route::get('/guide', [GuestGuideController::class, 'index'])->name('guide');
+    Route::get('/project-documents/history', [GuestProjectDocumentController::class, 'history'])->name('project-documents.history');
+});
 Route::post('/guest/assessment', [AssessmentRequestController::class, 'store'])->name('guest.submit.assessment');
+
+// Guest Project Document Routes
+Route::prefix('dashboard/guest/project-documents')
+    ->name('dashboard.guest.project-documents.')
+    ->middleware(['auth', 'ensure.guest'])
+    ->group(function () {
+        Route::get('/create', [\App\Http\Controllers\Dashboard\Guest\ProjectDocumentController::class, 'create'])->name('create');
+        Route::post('/', [\App\Http\Controllers\Dashboard\Guest\ProjectDocumentController::class, 'store'])->name('store');
+    });
 
 // Authenticated User Routes
 Route::middleware(['auth'])->group(function () {

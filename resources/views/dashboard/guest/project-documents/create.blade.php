@@ -4,8 +4,8 @@
 <div class="bg-white rounded-lg shadow-md p-6">
     <div class="flex items-center justify-between mb-6">
         <h2 class="text-2xl font-bold">Upload Dokumen Project</h2>
-        <a href="{{ route('dashboard.user.projects.show', $project) }}" class="text-gray-600 hover:text-gray-800">
-            <i class="fas fa-arrow-left mr-2"></i>Kembali ke Detail Project
+        <a href="{{ route('dashboard.guest') }}" class="text-gray-600 hover:text-gray-800">
+            <i class="fas fa-arrow-left mr-2"></i>Kembali ke Dashboard
         </a>
     </div>
 
@@ -19,10 +19,23 @@
         </div>
     @endif
 
-    <form action="{{ route('dashboard.user.project-documents.store', $project) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="{{ route('dashboard.guest.project-documents.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
 
         <div class="space-y-4">
+            <div>
+                <label for="project_id" class="block text-sm font-medium text-gray-700 mb-1">Pilih Project</label>
+                <select name="project_id" id="project_id" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Pilih Project</option>
+                    @foreach($projects as $project)
+                        <option value="{{ $project->id }}" {{ old('project_id') == $project->id ? 'selected' : '' }}>
+                            {{ $project->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
             <div>
                 <label for="document_type_id" class="block text-sm font-medium text-gray-700 mb-1">Jenis Dokumen</label>
                 <select name="document_type_id" id="document_type_id" required

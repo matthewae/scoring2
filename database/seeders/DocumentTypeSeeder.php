@@ -17,7 +17,9 @@ class DocumentTypeSeeder extends Seeder
         // ===================================
         
         // 1.a. Dokumen DED perencana
-        $dedDoc = DocumentType::create([
+        $dedDoc = DocumentType::firstOrCreate(
+            ['code' => 'PRA_TENDER_DED'],
+            [
             'code' => 'PRA_TENDER_DED',
             'no' => '1.a',
             'tahapan' => 'Pra-tender',
@@ -379,6 +381,7 @@ class DocumentTypeSeeder extends Seeder
         // j. Schedule
         $schedule = DocumentType::create([
             'code' => 'PERSIAPAN_SCHEDULE',
+            'parent_code' => 'PERSIAPAN',
             'no' => '3.j',
             'tahapan' => 'Persiapan',
             'uraian' => 'Schedule',
@@ -519,7 +522,18 @@ class DocumentTypeSeeder extends Seeder
             ['no' => '2', 'uraian' => 'Buku harian, yang memuat semua kejadian, perintah/petunjuk yang penting dari Pemimpin Pelaksana Kegiatan, Kontraktor Pelaksana dan Konsultan MK'],
             ['no' => '3', 'uraian' => 'Laporan Harian'],
             ['no' => '4', 'uraian' => 'Laporan Mingguan dan bulanan sesuai resume laporan harian'],
-            ['no' => '5', 'uraian' => 'Berita'],
+            ['no' => '5', 'uraian' => 'Berita']
+        ];
+
+        foreach ($keluaranMKItems as $item) {
+            DocumentType::create([
+                'code' => 'PELAKSANAAN_KAK_MK_KELUARAN_' . $item['no'],
+                'parent_code' => 'PELAKSANAAN_KAK_MK_KELUARAN',
+                'no' => '4.a.v.' . $item['no'],
+                'tahapan' => 'Pelaksanaan',
+                'uraian' => $item['uraian']
+            ]);
+        }
 
         // 5. Dokumen Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)
         // a. Laporan Harian
@@ -1241,7 +1255,19 @@ class DocumentTypeSeeder extends Seeder
             'tahapan' => 'Addendum',
             'uraian' => 'Persetujuan Perubahan atau Permutakhiran Program Mutu oleh PPK (jika ada)'
         ]);
-                'no' => '6.a.' . $bentuk['no'],
+
+        // Bentuk perubahan kontrak
+        $bentukPerubahan = [
+            ['no' => 'i', 'uraian' => 'Perubahan spesifikasi teknis'],
+            ['no' => 'ii', 'uraian' => 'Perubahan jadwal pelaksanaan'],
+            ['no' => 'iii', 'uraian' => 'Perubahan harga kontrak']
+        ];
+
+        foreach ($bentukPerubahan as $bentuk) {
+            DocumentType::create([
+                'code' => 'ADDENDUM_BENTUK_' . strtoupper(str_replace(' ', '_', $bentuk['no'])),
+                'parent_code' => 'ADDENDUM_PROGRAM_MUTU',
+                'no' => '6.e.' . $bentuk['no'],
                 'tahapan' => 'Addendum',
                 'uraian' => $bentuk['uraian'],
                 'is_file_required' => false
@@ -2018,7 +2044,7 @@ class DocumentTypeSeeder extends Seeder
         
 
         // j. Schedule
-        DocumentType::create([
+        $schedule = DocumentType::create([
             'code' => 'PERSIAPAN_SCHEDULE',
             'parent_code' => 'PERSIAPAN',
             'no' => '3.j',
