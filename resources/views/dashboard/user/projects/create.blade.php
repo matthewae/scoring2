@@ -18,8 +18,8 @@
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama Pekerjaan</label>
                     <input type="text" name="name" id="name" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('name') border-red-500 @enderror" 
-                           value="{{ old('name') }}" required>
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('name') border-red-500 @enderror" 
+                            value="{{ old('name') }}" required>
                     @error('name')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
@@ -28,19 +28,19 @@
                 <div>
                     <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Lokasi</label>
                     <input type="text" name="location" id="location" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('location') border-red-500 @enderror" 
-                           value="{{ old('location') }}" required>
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('location') border-red-500 @enderror" 
+                            value="{{ old('location') }}" required>
                     @error('location')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div>
-                    <label for="institution" class="block text-sm font-medium text-gray-700 mb-1">Kementerian/Lembaga/Perangkat Daerah/Institusi</label>
-                    <input type="text" name="institution" id="institution" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('institution') border-red-500 @enderror" 
-                           value="{{ old('institution') }}" required>
-                    @error('institution')
+                    <label for="ministry_institution" class="block text-sm font-medium text-gray-700 mb-1">Kementerian/Lembaga/Perangkat Daerah/Institusi</label>
+                    <input type="text" name="ministry_institution" id="ministry_institution" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('ministry_institution') border-red-500 @enderror" 
+                           value="{{ old('ministry_institution') }}" required>
+                    @error('ministry_institution')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
@@ -56,11 +56,11 @@
                 </div>
 
                 <div>
-                    <label for="supervision_consultant" class="block text-sm font-medium text-gray-700 mb-1">Konsultan MK</label>
-                    <input type="text" name="supervision_consultant" id="supervision_consultant" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('supervision_consultant') border-red-500 @enderror" 
-                           value="{{ old('supervision_consultant') }}" required>
-                    @error('supervision_consultant')
+                    <label for="mk_consultant" class="block text-sm font-medium text-gray-700 mb-1">Konsultan MK</label>
+                    <input type="text" name="mk_consultant" id="mk_consultant" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('mk_consultant') border-red-500 @enderror" 
+                           value="{{ old('mk_consultant') }}" required>
+                    @error('mk_consultant')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
@@ -110,11 +110,11 @@
                 </div>
 
                 <div>
-                    <label for="duration" class="block text-sm font-medium text-gray-700 mb-1">Jangka Waktu (Hari)</label>
-                    <input type="number" name="duration" id="duration" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('duration') border-red-500 @enderror" 
-                           value="{{ old('duration') }}" required>
-                    @error('duration')
+                    <label for="duration_days" class="block text-sm font-medium text-gray-700 mb-1">Jangka Waktu (Hari)</label>
+                    <input type="number" name="duration_days" id="duration_days" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('duration_days') border-red-500 @enderror" 
+                           value="{{ old('duration_days') }}" required>
+                    @error('duration_days')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
@@ -187,7 +187,9 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             @if($type->is_file_required)
-                                                <input type="file" name="document[{{ $type->code }}]" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                                                <input type="file" name="documents[{{ $type->code }}][file]" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                                                <input type="text" name="documents[{{ $type->code }}][catatan]" placeholder="Catatan" class="mt-2 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                                <input type="text" name="documents[{{ $type->code }}][sumber]" placeholder="Sumber" class="mt-2 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                             @else
                                                 <span class="text-gray-500 italic">Tidak memerlukan file</span>
                                             @endif
@@ -214,7 +216,9 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 @if($subType->is_file_required)
-                                                    <input type="file" name="document[{{ $subType->code }}]" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                                                    <input type="file" name="documents[{{ $subType->code }}][file]" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                                                    <input type="text" name="documents[{{ $subType->code }}][catatan]" placeholder="Catatan" class="mt-2 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                                    <input type="text" name="documents[{{ $subType->code }}][sumber]" placeholder="Sumber" class="mt-2 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                                 @else
                                                     <span class="text-gray-500 italic">Tidak memerlukan file</span>
                                                 @endif

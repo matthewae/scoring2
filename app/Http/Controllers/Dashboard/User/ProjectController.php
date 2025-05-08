@@ -31,53 +31,61 @@ class ProjectController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string',
-            'institution' => 'required|string',
+            'ministry_institution' => 'required|string',
             'planning_consultant' => 'required|string',
-            'supervision_consultant' => 'required|string',
+            'mk_consultant' => 'required|string',
             'contractor' => 'required|string',
             'selection_method' => 'required|in:tender,direct_appointment,direct_procurement',
             'contract_value' => 'required|numeric|min:0',
             'spmk_date' => 'required|date',
-            'duration' => 'required|integer|min:1',
+            'duration_days' => 'required|integer|min:1',
+            'status.*' => 'required|in:approved,rejected',
+            'documents.*.file' => 'nullable|file|max:10240',
+            'documents.*.catatan' => 'nullable|string',
+            'documents.*.sumber' => 'nullable|string',
         ]);
 
-        // Validasi dokumen wajib
-        $documentTypes = DocumentType::where('is_file_required', true)->get();
-        foreach ($documentTypes as $docType) {
-            if (!$request->hasFile("documents.{$docType->code}.file")) {
-                return back()
-                    ->withErrors(["documents.{$docType->code}.file" => "Dokumen {$docType->uraian} wajib diupload."])
-                    ->withInput();
+        try {
+            $project = new Project();
+            $project->name = $request->name;
+            $project->location = $request->location;
+            $project->ministry_institution = $request->ministry_institution;
+            $project->planning_consultant = $request->planning_consultant;
+            $project->mk_consultant = $request->mk_consultant;
+            $project->contractor = $request->contractor;
+            $project->selection_method = $request->selection_method;
+            $project->contract_value = $request->contract_value;
+            $project->spmk_date = $request->spmk_date;
+            $project->duration_days = $request->duration_days;
+            $project->status = 'planning';
+            $project->user_id = Auth::id();
+            $project->save();
+
+            // Store document statuses and files
+            foreach ($request->status as $documentTypeCode => $status) {
+                $documentData = [
+                    'document_type_code' => $documentTypeCode,
+                    'status' => $status,
+                    'catatan' => $request->input("documents.{$documentTypeCode}.catatan"),
+                    'sumber' => $request->input("documents.{$documentTypeCode}.sumber"),
+                ];
+
+                // Handle file upload if exists
+                if ($request->hasFile("documents.{$documentTypeCode}.file")) {
+                    $file = $request->file("documents.{$documentTypeCode}.file");
+                    $path = $file->store('project-documents/' . $project->id, 'public');
+                    $documentData['file_path'] = $path;
+                }
+
+                $project->documents()->create($documentData);
             }
-        }
 
-        $project = new Project($validated);
-        $project->user_id = Auth::id();
-        $project->save();
+            return redirect()->route('dashboard.user.projects.index')
+                ->with('success', 'Project berhasil dibuat beserta dokumen-dokumennya.');
 
-        // Simpan semua tipe dokumen dari seeder
-        $allDocumentTypes = DocumentType::all();
-        foreach ($allDocumentTypes as $docType) {
-            $documentData = [
-                'no' => $docType->no,
-                'tahapan' => $docType->tahapan,
-                'uraian' => $docType->uraian,
-                'kelengkapan' => false,
-                'catatan' => null,
-                'sumber' => null,
-                'file_path' => null
-            ];
-
-            // Jika ada file yang diupload untuk dokumen ini
-            if ($request->hasFile("documents.{$docType->code}.file")) {
-                $file = $request->file("documents.{$docType->code}.file");
-                $documentData['file_path'] = $file->store('project-documents/' . $project->id);
-                $documentData['kelengkapan'] = true;
-                $documentData['catatan'] = $request->input("documents.{$docType->code}.catatan");
-                $documentData['sumber'] = $request->input("documents.{$docType->code}.sumber");
-            }
-
-            $project->documents()->create($documentData);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat menyimpan project. Silakan coba lagi.')
+                ->withInput();
         }
 
         return redirect()
