@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', '') }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -21,7 +21,7 @@
         <!-- Sidebar -->
         <div class="bg-white w-64 shadow-lg fixed h-full transition-all duration-300 ease-in-out" id="sidebar">
             <div class="p-4 border-b border-gray-200 flex items-center">
-                <div class="text-xl font-semibold text-gray-800">{{ config('app.name', 'Laravel') }}</div>
+                <div class="text-xl font-semibold text-gray-800">{{ config('app.name', '') }}</div>
             </div>
             <nav class="mt-4 overflow-hidden">
                 @if(Auth::user()->status === 'guest')

@@ -38,6 +38,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [DashboardController::class, 'guestDashboard'])->name('index');
         Route::get('/guide', [DashboardController::class, 'guide'])->name('guide');
         
+        // Guest Project Scores
+        Route::prefix('project-scores')->name('project-scores.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Dashboard\Guest\ProjectScoreController::class, 'index'])->name('index');
+            Route::get('/{projectScore}', [\App\Http\Controllers\Dashboard\Guest\ProjectScoreController::class, 'show'])->name('show');
+        });
+        
         // Guest Project Documents
         Route::prefix('project-documents')->name('project-documents.')->group(function () {
             Route::get('/create', [\App\Http\Controllers\Dashboard\Guest\ProjectDocumentController::class, 'create'])->name('create');
