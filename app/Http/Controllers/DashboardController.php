@@ -29,4 +29,20 @@ class DashboardController extends Controller
         $assessmentRequests = AssessmentRequest::with(['project', 'guest'])->get();
         return view('dashboard.user.index', compact('assessmentRequests'));
     }
+
+    public function guide()
+    {
+        if (Auth::user()->status !== 'guest') {
+            return redirect()->route('dashboard.user');
+        }
+        return view('dashboard.guest.guide.index');
+    }
+
+    public function projectDocumentsHistory()
+    {
+        if (Auth::user()->status !== 'guest') {
+            return redirect()->route('dashboard.user');
+        }
+        return view('dashboard.guest.project-documents.history');
+    }
 }

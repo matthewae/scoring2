@@ -4,7 +4,7 @@
 <div class="bg-white rounded-lg shadow-md p-6">
     <div class="flex items-center justify-between mb-6">
         <h2 class="text-2xl font-bold">Panduan Penggunaan Sistem</h2>
-        <a href="{{ route('dashboard.guest') }}" class="text-gray-600 hover:text-gray-800">
+        <a href="{{ route('dashboard.guest.index') }}" class="text-gray-600 hover:text-gray-800">
             <i class="fas fa-arrow-left mr-2"></i>Kembali ke Dashboard
         </a>
     </div>

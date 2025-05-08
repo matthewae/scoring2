@@ -119,421 +119,157 @@
                     @enderror
                 </div>
             </div>
+        </div>
 
-            <!-- Tabel Dokumen -->
-            <div class="mt-8">
-                <h3 class="text-lg font-semibold mb-4">Checklist Pemeriksaan Kelengkapan Dokumen Administrasi</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 px-4 py-2">No.</th>
-                                <th class="border border-gray-300 px-4 py-2">Tahapan</th>
-                                <th class="border border-gray-300 px-4 py-2">Uraian Teknis Administrasi</th>
-                                <th class="border border-gray-300 px-4 py-2">Catatan</th>
-                                <th class="border border-gray-300 px-4 py-2">Status</th>
-                                <th class="border border-gray-300 px-4 py-2">Skor</th>
-                                <th class="border border-gray-300 px-4 py-2">Sumber</th>
-                                <th class="border border-gray-300 px-4 py-2">File</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @php
-                            $documentTypes = \App\Models\DocumentType::orderBy('no')->get();
-                            $parentDocs = $documentTypes->whereNull('parent_code');
-                        @endphp
+        <!-- Checklist Dokumen -->
+        <div class="mt-8">
+            <h3 class="text-lg font-semibold mb-4">Checklist Dokumen yang Diperlukan</h3>
+            
+            <!-- Navigasi Tahapan -->
+            <div class="flex items-center justify-between mb-6">
+                <button type="button" onclick="prevSlide()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    <i class="fas fa-chevron-left mr-2"></i>Sebelumnya
+                </button>
+                <div class="text-gray-600">
+                    Tahap <span id="currentSlide">1</span> dari <span id="totalSlides">8</span>
+                </div>
+                <button type="button" onclick="nextSlide()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    Selanjutnya<i class="fas fa-chevron-right ml-2"></i>
+                </button>
+            </div>
+            
+            @php
+                $tahapan = [
+                    'Pra-Tender',
+                    'Tender', 
+                    'Persiapan Pelaksanaan Pekerjaan Konstruksi',
+                    'Pelaksanaan Pekerjaan Konstruksi',
+                    'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+                    'Perubahan Kontrak (Addendum)',
+                    'Kontrak Kritis',
+                    'Pemutusan Kontrak sampai dengan Penetapan Sanksi Daftar Hitam'
+                ];
+            @endphp
 
-                        @foreach($parentDocs as $parent)
-                            <tr class="bg-gray-50">
-                                <td class="border border-gray-300 px-4 py-2">{{ $parent->no }}</td>
-                                <td class="border border-gray-300 px-4 py-2">{{ $parent->tahapan }}</td>
-                                <td class="border border-gray-300 px-4 py-2 font-semibold">{{ $parent->uraian }}</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="text" name="documents[{{ $parent->code }}][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <select name="documents[{{ $parent->code }}][status]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                        <option value="pending">Pending</option>
-                                        <option value="approved">Disetujui</option>
-                                        <option value="rejected">Ditolak</option>
-                                    </select>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="number" name="documents[{{ $parent->code }}][score]" value="0" class="w-full px-2 py-1 border border-gray-300 rounded" readonly>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="text" name="documents[{{ $parent->code }}][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="{{ $parent->tahapan }}" readonly>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    @if($parent->is_file_required)
-                                        <input type="file" name="documents[{{ $parent->code }}][file]" class="w-full px-2 py-1">
-                                    @endif
-                                </td>
-                            </tr>
-
-                            @foreach($documentTypes->where('parent_code', $parent->code) as $child)
+            @foreach($tahapan as $index => $tahap)
+                <div class="mb-6 slide-content" style="display: {{ $index === 0 ? 'block' : 'none' }};">
+                    <h4 class="text-md font-medium text-gray-800 mb-3">{{ $tahap }}</h4>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
                                 <tr>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $child->no }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $child->tahapan }}</td>
-                                    <td class="border border-gray-300 px-4 py-2 pl-8">{{ $child->uraian }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">
-                                        <input type="text" name="documents[{{ $child->code }}][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                                    </td>
-                                    <td class="border border-gray-300 px-4 py-2">
-                                        <select name="documents[{{ $child->code }}][status]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                            <option value="pending">Pending</option>
-                                            <option value="approved">Disetujui</option>
-                                            <option value="rejected">Ditolak</option>
-                                        </select>
-                                    </td>
-                                    <td class="border border-gray-300 px-4 py-2">
-                                        <input type="number" name="documents[{{ $child->code }}][score]" value="0" class="w-full px-2 py-1 border border-gray-300 rounded" readonly>
-                                    </td>
-                                    <td class="border border-gray-300 px-4 py-2">
-                                        <input type="text" name="documents[{{ $child->code }}][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="{{ $child->tahapan }}" readonly>
-                                    </td>
-                                    <td class="border border-gray-300 px-4 py-2">
-                                        @if($child->is_file_required)
-                                            <input type="file" name="documents[{{ $child->code }}][file]" class="w-full px-2 py-1">
-                                        @endif
-                                    </td>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tahapan</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uraian Teknis Administrasi</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelengkapan Dokumen</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Upload File</th>
                                 </tr>
-
-                                @foreach($documentTypes->where('parent_code', $child->code) as $grandchild)
-                                    <tr>
-                                        <td class="border border-gray-300 px-4 py-2">{{ $grandchild->no }}</td>
-                                        <td class="border border-gray-300 px-4 py-2">{{ $grandchild->tahapan }}</td>
-                                        <td class="border border-gray-300 px-4 py-2 pl-12">{{ $grandchild->uraian }}</td>
-                                        <td class="border border-gray-300 px-4 py-2">
-                                            <input type="text" name="documents[{{ $grandchild->code }}][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @php $no = 1; @endphp
+                                @foreach($documentTypes->where('tahapan', $tahap)->whereNull('parent_code') as $type)
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $no++ }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $tahap }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-900">{{ $type->uraian }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <span id="kelengkapan_{{ $type->code }}" class="px-2 py-1 text-sm rounded-full {{ old('status.' . $type->code) === 'approved' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                                {{ old('status.' . $type->code) === 'approved' ? 'Ada' : 'Tidak Ada' }}
+                                            </span>
                                         </td>
-                                        <td class="border border-gray-300 px-4 py-2">
-                                            <select name="documents[{{ $grandchild->code }}][status]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                                <option value="pending">Pending</option>
-                                                <option value="approved">Disetujui</option>
-                                                <option value="rejected">Ditolak</option>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <select name="status[{{ $type->code }}]" onchange="updateKelengkapan('{{ $type->code }}', this.value)" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                                <option value="">Pilih Status</option>
+                                                <option value="approved" {{ old('status.' . $type->code) === 'approved' ? 'selected' : '' }}>Approve</option>
+                                                <option value="rejected" {{ old('status.' . $type->code) === 'rejected' ? 'selected' : '' }}>Reject</option>
                                             </select>
                                         </td>
-                                        <td class="border border-gray-300 px-4 py-2">
-                                            <input type="number" name="documents[{{ $grandchild->code }}][score]" value="0" class="w-full px-2 py-1 border border-gray-300 rounded" readonly>
-                                        </td>
-                                        <td class="border border-gray-300 px-4 py-2">
-                                            <input type="text" name="documents[{{ $grandchild->code }}][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="{{ $grandchild->tahapan }}" readonly>
-                                        </td>
-                                        <td class="border border-gray-300 px-4 py-2">
-                                            @if($grandchild->is_file_required)
-                                                <input type="file" name="documents[{{ $grandchild->code }}][file]" class="w-full px-2 py-1">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            @if($type->is_file_required)
+                                                <input type="file" name="document[{{ $type->code }}]" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                                            @else
+                                                <span class="text-gray-500 italic">Tidak memerlukan file</span>
                                             @endif
                                         </td>
                                     </tr>
+                                    
+                                    <!-- Sub-documents -->
+                                    @foreach($documentTypes->where('parent_code', $type->code) as $subType)
+                                        <tr class="hover:bg-gray-50 bg-gray-50">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $no++ }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $tahap }}</td>
+                                            <td class="px-6 py-4 text-sm text-gray-900 pl-6">{{ $subType->uraian }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <span id="kelengkapan_{{ $subType->code }}" class="px-2 py-1 text-sm rounded-full {{ old('status.' . $subType->code) === 'approved' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                                    {{ old('status.' . $subType->code) === 'approved' ? 'Ada' : 'Tidak Ada' }}
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <select name="status[{{ $subType->code }}]" onchange="updateKelengkapan('{{ $subType->code }}', this.value)" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                                    <option value="">Pilih Status</option>
+                                                    <option value="approved" {{ old('status.' . $subType->code) === 'approved' ? 'selected' : '' }}>Approve</option>
+                                                    <option value="rejected" {{ old('status.' . $subType->code) === 'rejected' ? 'selected' : '' }}>Reject</option>
+                                                </select>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                @if($subType->is_file_required)
+                                                    <input type="file" name="document[{{ $subType->code }}]" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                                                @else
+                                                    <span class="text-gray-500 italic">Tidak memerlukan file</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 @endforeach
-                            @endforeach
-                        @endforeach
-
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+            @endforeach
+        </div>
 
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const statusSelects = document.querySelectorAll('select[name$="[status]"]');
-                        
-                        statusSelects.forEach(select => {
-                            select.addEventListener('change', function() {
-                                const scoreInput = this.closest('tr').querySelector('input[name$="[score]"]');
-                                scoreInput.value = this.value === 'approved' ? 1 : 0;
-                            });
-                        });
-                    });
-                </script>
-                            <!-- Laporan Antara Pengembangan Rancangan Penyusunan -->
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">ii.</td>
-                                <td class="border border-gray-300 px-4 py-2">Laporan Antara Pengembangan Rancangan Penyusunan</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <select name="documents[3][kelengkapan]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                        <option value="0">Tidak Ada (0)</option>
-                                        <option value="1">Ada (1)</option>
-                                    </select>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="text" name="documents[3][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="text" name="documents[3][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="Dokumen Perencana" readonly>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="file" name="documents[3][file]" class="w-full px-2 py-1">
-                                </td>
-                            </tr>
-                            <!-- Laporan Akhir Master Plan -->
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">iii.</td>
-                                <td class="border border-gray-300 px-4 py-2">Laporan Akhir Master Plan</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <select name="documents[4][kelengkapan]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                        <option value="0">Tidak Ada (0)</option>
-                                        <option value="1">Ada (1)</option>
-                                    </select>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="text" name="documents[4][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="text" name="documents[4][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="Dokumen Perencana" readonly>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="file" name="documents[4][file]" class="w-full px-2 py-1">
-                                </td>
-                            </tr>
-                            <!-- Laporan Akhir Master Plan dan Detail Engineering -->
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">iv.</td>
-                                <td class="border border-gray-300 px-4 py-2">Laporan Akhir Master Plan dan Detail Engineering</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <select name="documents[5][kelengkapan]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                        <option value="0">Tidak Ada (0)</option>
-                                        <option value="1">Ada (1)</option>
-                                    </select>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="text" name="documents[5][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="text" name="documents[5][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="Dokumen Perencana" readonly>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="file" name="documents[5][file]" class="w-full px-2 py-1">
-                                </td>
-                            </tr>
-                            <!-- Rencana Kerja dan Syarat-Syarat (RKS) -->
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">v.</td>
-                                <td class="border border-gray-300 px-4 py-2">Rencana Kerja dan Syarat-Syarat (RKS)</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <select name="documents[6][kelengkapan]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                        <option value="0">Tidak Ada (0)</option>
-                                        <option value="1">Ada (1)</option>
-                                    </select>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="text" name="documents[6][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="text" name="documents[6][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="Dokumen Perencana" readonly>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="file" name="documents[6][file]" class="w-full px-2 py-1">
-                                </td>
-                            </tr>
-                            <!-- Gambar Perencanaan -->
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">vi.</td>
-                                <td class="border border-gray-300 px-4 py-2">Gambar Perencanaan</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <select name="documents[7][kelengkapan]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                        <option value="0">Tidak Ada (0)</option>
-                                        <option value="1">Ada (1)</option>
-                                    </select>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="text" name="documents[7][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="text" name="documents[7][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="Dokumen Perencana" readonly>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="file" name="documents[7][file]" class="w-full px-2 py-1">
-                                </td>
-                            </tr>
-                            <!-- Notulensi hasil rapat koordinasi proses review penyusunan -->
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">b.</td>
-                                <td class="border border-gray-300 px-4 py-2">Notulensi hasil rapat koordinasi proses review penyusunan</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <select name="documents[8][kelengkapan]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                        <option value="0">Tidak Ada (0)</option>
-                                        <option value="1">Ada (1)</option>
-                                    </select>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="text" name="documents[8][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="text" name="documents[8][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="Risalah Rapat" readonly>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <input type="file" name="documents[8][file]" class="w-full px-2 py-1">
-                                </td>
-                            </tr>
-                         <!-- Laporan review penyusunan DED -->
-                         <tr>
-                             <td class="border border-gray-300 px-4 py-2">c.</td>
-                             <td class="border border-gray-300 px-4 py-2" rowspan="8">Laporan review penyusunan DED</td>
-                             <td class="border border-gray-300 px-4 py-2">i. Kesesuaian Desain (DED) dengan standar teknis dan spesifikasi</td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <select name="documents[9][kelengkapan]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                     <option value="0">Tidak Ada (0)</option>
-                                     <option value="1">Ada (1)</option>
-                                 </select>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[9][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[9][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="Gambar Reviu MK" readonly>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="file" name="documents[9][file]" class="w-full px-2 py-1">
-                             </td>
-                         </tr>
-                         <tr>
-                             <td class="border border-gray-300 px-4 py-2">ii.</td>
-                             <td class="border border-gray-300 px-4 py-2">Kesesuaian Gambar Desain dengan RKS dan RAB</td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <select name="documents[10][kelengkapan]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                     <option value="0">Tidak Ada (0)</option>
-                                     <option value="1">Ada (1)</option>
-                                 </select>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[10][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[10][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="Terdapat pada BOQ dan RKS MK" readonly>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="file" name="documents[10][file]" class="w-full px-2 py-1">
-                             </td>
-                         </tr>
-                         <tr>
-                             <td class="border border-gray-300 px-4 py-2">iii.</td>
-                             <td class="border border-gray-300 px-4 py-2">Review kewajaran harga pada RAB</td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <select name="documents[11][kelengkapan]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                     <option value="0">Tidak Ada (0)</option>
-                                     <option value="1">Ada (1)</option>
-                                 </select>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[11][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[11][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="RAB BOQ HPS" readonly>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="file" name="documents[11][file]" class="w-full px-2 py-1">
-                             </td>
-                         </tr>
-                         <tr>
-                             <td class="border border-gray-300 px-4 py-2">iv.</td>
-                             <td class="border border-gray-300 px-4 py-2">Kesesuaian rencana waktu pelaksanaan</td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <select name="documents[12][kelengkapan]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                     <option value="0">Tidak Ada (0)</option>
-                                     <option value="1">Ada (1)</option>
-                                 </select>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[12][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[12][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="" readonly>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="file" name="documents[12][file]" class="w-full px-2 py-1">
-                             </td>
-                         </tr>
-                         <tr>
-                             <td class="border border-gray-300 px-4 py-2">v.</td>
-                             <td class="border border-gray-300 px-4 py-2">Hasil evaluasi yang telah diperbaiki atau dilengkapi oleh perencana</td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <select name="documents[13][kelengkapan]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                     <option value="0">Tidak Ada (0)</option>
-                                     <option value="1">Ada (1)</option>
-                                 </select>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[13][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[13][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="Gambar Perencanaan" readonly>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="file" name="documents[13][file]" class="w-full px-2 py-1">
-                             </td>
-                         </tr>
-                         <tr>
-                             <td class="border border-gray-300 px-4 py-2">vi.</td>
-                             <td class="border border-gray-300 px-4 py-2">Hasil review dokumen KAK terhadap SMKK</td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <select name="documents[14][kelengkapan]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                     <option value="0">Tidak Ada (0)</option>
-                                     <option value="1">Ada (1)</option>
-                                 </select>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[14][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[14][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="Dokumen KAK" readonly>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="file" name="documents[14][file]" class="w-full px-2 py-1">
-                             </td>
-                         </tr>
-                         <tr>
-                             <td class="border border-gray-300 px-4 py-2">vii.</td>
-                             <td class="border border-gray-300 px-4 py-2">Program mutu pengawasan</td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <select name="documents[15][kelengkapan]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                     <option value="0">Tidak Ada (0)</option>
-                                     <option value="1">Ada (1)</option>
-                                 </select>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[15][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[15][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="" readonly>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="file" name="documents[15][file]" class="w-full px-2 py-1">
-                             </td>
-                         </tr>
-                         <tr>
-                             <td class="border border-gray-300 px-4 py-2">viii.</td>
-                             <td class="border border-gray-300 px-4 py-2">Dokumen Notulensi terkait kegiatan aanwijzing</td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <select name="documents[16][kelengkapan]" class="w-full px-2 py-1 border border-gray-300 rounded">
-                                     <option value="0">Tidak Ada (0)</option>
-                                     <option value="1">Ada (1)</option>
-                                 </select>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[16][catatan]" class="w-full px-2 py-1 border border-gray-300 rounded" placeholder="Catatan">
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="text" name="documents[16][sumber]" class="w-full px-2 py-1 border border-gray-300 rounded" value="Risalah Rapat" readonly>
-                             </td>
-                             <td class="border border-gray-300 px-4 py-2">
-                                 <input type="file" name="documents[16][file]" class="w-full px-2 py-1">
-                             </td>
-                         </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="flex justify-end mt-6 space-x-3">
-                <a href="{{ route('dashboard.user.projects.index') }}" class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
-                    <i class="fas fa-times mr-2"></i>Batal
-                </a>
-                <button type="submit" class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                    <i class="fas fa-save mr-2"></i>Simpan Project
-                </button>
-            </div>
+        <div class="flex justify-end mt-6">
+            <button type="submit" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Simpan Project
+            </button>
         </div>
     </form>
 </div>
+<script>
+let currentSlideIndex = 0;
+const totalSlides = 8;
+
+function showSlide(index) {
+    const slides = document.querySelectorAll('.slide-content');
+    slides.forEach(slide => slide.style.display = 'none');
+    slides[index].style.display = 'block';
+    document.getElementById('currentSlide').textContent = index + 1;
+}
+
+function nextSlide() {
+    if (currentSlideIndex < totalSlides - 1) {
+        currentSlideIndex++;
+        showSlide(currentSlideIndex);
+    }
+}
+
+function prevSlide() {
+    if (currentSlideIndex > 0) {
+        currentSlideIndex--;
+        showSlide(currentSlideIndex);
+    }
+}
+
+function updateKelengkapan(code, value) {
+    const kelengkapanEl = document.getElementById(`kelengkapan_${code}`);
+    if (value === 'approved') {
+        kelengkapanEl.textContent = 'Ada';
+        kelengkapanEl.className = 'px-2 py-1 text-sm rounded-full bg-green-100 text-green-800';
+    } else if (value === 'rejected') {
+        kelengkapanEl.textContent = 'Tidak Ada';
+        kelengkapanEl.className = 'px-2 py-1 text-sm rounded-full bg-red-100 text-red-800';
+    }
+}
+</script>
 @endsection

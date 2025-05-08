@@ -22,7 +22,8 @@ class ProjectController extends Controller
 
     public function create()
     {
-        return view('dashboard.user.projects.create');
+        $documentTypes = DocumentType::all();
+        return view('dashboard.user.projects.create', compact('documentTypes'));
     }
 
     public function store(Request $request)

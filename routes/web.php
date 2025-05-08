@@ -25,53 +25,66 @@ Route::get('/', function () {
 });
 
 // Authentication Routes
-Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
-});
-
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-Route::middleware(['auth', 'role:guest'])->prefix('dashboard/guest')->name('dashboard.guest.')->group(function () {
-    Route::get('/', [GuestDashboardController::class, 'index'])->name('index');
-    Route::get('/guide', [GuestGuideController::class, 'index'])->name('guide');
-    Route::get('/project-documents/history', [GuestProjectDocumentController::class, 'history'])->name('project-documents.history');
-});
-Route::post('/guest/assessment', [AssessmentRequestController::class, 'store'])->name('guest.submit.assessment');
-
-// Guest Project Document Routes
-Route::prefix('dashboard/guest/project-documents')
-    ->name('dashboard.guest.project-documents.')
-    ->middleware(['auth', 'ensure.guest'])
-    ->group(function () {
-        Route::get('/create', [\App\Http\Controllers\Dashboard\Guest\ProjectDocumentController::class, 'create'])->name('create');
-        Route::post('/', [\App\Http\Controllers\Dashboard\Guest\ProjectDocumentController::class, 'store'])->name('store');
-    });
-
-// Authenticated User Routes
+// All authenticated routes
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard/user', [DashboardController::class, 'userDashboard'])->name('dashboard.user');
-    
-    // Admin Routes
-    Route::get('/dashboard/admin', [DashboardController::class, 'adminDashboard'])->name('dashboard.admin');
-    Route::post('/assessment/{id}/approve', [AssessmentRequestController::class, 'approve'])->name('assessment.approve');
-    Route::post('/assessment/{id}/reject', [AssessmentRequestController::class, 'reject'])->name('assessment.reject');
-    
-    // Project Management Routes
-    Route::resource('dashboard/user/projects', ProjectController::class, [
-        'as' => 'dashboard.user'
-    ]);
-
-    // Project Document Routes
-    Route::prefix('dashboard/user/projects/{project}/documents')->name('dashboard.user.project-documents.')->group(function () {
-        Route::get('/create', [ProjectDocumentController::class, 'create'])->name('create');
-        Route::post('/', [ProjectDocumentController::class, 'store'])->name('store');
-        Route::get('/{document}', [ProjectDocumentController::class, 'show'])->name('show');
-        Route::delete('/{document}', [ProjectDocumentController::class, 'destroy'])->name('destroy');
+    // Guest Dashboard Routes
+    Route::prefix('dashboard/guest')->name('dashboard.guest.')->group(function () {
+        Route::get('/', [DashboardController::class, 'guestDashboard'])->name('index');
+        Route::get('/guide', [DashboardController::class, 'guide'])->name('guide');
+        
+        // Guest Project Documents
+        Route::prefix('project-documents')->name('project-documents.')->group(function () {
+            Route::get('/create', [\App\Http\Controllers\Dashboard\Guest\ProjectDocumentController::class, 'create'])->name('create');
+            Route::post('/', [\App\Http\Controllers\Dashboard\Guest\ProjectDocumentController::class, 'store'])->name('store');
+            Route::get('/history', [\App\Http\Controllers\Guest\GuestProjectDocumentController::class, 'history'])->name('history');
+            Route::get('/{projectDocument}', [\App\Http\Controllers\Guest\GuestProjectDocumentController::class, 'show'])->name('show');
+        });
     });
+
+    // User Dashboard Routes
+    Route::prefix('dashboard/user')->name('dashboard.user.')->group(function () {
+        Route::get('/', [DashboardController::class, 'userDashboard'])->name('index');
+        Route::get('/guide', [DashboardController::class, 'guide'])->name('guide');
+
+        // Assessment Requests
+        Route::prefix('assessment-requests')->name('assessment-requests.')->group(function () {
+            Route::get('/', [AssessmentRequestController::class, 'index'])->name('index');
+            Route::get('/{assessmentRequest}', [AssessmentRequestController::class, 'show'])->name('show');
+        });
+        
+        // User Documents
+        Route::get('/documents/upload', [\App\Http\Controllers\Dashboard\User\UserDocumentController::class, 'create'])->name('documents.upload');
+        Route::post('/documents', [\App\Http\Controllers\Dashboard\User\UserDocumentController::class, 'store'])->name('documents.store');
+        
+        // Projects Management
+        Route::resource('projects', ProjectController::class);
+        
+        // Project Documents
+        Route::prefix('projects/{project}/documents')->name('project-documents.')->group(function () {
+            Route::get('/create', [ProjectDocumentController::class, 'create'])->name('create');
+            Route::post('/', [ProjectDocumentController::class, 'store'])->name('store');
+            Route::get('/{document}', [ProjectDocumentController::class, 'show'])->name('show');
+            Route::delete('/{document}', [ProjectDocumentController::class, 'destroy'])->name('destroy');
+        });
+    });
+
+    // Admin Routes
+    Route::prefix('dashboard/admin')->name('dashboard.admin.')->group(function () {
+        Route::get('/', [DashboardController::class, 'adminDashboard'])->name('index');
+        Route::post('/assessment/{id}/approve', [AssessmentRequestController::class, 'approve'])->name('assessment.approve');
+        Route::post('/assessment/{id}/reject', [AssessmentRequestController::class, 'reject'])->name('assessment.reject');
+    });
+});
+
+// Guest Assessment Route
+Route::post('/guest/assessment', [AssessmentRequestController::class, 'store'])->name('guest.submit.assessment');
     
     // Redirect after login
     Route::get('/home', [HomeController::class, 'index'])->name('home.redirect');
-});
+;

@@ -9,37 +9,43 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <script src="{{ asset('js/sidebar.js') }}"></script>
 </head>
 <body class="bg-gray-100">
     <div class="min-h-screen flex">
+        <!-- Sidebar Toggle Button -->
+        <button id="sidebarToggle" class="fixed z-50 bottom-4 left-4 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 focus:outline-none">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
         <!-- Sidebar -->
-        <div class="bg-white w-64 shadow-lg fixed h-full transition-transform duration-300 ease-in-out" id="sidebar">
-            <div class="p-4 border-b border-gray-200">
+        <div class="bg-white w-64 shadow-lg fixed h-full transition-all duration-300 ease-in-out" id="sidebar">
+            <div class="p-4 border-b border-gray-200 flex items-center">
                 <div class="text-xl font-semibold text-gray-800">{{ config('app.name', 'Laravel') }}</div>
             </div>
-            <nav class="mt-4">
+            <nav class="mt-4 overflow-hidden">
                 @if(Auth::user()->status === 'guest')
-                    <a href="{{ route('dashboard.guest') }}" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">
-                        <i class="fas fa-home mr-2"></i> Dashboard
+                    <a href="{{ route('dashboard.guest.index') }}" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">
+                        <i class="fas fa-home mr-2"></i><span class="nav-text"> Dashboard</span>
                     </a>
                     <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">
-                        <i class="fas fa-file-alt mr-2"></i> Dokumen
+                        <i class="fas fa-file-alt mr-2"></i><span class="nav-text"> Dokumen</span>
                     </a>
                     <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">
-                        <i class="fas fa-history mr-2"></i> Riwayat
+                        <i class="fas fa-history mr-2"></i><span class="nav-text"> Riwayat</span>
                     </a>
                 @else
-                    <a href="{{ route('dashboard.user') }}" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">
-                        <i class="fas fa-home mr-2"></i> Dashboard
+                    <a href="{{ route('dashboard.user.index') }}" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">
+                        <i class="fas fa-home mr-2"></i><span class="nav-text"> Dashboard</span>
                     </a>
                     <a href="{{ route('dashboard.user.projects.index') }}" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">
-                        <i class="fas fa-project-diagram mr-2"></i> Project
+                        <i class="fas fa-project-diagram mr-2"></i><span class="nav-text"> Project</span>
                     </a>
                     <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">
-                        <i class="fas fa-file-upload mr-2"></i> Upload Dokumen
+                        <i class="fas fa-file-upload mr-2"></i><span class="nav-text"> Upload Dokumen</span>
                     </a>
-                    <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">
-                        <i class="fas fa-tasks mr-2"></i> Pengajuan Penilaian
+                    <a href="{{ route('dashboard.user.assessment-requests.index') }}" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800">
+                        <i class="fas fa-tasks mr-2"></i><span class="nav-text"> Pengajuan Penilaian</span>
                     </a>
                 @endif
             </nav>

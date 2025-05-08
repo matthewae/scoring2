@@ -2,2191 +2,2259 @@
 
 namespace Database\Seeders;
 
-use App\Models\DocumentType;
 use Illuminate\Database\Seeder;
+use App\Models\DocumentType;
+use PhpParser\Comment\Doc;
 
 class DocumentTypeSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        // ===================================
-        // 1. PRA-TENDER
-        // ===================================
-        
-        // 1.a. Dokumen DED perencana
-        $dedDoc = DocumentType::firstOrCreate(
-            ['code' => 'PRA_TENDER_DED'],
-            [
-            'code' => 'PRA_TENDER_DED',
+        // 1. Pra-Tender
+        // a. Dokumen DED perencana
+        $dedPerencana = DocumentType::firstOrCreate(['code' => 'PT-A'], [
+            'code' => 'PT-A',
             'no' => '1.a',
-            'tahapan' => 'Pra-tender',
+            'tahapan' => 'Pra-Tender',
             'uraian' => 'Dokumen DED perencana',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
         // Sub-dokumen DED perencana
-        $dedSubDocs = [
-            ['no' => 'i', 'uraian' => 'Laporan Pendahuluan Penyusunan Masterplan dan DED'],
-            ['no' => 'ii', 'uraian' => 'Laporan Antara Pengembangan Rancangan Penyusunan Masterplan dan DED'],
-            ['no' => 'iii', 'uraian' => 'Laporan Akhir Master Plan'],
-            ['no' => 'iv', 'uraian' => 'Laporan Akhir Master Plan dan Detail Engineering Design'],
-            ['no' => 'v', 'uraian' => 'Rencana Kerja dan Syarat-Syarat (RKS)'],
-            ['no' => 'vi', 'uraian' => 'Gambar Perencanaan']
-        ];
+        DocumentType::firstOrCreate(['code' => 'PT-A-1'], [
+            'code' => 'PT-A-1',
+            'no' => '1.a.i',
+            'tahapan' => 'Pra-Tender',
+            'uraian' => 'Laporan Pendahuluan Penyusunan Masterplan dan DED',
+            'is_file_required' => true,
+            'parent_code' => 'PT-A'
+        ]);
 
-        foreach ($dedSubDocs as $doc) {
-            DocumentType::create([
-                'code' => 'PRA_TENDER_DED_' . strtoupper(str_replace(' ', '_', $doc['no'])),
-                'parent_code' => 'PRA_TENDER_DED',
-                'no' => '1.a.' . $doc['no'],
-                'tahapan' => 'Pra-tender',
-                'uraian' => $doc['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PT-A-2'], [
+            'code' => 'PT-A-2',
+            'no' => '1.a.ii',
+            'tahapan' => 'Pra-Tender',
+            'uraian' => 'Laporan Antara Pengembangan Rancangan Penyusunan Masterplan dan DED',
+            'is_file_required' => true,
+            'parent_code' => 'PT-A'
+        ]);
 
-        // 1.b. Notulensi hasil rapat
-        DocumentType::create([
-            'code' => 'PRA_TENDER_NOTULENSI',
+        DocumentType::firstOrCreate(['code' => 'PT-A-3'], [
+            'code' => 'PT-A-3',
+            'no' => '1.a.iii',
+            'tahapan' => 'Pra-Tender',
+            'uraian' => 'Laporan Akhir Master Plan',
+            'is_file_required' => true,
+            'parent_code' => 'PT-A'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PT-A-4'], [
+            'code' => 'PT-A-4',
+            'no' => '1.a.iv',
+            'tahapan' => 'Pra-Tender',
+            'uraian' => 'Laporan Akhir Master Plan dan Detail Engineering Design',
+            'is_file_required' => true,
+            'parent_code' => 'PT-A'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PT-A-5'], [
+            'code' => 'PT-A-5',
+            'no' => '1.a.v',
+            'tahapan' => 'Pra-Tender',
+            'uraian' => 'Rencana Kerja dan Syarat-Syarat (RKS)',
+            'is_file_required' => true,
+            'parent_code' => 'PT-A'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PT-A-6'], [
+            'code' => 'PT-A-6',
+            'no' => '1.a.vi',
+            'tahapan' => 'Pra-Tender',
+            'uraian' => 'Gambar Perencanaan',
+            'is_file_required' => true,
+            'parent_code' => 'PT-A'
+        ]);
+
+        // b. Notulensi hasil rapat koordinasi
+        DocumentType::firstOrCreate(['code' => 'PT-B'], [
+            'code' => 'PT-B',
             'no' => '1.b',
-            'tahapan' => 'Pra-tender',
-            'uraian' => 'Notulensi hasil rapat koordinasi proses review penyusunan DED'
+            'tahapan' => 'Pra-Tender',
+            'uraian' => 'Notulensi hasil rapat koordinasi proses review penyusunan DED',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        // 1.c. Laporan review penyusunan DED
-        $reviewDoc = DocumentType::create([
-            'code' => 'PRA_TENDER_REVIEW',
+        // c. Laporan review penyusunan DED
+        $reviewDed = DocumentType::firstOrCreate(['code' => 'PT-C'], [
+            'code' => 'PT-C',
             'no' => '1.c',
-            'tahapan' => 'Pra-tender',
+            'tahapan' => 'Pra-Tender',
             'uraian' => 'Laporan review penyusunan DED',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        // Sub-dokumen laporan review
-        $reviewSubDocs = [
-            ['no' => 'i', 'uraian' => 'Kesesuaian Desain (DED) dengan standar teknis dan kondisi lapangan'],
-            ['no' => 'ii', 'uraian' => 'Kesesuaian Gambar Desain dengan RKS dan RAB'],
-            ['no' => 'iii', 'uraian' => 'Review kewajaran harga pada RAB'],
-            ['no' => 'iv', 'uraian' => 'Kesesuaian rencana waktu pelaksanaan'],
-            ['no' => 'v', 'uraian' => 'Hasil evaluasi yang telah diperbaiki atau dilengkapi oleh konsultan perencana'],
-            ['no' => 'vi', 'uraian' => 'Hasil review dokumen KAK terhadap SMKK'],
-            ['no' => 'vii', 'uraian' => 'Program mutu pengawasan'],
-            ['no' => 'viii', 'uraian' => 'Dokumen Notulensi terkait kegiatan aanwijzing']
-        ];
+        // Sub-dokumen Laporan review
+        DocumentType::firstOrCreate(['code' => 'PT-C-1'], [
+            'code' => 'PT-C-1',
+            'no' => '1.c.i',
+            'tahapan' => 'Pra-Tender',
+            'uraian' => 'Kesesuaian Desain (DED) dengan standar teknis dan kondisi lapangan',
+            'is_file_required' => true,
+            'parent_code' => 'PT-C'
+        ]);
 
-        foreach ($reviewSubDocs as $doc) {
-            DocumentType::create([
-                'code' => 'PRA_TENDER_REVIEW_' . strtoupper(str_replace(' ', '_', $doc['no'])),
-                'parent_code' => 'PRA_TENDER_REVIEW',
-                'no' => '1.c.' . $doc['no'],
-                'tahapan' => 'Pra-tender',
-                'uraian' => $doc['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PT-C-2'], [
+            'code' => 'PT-C-2',
+            'no' => '1.c.ii',
+            'tahapan' => 'Pra-Tender',
+            'uraian' => 'Kesesuaian Gambar Desain dengan RKS dan RAB',
+            'is_file_required' => true,
+            'parent_code' => 'PT-C'
+        ]);
 
-        // ===================================
-        // 2. TENDER
-        // ===================================
+        DocumentType::firstOrCreate(['code' => 'PT-C-3'], [
+            'code' => 'PT-C-3',
+            'no' => '1.c.iii',
+            'tahapan' => 'Pra-Tender',
+            'uraian' => 'Review kewajaran harga pada RAB',
+            'is_file_required' => true,
+            'parent_code' => 'PT-C'
+        ]);
 
-        // 2.a. Tender Konsultan MK
-        DocumentType::create([
-            'code' => 'TENDER_MK',
+        DocumentType::firstOrCreate(['code' => 'PT-C-4'], [
+            'code' => 'PT-C-4',
+            'no' => '1.c.iv',
+            'tahapan' => 'Pra-Tender',
+            'uraian' => 'Kesesuaian rencana waktu pelaksanaan',
+            'is_file_required' => true,
+            'parent_code' => 'PT-C'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PT-C-5'], [
+            'code' => 'PT-C-5',
+            'no' => '1.c.v',
+            'tahapan' => 'Pra-Tender',
+            'uraian' => 'Hasil evaluasi yang telah diperbaiki atau dilengkapi oleh konsultan perencana',
+            'is_file_required' => true,
+            'parent_code' => 'PT-C'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PT-C-6'], [
+            'code' => 'PT-C-6',
+            'no' => '1.c.vi',
+            'tahapan' => 'Pra-Tender',
+            'uraian' => 'Hasil review dokumen KAK terhadap SMKK',
+            'is_file_required' => true,
+            'parent_code' => 'PT-C'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PT-C-7'], [
+            'code' => 'PT-C-7',
+            'no' => '1.c.vii',
+            'tahapan' => 'Pra-Tender',
+            'uraian' => 'Program mutu pengawasan',
+            'is_file_required' => true,
+            'parent_code' => 'PT-C'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PT-C-8'], [
+            'code' => 'PT-C-8',
+            'no' => '1.c.viii',
+            'tahapan' => 'Pra-Tender',
+            'uraian' => 'Dokumen Notulensi terkait kegiatan aanwijzing',
+            'is_file_required' => true,
+            'parent_code' => 'PT-C'
+        ]);
+        // 2. Tender
+        // a. Tender Konsultan MK
+        $tenderKonsultanMK = DocumentType::firstOrCreate(['code' => 'T-A'], [
+            'code' => 'T-A',
             'no' => '2.a',
             'tahapan' => 'Tender',
             'uraian' => 'Tender Konsultan MK',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        // Sub-dokumen Tender Konsultan MK
-        $mkDocs = [
-            ['no' => 'i', 'uraian' => 'Dokumen KAK Konsultan MK'],
-            ['no' => 'ii', 'uraian' => 'Dokumen Penawaran Konsultan MK'],
-            ['no' => 'iii', 'uraian' => 'Cek Personil Konsultan MK', 'is_file_required' => false],
-            ['no' => 'iv', 'uraian' => 'Tujuan adanya Konsultan MK', 'is_file_required' => false]
-        ];
+        // i. Dokumen KAK Konsultan MK
+        DocumentType::firstOrCreate(['code' => 'T-A-1'], [
+            'code' => 'T-A-1',
+            'no' => '2.a.i',
+            'tahapan' => 'Tender',
+            'uraian' => 'Dokumen KAK Konsultan MK',
+            'is_file_required' => true,
+            'parent_code' => 'T-A'
+        ]);
 
-        foreach ($mkDocs as $doc) {
-            DocumentType::create([
-                'code' => 'TENDER_MK_' . strtoupper(str_replace(' ', '_', $doc['no'])),
-                'parent_code' => 'TENDER_MK',
-                'no' => '2.a.' . $doc['no'],
-                'tahapan' => 'Tender',
-                'uraian' => $doc['uraian'],
-                'is_file_required' => $doc['is_file_required'] ?? true
-            ]);
-        }
+        // ii. Dokumen Penawaran Konsultan MK
+        DocumentType::firstOrCreate(['code' => 'T-A-2'], [
+            'code' => 'T-A-2',
+            'no' => '2.a.ii',
+            'tahapan' => 'Tender',
+            'uraian' => 'Dokumen Penawaran Konsultan MK',
+            'is_file_required' => true,
+            'parent_code' => 'T-A'
+        ]);
 
-        // Sub-dokumen Tujuan adanya Konsultan MK
-        $tujuanMkDocs = [
-            ['no' => '1', 'uraian' => 'BA Aanwjzing'],
-            ['no' => '2', 'uraian' => 'Notulen Rapat Persiapan Pelaksanaan Kontrak'],
-            ['no' => '3', 'uraian' => 'Kontrak Pelaksanaan Pekerjaan'],
-            ['no' => '4', 'uraian' => 'Rencana Pre Construction Meeting'],
-            ['no' => '5', 'uraian' => 'Rencana Pekerjaan Persiapan Konstruksi'],
-            ['no' => '6', 'uraian' => 'Berita Acara Serah Terima Lahan'],
-            ['no' => '7', 'uraian' => 'Berita Acara Pengukuran Kembali Lokasi Pekerjaan (Uitzet) dan Mutual Check']
-        ];
+        // iii. Cek Personil Konsultan MK
+        $cekPersonil = DocumentType::firstOrCreate(['code' => 'T-A-3'], [
+            'code' => 'T-A-3',
+            'no' => '2.a.iii',
+            'tahapan' => 'Tender',
+            'uraian' => 'Cek Personil Konsultan MK',
+            'is_file_required' => false,
+            'parent_code' => 'T-A'
+        ]);
 
-        foreach ($tujuanMkDocs as $doc) {
-            DocumentType::create([
-                'code' => 'TENDER_MK_IV_' . $doc['no'],
-                'parent_code' => 'TENDER_MK_IV',
-                'no' => '2.a.iv.' . $doc['no'],
-                'tahapan' => 'Tender',
-                'uraian' => $doc['uraian']
-            ]);
-        }
+        // Tenaga Ahli
+        $tenagaAhli = DocumentType::firstOrCreate(['code' => 'T-A-3-1'], [
+            'code' => 'T-A-3-1',
+            'no' => '2.a.iii.1',
+            'tahapan' => 'Tender',
+            'uraian' => 'Tenaga Ahli',
+            'is_file_required' => false,
+            'parent_code' => 'T-A-3'
+        ]);
 
-        // 2.b. Hasil Review Pagu Anggaran Konstruksi
-        DocumentType::create([
-            'code' => 'TENDER_REVIEW_ANGGARAN',
+        // Sub-dokumen Tenaga Ahli
+        DocumentType::firstOrCreate(['code' => 'T-A-3-1-1'], [
+            'code' => 'T-A-3-1-1',
+            'no' => '2.a.iii.1.1',
+            'tahapan' => 'Tender',
+            'uraian' => 'Team Leader',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-3-1'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'T-A-3-1-2'], [
+            'code' => 'T-A-3-1-2',
+            'no' => '2.a.iii.1.2',
+            'tahapan' => 'Tender',
+            'uraian' => 'Tenaga Ahli Teknik Arsitektur',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-3-1'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'T-A-3-1-3'], [
+            'code' => 'T-A-3-1-3',
+            'no' => '2.a.iii.1.3',
+            'tahapan' => 'Tender',
+            'uraian' => 'Tenaga Ahli Struktur/Sipil',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-3-1'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'T-A-3-1-4'], [
+            'code' => 'T-A-3-1-4',
+            'no' => '2.a.iii.1.4',
+            'tahapan' => 'Tender',
+            'uraian' => 'Tenaga Ahli Mekanikal/Elektrikal',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-3-1'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'T-A-3-1-5'], [
+            'code' => 'T-A-3-1-5',
+            'no' => '2.a.iii.1.5',
+            'tahapan' => 'Tender',
+            'uraian' => 'Tenaga Ahli K3 Konstruksi',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-3-1'
+        ]);
+
+        // Tenaga Pengawas
+        $tenagaPengawas = DocumentType::firstOrCreate(['code' => 'T-A-3-2'], [
+            'code' => 'T-A-3-2',
+            'no' => '2.a.iii.2',
+            'tahapan' => 'Tender',
+            'uraian' => 'Tenaga Pengawas',
+            'is_file_required' => false,
+            'parent_code' => 'T-A-3'
+        ]);
+
+        // Sub-dokumen Tenaga Pengawas
+        DocumentType::firstOrCreate(['code' => 'T-A-3-2-1'], [
+            'code' => 'T-A-3-2-1',
+            'no' => '2.a.iii.2.1',
+            'tahapan' => 'Tender',
+            'uraian' => 'Site Engineer',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-3-2'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'T-A-3-2-2'], [
+            'code' => 'T-A-3-2-2',
+            'no' => '2.a.iii.2.2',
+            'tahapan' => 'Tender',
+            'uraian' => 'Pengawas Arsitektur',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-3-2'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'T-A-3-2-3'], [
+            'code' => 'T-A-3-2-3',
+            'no' => '2.a.iii.2.3',
+            'tahapan' => 'Tender',
+            'uraian' => 'Pengawas Struktur',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-3-2'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'T-A-3-2-4'], [
+            'code' => 'T-A-3-2-4',
+            'no' => '2.a.iii.2.4',
+            'tahapan' => 'Tender',
+            'uraian' => 'Pengawas MEP',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-3-2'
+        ]);
+
+        // Tenaga Pendukung
+        $tenagaPendukung = DocumentType::firstOrCreate(['code' => 'T-A-3-3'], [
+            'code' => 'T-A-3-3',
+            'no' => '2.a.iii.3',
+            'tahapan' => 'Tender',
+            'uraian' => 'Tenaga Pendukung',
+            'is_file_required' => false,
+            'parent_code' => 'T-A-3'
+        ]);
+
+        // Sub-dokumen Tenaga Pendukung
+        DocumentType::firstOrCreate(['code' => 'T-A-3-3-1'], [
+            'code' => 'T-A-3-3-1',
+            'no' => '2.a.iii.3.1',
+            'tahapan' => 'Tender',
+            'uraian' => 'Juru Gambar/Drafter BIM',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-3-3'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'T-A-3-3-2'], [
+            'code' => 'T-A-3-3-2',
+            'no' => '2.a.iii.3.2',
+            'tahapan' => 'Tender',
+            'uraian' => 'Administrasi + Surveyor',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-3-3'
+        ]);
+
+        // iv. Tujuan adanya Konsultan MK
+        $tujuanKonsultanMK = DocumentType::firstOrCreate(['code' => 'T-A-4'], [
+            'code' => 'T-A-4',
+            'no' => '2.a.iv',
+            'tahapan' => 'Tender',
+            'uraian' => 'Tujuan adanya Konsultan MK',
+            'is_file_required' => false,
+            'parent_code' => 'T-A'
+        ]);
+
+        // Sub-dokumen Tujuan Konsultan MK
+        DocumentType::firstOrCreate(['code' => 'T-A-4-1'], [
+            'code' => 'T-A-4-1',
+            'no' => '2.a.iv.1',
+            'tahapan' => 'Tender',
+            'uraian' => 'BA Aanwjzing',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-4'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'T-A-4-2'], [
+            'code' => 'T-A-4-2',
+            'no' => '2.a.iv.2',
+            'tahapan' => 'Tender',
+            'uraian' => 'Notulen Rapat Persiapan Pelaksanaan Kontrak',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-4'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'T-A-4-3'], [
+            'code' => 'T-A-4-3',
+            'no' => '2.a.iv.3',
+            'tahapan' => 'Tender',
+            'uraian' => 'Kontrak Pelaksanaan Pekerjaan',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-4'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'T-A-4-4'], [
+            'code' => 'T-A-4-4',
+            'no' => '2.a.iv.4',
+            'tahapan' => 'Tender',
+            'uraian' => 'Rencana Pre Construction Meeting',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-4'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'T-A-4-5'], [
+            'code' => 'T-A-4-5',
+            'no' => '2.a.iv.5',
+            'tahapan' => 'Tender',
+            'uraian' => 'Rencana Pekerjaan Persiapan Konstruksi',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-4'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'T-A-4-6',
+            'no' => '2.a.iv.6',
+            'tahapan' => 'Tender',
+            'uraian' => 'Berita Acara Serah Terima Lahan',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-4'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'T-A-4-7',
+            'no' => '2.a.iv.7',
+            'tahapan' => 'Tender',
+            'uraian' => 'Berita Acara Pengukuran Kembali Lokasi Pekerjaan (Uitzet) dan Mutual Check',
+            'is_file_required' => true,
+            'parent_code' => 'T-A-4'
+        ]);
+
+        // b. Hasil Review Pagu Anggaran Konstruksi
+        DocumentType::firstOrCreate(['code' => 'T-B'], [
+            'code' => 'T-B',
             'no' => '2.b',
             'tahapan' => 'Tender',
-            'uraian' => 'Hasil Review Pagu Anggaran Konstruksi'
+            'uraian' => 'Hasil Review Pagu Anggaran Konstruksi',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        // 2.c. Dokumen DED for Tender
-        DocumentType::create([
-            'code' => 'TENDER_DED',
+        // c. Dokumen DED for Tender
+        DocumentType::firstOrCreate(['code' => 'T-C'], [
+            'code' => 'T-C',
             'no' => '2.c',
             'tahapan' => 'Tender',
-            'uraian' => 'Dokumen DED for Tender'
+            'uraian' => 'Dokumen DED for Tender',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        // 2.d. Hasil Penilaian Calon Penyedia Jasa
-        DocumentType::create([
-            'code' => 'TENDER_PENILAIAN_PENYEDIA',
+        // d. Hasil Penilaian Calon Penyedia Jasa
+        DocumentType::firstOrCreate(['code' => 'T-D'], [
+            'code' => 'T-D',
             'no' => '2.d',
             'tahapan' => 'Tender',
-            'uraian' => 'Hasil Penilaian Calon Penyedia Jasa sebagai Rekomendasi kepada Pemberi Tugas'
+            'uraian' => 'Hasil Penilaian Calon Penyedia Jasa sebagai Rekomendasi kepada Pemberi Tugas',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        // 2.e. Pengecekan kesanggupan supplier material
-        DocumentType::create([
-            'code' => 'TENDER_CEK_SUPPLIER',
+        // e. Pengecekan kesanggupan supplier material
+        DocumentType::firstOrCreate(['code' => 'T-E'], [
+            'code' => 'T-E',
             'no' => '2.e',
             'tahapan' => 'Tender',
-            'uraian' => 'Pengecekan kesanggupan supplier material'
+            'uraian' => 'Pengecekan kesanggupan supplier material',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        // 2.f. Reviu spesifikasi material
-        DocumentType::create([
-            'code' => 'TENDER_REVIU_SPESIFIKASI',
+        // f. Reviu spesifikasi material
+        DocumentType::firstOrCreate(['code' => 'T-F'], [
+            'code' => 'T-F',
             'no' => '2.f',
             'tahapan' => 'Tender',
-            'uraian' => 'Reviu spesifikasi material'
+            'uraian' => 'Reviu spesifikasi material',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        // ===================================
-        // 3. PERSIAPAN PELAKSANAAN PEKERJAAN KONSTRUKSI
-        // ===================================
-
+        // 3. Persiapan Pelaksanaan Pekerjaan Konstruksi
         // a. Jaminan Pelaksanaan
-        DocumentType::create([
-            'code' => 'PERSIAPAN_JAMINAN',
+        DocumentType::firstOrCreate(['code' => 'PPK-A'], [
+            'code' => 'PPK-A',
             'no' => '3.a',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Jaminan Pelaksanaan (jika ada)'
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Jaminan Pelaksanaan (jika ada)',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        // b. Pengelolaan K3
-        DocumentType::create([
-            'code' => 'PERSIAPAN_K3',
+        // b. Pengelolaan Kesehatan Kerja
+        DocumentType::firstOrCreate(['code' => 'PPK-B'], [
+            'code' => 'PPK-B',
             'no' => '3.b',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Pengelolaan Kesehatan Kerja - Perlindungan Sosial Tenaga Kerja'
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Pengelolaan Kesehatan Kerja - Perlindungan Sosial Tenaga Kerja',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        // c. Dokumen Kontrak
-        DocumentType::create([
-            'code' => 'PERSIAPAN_KONTRAK',
+        // c. Dokumen Kontrak Pelaksana Konstruksi
+        DocumentType::firstOrCreate(['code' => 'PPK-C'], [
+            'code' => 'PPK-C',
             'no' => '3.c',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Dokumen Kontrak Pelaksana Konstruksi'
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Dokumen Kontrak Pelaksana Konstruksi',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
         // d. Berita Acara Penyerahan Lokasi
-        DocumentType::create([
-            'code' => 'PERSIAPAN_BA_LOKASI',
+        DocumentType::firstOrCreate(['code' => 'PPK-D'], [
+            'code' => 'PPK-D',
             'no' => '3.d',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Surat / Berita Acara Penyerahan Lokasi Pekerjaan dari PPK kepada Kontraktor Pelaksana beserta dokumentasi'
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Surat / Berita Acara Penyerahan Lokasi Pekerjaan dari PPK kepada Kontraktor Pelaksana beserta dokumentasi',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
         // e. SPMK
-        DocumentType::create([
-            'code' => 'PERSIAPAN_SPMK',
+        DocumentType::firstOrCreate(['code' => 'PPK-E'], [
+            'code' => 'PPK-E',
             'no' => '3.e',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Surat Perintah Mulai Kerja (SPMK) Kontraktor Pelaksana'
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Surat Perintah Mulai Kerja (SPMK) Kontraktor Pelaksana',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
         // f. PCM
-        $pcm = DocumentType::create([
-            'code' => 'PERSIAPAN_PCM',
+        $pcm = DocumentType::firstOrCreate(['code' => 'PPK-F'], [
+            'code' => 'PPK-F',
             'no' => '3.f',
-            'tahapan' => 'Persiapan',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
             'uraian' => 'Kegiatan Rapat Persiapan Pelaksanaan Kontrak (Pre Construction Meeting (PCM))',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        // PCM Sub-documents
-        $pcmDocs = [
-            ['no' => 'i', 'uraian' => 'Berita Acara PCM'],
-            ['no' => 'ii', 'uraian' => 'Struktur Organisasi Proyek', 'is_file_required' => false],
-            ['no' => 'iii', 'uraian' => 'Pendelegasian Kewenangan'],
-            ['no' => 'iv', 'uraian' => 'Alur Komunikasi dan Persetujuan'],
-            ['no' => 'v', 'uraian' => 'Mekanisme Pengawasan'],
-            ['no' => 'vi', 'uraian' => 'Jadwal Pelaksanaan'],
-            ['no' => 'vii', 'uraian' => 'Mobilisasi personil inti, peralatan, dan material'],
-            ['no' => 'viii', 'uraian' => 'Metode Pelaksanaan', 'is_file_required' => false],
-            ['no' => 'ix', 'uraian' => 'Pembahasan Dokumen SMKK', 'is_file_required' => false],
-            ['no' => 'x', 'uraian' => 'Rencana Pemeriksaan Lapangan Bersama'],
-            ['no' => 'xi', 'uraian' => 'Tugas Konsultan MK', 'is_file_required' => false]
-        ];
+        // i. Berita Acara PCM
+        DocumentType::firstOrCreate(['code' => 'PPK-F-1'], [
+            'code' => 'PPK-F-1',
+            'no' => '3.f.i',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Berita Acara PCM',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F'
+        ]);
 
-        foreach ($pcmDocs as $doc) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_PCM_' . strtoupper(str_replace(' ', '_', $doc['no'])),
-                'parent_code' => 'PERSIAPAN_PCM',
-                'no' => '3.f.' . $doc['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $doc['uraian'],
-                'is_file_required' => $doc['is_file_required'] ?? true
-            ]);
-        }
+        // ii. Struktur Organisasi Proyek
+        $strukturOrganisasi = DocumentType::firstOrCreate(['code' => 'PPK-F-2'], [
+            'code' => 'PPK-F-2',
+            'no' => '3.f.ii',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Struktur Organisasi Proyek',
+            'is_file_required' => false,
+            'parent_code' => 'PPK-F'
+        ]);
 
-        // Struktur Organisasi sub-documents
-        $orgDocs = [
-            ['no' => '1', 'uraian' => 'Penanggung Jawab Kegiatan'],
-            ['no' => '2', 'uraian' => 'Pengawas Pekerjaan'],
-            ['no' => '3', 'uraian' => 'Penyedia Jasa Pekerjaan Konstruksi']
-        ];
+        // Sub-dokumen Struktur Organisasi
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PPK-F-2-1',
+            'no' => '3.f.ii.1',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Penanggung Jawab Kegiatan',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F-2'
+        ]);
 
-        foreach ($orgDocs as $doc) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_PCM_II_' . $doc['no'],
-                'parent_code' => 'PERSIAPAN_PCM_II',
-                'no' => '3.f.ii.' . $doc['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $doc['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-2'], [
+            'code' => 'PPK-F-2-2',
+            'no' => '3.f.ii.2',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Pengawas Pekerjaan',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F-2'
+        ]);
 
-        // Metode Pelaksanaan sub-documents
-        $metodeDocs = [
-            ['no' => '1', 'uraian' => 'Gambaran umum tiap tahapan pelaksaan pekerjaan'],
-            ['no' => '2', 'uraian' => 'Metode pelaksanaan pekerjaan tertentu yang beresiko besar']
-        ];
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-3'], [
+            'code' => 'PPK-F-2-3',
+            'no' => '3.f.ii.3',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Penyedia Jasa Pekerjaan Konstruksi',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F-2'
+        ]);
 
-        foreach ($metodeDocs as $doc) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_PCM_VIII_' . $doc['no'],
-                'parent_code' => 'PERSIAPAN_PCM_VIII',
-                'no' => '3.f.viii.' . $doc['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $doc['uraian']
-            ]);
-        }
+        // iii. Pendelegasian Kewenangan
+        DocumentType::firstOrCreate(['code' => 'PPK-F-3'], [
+            'code' => 'PPK-F-3',
+            'no' => '3.f.iii',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Pendelegasian Kewenangan',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F'
+        ]);
 
-        // SMKK sub-documents
-        $smkkDocs = [
-            ['no' => '1', 'uraian' => 'Dokumen RKK'],
-            ['no' => '2', 'uraian' => 'Dokumen RMPK'],
-            ['no' => '3', 'uraian' => 'Dokumen RKPPL (Jika Ada)'],
-            ['no' => '4', 'uraian' => 'Dokumen RMLLP (Jika Ada)']
-        ];
+        // iv. Alur Komunikasi
+        DocumentType::firstOrCreate(['code' => 'PPK-F-4'], [
+            'code' => 'PPK-F-4',
+            'no' => '3.f.iv',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Alur Komunikasi dan Persetujuan',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F'
+        ]);
 
-        foreach ($smkkDocs as $doc) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_PCM_IX_' . $doc['no'],
-                'parent_code' => 'PERSIAPAN_PCM_IX',
-                'no' => '3.f.ix.' . $doc['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $doc['uraian']
-            ]);
-        }
+        // v. Mekanisme Pengawasan
+        DocumentType::firstOrCreate(['code' => 'PPK-F-5'], [
+            'code' => 'PPK-F-5',
+            'no' => '3.f.v',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Mekanisme Pengawasan',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F'
+        ]);
 
-        // Tugas Konsultan MK sub-documents
-        $tugasMkDocs = [
-            ['no' => '1', 'uraian' => 'Mengecek kesanggupan suplier dan reviu spesifikasi material dengan konsultan perencana'],
-            ['no' => '2', 'uraian' => 'Mengarahkan mutu pekerjaan dan spesifikasi material'],
-            ['no' => '3', 'uraian' => 'Mengawasi terhadap aspek K3'],
-            ['no' => '4', 'uraian' => 'Membantu proses koordinasi dan sosialisasi dengan aparat kewilayahan dan warga setempat'],
-            ['no' => '5', 'uraian' => 'Menganalisa master schedule dan daftar tenaga kerja kontraktor pelaksana']
-        ];
+        // vi. Jadwal Pelaksanaan
+        DocumentType::firstOrCreate(['code' => 'PPK-F-6'], [
+            'code' => 'PPK-F-6',
+            'no' => '3.f.vi',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Jadwal Pelaksanaan',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F'
+        ]);
 
-        foreach ($tugasMkDocs as $doc) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_PCM_XI_' . $doc['no'],
-                'parent_code' => 'PERSIAPAN_PCM_XI',
-                'no' => '3.f.xi.' . $doc['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $doc['uraian']
-            ]);
-        }
+        // vii. Mobilisasi
+        DocumentType::firstOrCreate(['code' => 'PPK-F-7'], [
+            'code' => 'PPK-F-7',
+            'no' => '3.f.vii',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Mobilisasi personil inti, peralatan, dan material',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F'
+        ]);
+
+        // viii. Metode Pelaksanaan
+        $metodePelaksanaan = DocumentType::firstOrCreate(['code' => 'PPK-F-8'], [
+            'code' => 'PPK-F-8',
+            'no' => '3.f.viii',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Metode Pelaksanaan',
+            'is_file_required' => false,
+            'parent_code' => 'PPK-F'
+        ]);
+
+        // Sub-dokumen Metode Pelaksanaan
+        DocumentType::firstOrCreate(['code' => 'PPK-F-8-1'], [
+            'code' => 'PPK-F-8-1',
+            'no' => '3.f.viii.1',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Gambaran umum tiap tahapan pelaksaan pekerjaan',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F-8'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-8-2'], [
+            'code' => 'PPK-F-8-2',
+            'no' => '3.f.viii.2',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Metode pelaksanaan pekerjaan tertentu yang beresiko besar',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F-8'
+        ]);
+
+        // ix. Pembahasan Dokumen SMKK
+        $smkk = DocumentType::firstOrCreate(['code' => 'PPK-F-9'], [
+            'code' => 'PPK-F-9',
+            'no' => '3.f.ix',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Pembahasan Dokumen SMKK',
+            'is_file_required' => false,
+            'parent_code' => 'PPK-F'
+        ]);
+
+        // Sub-dokumen SMKK
+        DocumentType::firstOrCreate(['code' => 'PPK-F-9-1'], [
+            'code' => 'PPK-F-9-1',
+            'no' => '3.f.ix.1',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Dokumen RKK',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F-9'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-9-2'], [
+            'code' => 'PPK-F-9-2',
+            'no' => '3.f.ix.2',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Dokumen RMPK',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F-9'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-9-3'], [
+            'code' => 'PPK-F-9-3',
+            'no' => '3.f.ix.3',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Dokumen RKPPL (Jika Ada)',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F-9'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-9-4'], [
+            'code' => 'PPK-F-9-4',
+            'no' => '3.f.ix.4',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Dokumen RMLLP (Jika Ada)',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F-9'
+        ]);
+
+        // x. Rencana Pemeriksaan
+        DocumentType::firstOrCreate(['code' => 'PPK-F-10'], [
+            'code' => 'PPK-F-10',
+            'no' => '3.f.x',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Rencana Pemeriksaan Lapangan Bersama',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F'
+        ]);
+
+        // xi. Tugas Konsultan MK
+        $tugasMK = DocumentType::create([
+            'code' => 'PPK-F-11',
+            'no' => '3.f.xi',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Tugas Konsultan MK',
+            'is_file_required' => false,
+            'parent_code' => 'PPK-F'
+        ]);
+
+        // Sub-dokumen Tugas MK
+        DocumentType::firstOrCreate(['code' => 'PPK-F-11-1'], [
+            'code' => 'PPK-F-11-1',
+            'no' => '3.f.xi.1',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Mengecek kesanggupan suplier dan reviu spesifikasi material dengan konsultan perencana',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F-11'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-11-2'], [
+            'code' => 'PPK-F-11-2',
+            'no' => '3.f.xi.2',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Mengarahkan mutu pekerjaan dan spesifikasi material',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F-11'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-11-3'], [
+            'code' => 'PPK-F-11-3',
+            'no' => '3.f.xi.3',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Mengawasi terhadap aspek K3',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F-11'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-11-4'], [
+            'code' => 'PPK-F-11-4',
+            'no' => '3.f.xi.4',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Membantu proses koordinasi dan sosialisasi dengan aparat kewilayahan dan warga setempat',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F-11'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-11-5'], [
+            'code' => 'PPK-F-11-5',
+            'no' => '3.f.xi.5',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Menganalisa master schedule dan daftar tenaga kerja kontraktor pelaksana',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-F-11'
+        ]);
 
         // g. Kelengkapan Dokumen Perizinan
         $perizinan = DocumentType::create([
-            'code' => 'PERSIAPAN_PERIZINAN',
+            'code' => 'PPK-G',
             'no' => '3.g',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Kelengkapan Dokumen Perizinan:',
-            'is_file_required' => false
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Kelengkapan Dokumen Perizinan',
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        // Perizinan sub-documents
-        $perizinanDocs = [
-            ['no' => 'i', 'uraian' => 'Surat Keterangan Rencana Kota/Kab'],
-            ['no' => 'ii', 'uraian' => 'Persetujuan Bangunan Gedung (PBG) (khususnya bangunan baru/perluasan)']
-        ];
+        // Sub-dokumen Perizinan
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PPK-G-1',
+            'no' => '3.g.i',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Surat Keterangan Rencana Kota/Kab',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-G'
+        ]);
 
-        foreach ($perizinanDocs as $doc) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_PERIZINAN_' . strtoupper(str_replace(' ', '_', $doc['no'])),
-                'parent_code' => 'PERSIAPAN_PERIZINAN',
-                'no' => '3.g.' . $doc['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $doc['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PPK-G-2',
+            'no' => '3.g.ii',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Persetujuan Bangunan Gedung (PBG) (khususnya bangunan baru/perluasan)',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-G'
+        ]);
 
         // i. Pembayaran Uang Muka
         $uangMuka = DocumentType::create([
-            'code' => 'PERSIAPAN_UANG_MUKA',
+            'code' => 'PPK-H',
             'no' => '3.i',
-            'tahapan' => 'Persiapan',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
             'uraian' => 'Pembayaran Uang Muka Berdasarkan SSKK',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        // Uang Muka sub-documents
-        $uangMukaDocs = [
-            ['no' => 'i', 'uraian' => 'Jaminan Uang Muka (Jika Ada)'],
-            ['no' => 'ii', 'uraian' => 'Berita Acara Pembayaran Uang Muka']
-        ];
+        // Sub-dokumen Uang Muka
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PPK-H-1',
+            'no' => '3.i.i',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Jaminan Uang Muka (Jika Ada)',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-H'
+        ]);
 
-        foreach ($uangMukaDocs as $doc) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_UANG_MUKA_' . strtoupper(str_replace(' ', '_', $doc['no'])),
-                'parent_code' => 'PERSIAPAN_UANG_MUKA',
-                'no' => '3.i.' . $doc['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $doc['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PPK-H-2',
+            'no' => '3.i.ii',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Berita Acara Pembayaran Uang Muka',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-H'
+        ]);
 
         // j. Schedule
         $schedule = DocumentType::create([
-            'code' => 'PERSIAPAN_SCHEDULE',
-            'parent_code' => 'PERSIAPAN',
+            'code' => 'PPK-I',
             'no' => '3.j',
-            'tahapan' => 'Persiapan',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
             'uraian' => 'Schedule',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        // Schedule sub-documents
-        $scheduleDocs = [
-            ['no' => 'i', 'uraian' => 'Peralatan'],
-            ['no' => 'ii', 'uraian' => 'Personil Inti dan Pendukung'],
-            ['no' => 'iii', 'uraian' => 'Material']
-        ];
+        // Sub-dokumen Schedule
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PPK-I-1',
+            'no' => '3.j.i',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Peralatan',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-I'
+        ]);
 
-        foreach ($scheduleDocs as $doc) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_SCHEDULE_' . strtoupper(str_replace(' ', '_', $doc['no'])),
-                'parent_code' => 'PERSIAPAN_SCHEDULE',
-                'no' => '3.j.' . $doc['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $doc['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PPK-I-2',
+            'no' => '3.j.ii',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Personil Inti dan Pendukung',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-I'
+        ]);
 
-        // 4.a. Kerangka Acuan Kerja Konsultan MK
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PPK-I-3',
+            'no' => '3.j.iii',
+            'tahapan' => 'Persiapan Pelaksanaan Konstruksi',
+            'uraian' => 'Material',
+            'is_file_required' => true,
+            'parent_code' => 'PPK-I'
+        ]);
+        // 4. Pelaksanaan Pekerjaan Konstruksi
+        // a. Kerangka Acuan Kerja Konsultan MK
         $kak = DocumentType::create([
-            'code' => 'PELAKSANAAN_KAK_MK',
+            'code' => 'PK-A',
             'no' => '4.a',
-            'tahapan' => 'Pelaksanaan',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
             'uraian' => 'Kerangka Acuan Kerja Konsultan MK',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
         // i. Masukan teknis kepada pengelola proyek
         $masukanTeknis = DocumentType::create([
-            'code' => 'PELAKSANAAN_KAK_MK_MASUKAN',
-            'parent_code' => 'PELAKSANAAN_KAK_MK',
+            'code' => 'PK-A-1',
             'no' => '4.a.i',
-            'tahapan' => 'Pelaksanaan',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
             'uraian' => 'Masukan teknis kepada pengelola proyek',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => 'PK-A'
         ]);
 
-        // Sub-dokumen masukan teknis
-        $masukanTeknisItems = [
-            ['no' => '1', 'uraian' => 'Pengelola Administrasi dan Keuangan'],
-            ['no' => '2', 'uraian' => 'Pengelola Teknis']
-        ];
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-1-1',
+            'no' => '4.a.i.1',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Pengelola Administrasi dan Keuangan',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-1'
+        ]);
 
-        foreach ($masukanTeknisItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_KAK_MK_MASUKAN_' . $item['no'],
-                'parent_code' => 'PELAKSANAAN_KAK_MK_MASUKAN',
-                'no' => '4.a.i.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-1-2',
+            'no' => '4.a.i.2',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Pengelola Teknis',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-1'
+        ]);
 
         // ii. Sasaran Kegiatan Konsultan MK
         $sasaranKegiatan = DocumentType::create([
-            'code' => 'PELAKSANAAN_KAK_MK_SASARAN',
-            'parent_code' => 'PELAKSANAAN_KAK_MK',
+            'code' => 'PK-A-2',
             'no' => '4.a.ii',
-            'tahapan' => 'Pelaksanaan',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
             'uraian' => 'Sasaran Kegiatan Konsultan MK',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => 'PK-A'
         ]);
 
-        // Laporan berkala items
-        $laporanBerkalaItems = [
-            ['no' => '1', 'uraian' => 'Reviu perencanaan'],
-            ['no' => '2', 'uraian' => 'Manajemen kontrak penyedia jasa konstruksi'],
-            ['no' => '3', 'uraian' => 'Pelaksanaan pekerjaan'],
-            ['no' => '4', 'uraian' => 'Pengawasan']
-        ];
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-2-1',
+            'no' => '4.a.ii.1',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Reviu perencanaan',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-2'
+        ]);
 
-        foreach ($laporanBerkalaItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_KAK_MK_SASARAN_' . $item['no'],
-                'parent_code' => 'PELAKSANAAN_KAK_MK_SASARAN',
-                'no' => '4.a.ii.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-2-2',
+            'no' => '4.a.ii.2',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Manajemen kontrak penyedia jasa konstruksi',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-2'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-2-3',
+            'no' => '4.a.ii.3',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Pelaksanaan pekerjaan',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-2'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-2-4',
+            'no' => '4.a.ii.4',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Pengawasan',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-2'
+        ]);
 
         // iii. Waktu Pelaksanaan Konstruksi
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_KAK_MK_WAKTU',
-            'parent_code' => 'PELAKSANAAN_KAK_MK',
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-3',
             'no' => '4.a.iii',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Waktu Pelaksanaan Konstruksi'
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Waktu Pelaksanaan Konstruksi',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A'
         ]);
 
         // iv. Tujuan adanya Konsultan MK
-        $tujuanMK = DocumentType::create([
-            'code' => 'PELAKSANAAN_KAK_MK_TUJUAN',
-            'parent_code' => 'PELAKSANAAN_KAK_MK',
+        $tujuanKonsultanMK = DocumentType::create([
+            'code' => 'PK-A-4',
             'no' => '4.a.iv',
-            'tahapan' => 'Pelaksanaan',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
             'uraian' => 'Tujuan adanya Konsultan MK',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => 'PK-A'
         ]);
 
-        // Tujuan MK items
-        $tujuanMKItems = [
-            ['no' => '1', 'uraian' => 'Melakukan pengelolaan/manajemen pelaksanaan konstruksi'],
-            ['no' => '2', 'uraian' => 'Melakukan pengendalian'],
-            ['no' => '3', 'uraian' => 'Monitoring'],
-            ['no' => '4', 'uraian' => 'Evaluasi terhadap pelaksanaan konstruksi'],
-            ['no' => '5', 'uraian' => 'Melakukan pengawasan']
-        ];
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-4-1',
+            'no' => '4.a.iv.1',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Melakukan pengelolaan/manajemen pelaksanaan konstruksi',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-4'
+        ]);
 
-        foreach ($tujuanMKItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_KAK_MK_TUJUAN_' . $item['no'],
-                'parent_code' => 'PELAKSANAAN_KAK_MK_TUJUAN',
-                'no' => '4.a.iv.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-4-2',
+            'no' => '4.a.iv.2',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Melakukan pengendalian',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-4'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-4-3',
+            'no' => '4.a.iv.3',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Monitoring',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-4'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-4-4',
+            'no' => '4.a.iv.4',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Evaluasi terhadap pelaksanaan konstruksi',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-4'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-4-5',
+            'no' => '4.a.iv.5',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Melakukan pengawasan',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-4'
+        ]);
 
         // Keluaran Konsultan MK
-        $keluaranMK = DocumentType::create([
-            'code' => 'PELAKSANAAN_KAK_MK_KELUARAN',
-            'parent_code' => 'PELAKSANAAN_KAK_MK',
+        $keluaranKonsultanMK = DocumentType::create([
+            'code' => 'PK-A-5',
             'no' => '4.a.v',
-            'tahapan' => 'Pelaksanaan',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
             'uraian' => 'Keluaran Konsultan MK',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => 'PK-A'
         ]);
 
-        // Keluaran MK items
-        $keluaranMKItems = [
-            ['no' => '1', 'uraian' => 'Laporan dan Berita Acara Persiapan Pelaksanaan'],
-            ['no' => '2', 'uraian' => 'Buku harian, yang memuat semua kejadian, perintah/petunjuk yang penting dari Pemimpin Pelaksana Kegiatan, Kontraktor Pelaksana dan Konsultan MK'],
-            ['no' => '3', 'uraian' => 'Laporan Harian'],
-            ['no' => '4', 'uraian' => 'Laporan Mingguan dan bulanan sesuai resume laporan harian'],
-            ['no' => '5', 'uraian' => 'Berita']
-        ];
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-5-1',
+            'no' => '4.a.v.1',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Laporan dan Berita Acara Persiapan Pelaksanaan',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-5'
+        ]);
 
-        foreach ($keluaranMKItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_KAK_MK_KELUARAN_' . $item['no'],
-                'parent_code' => 'PELAKSANAAN_KAK_MK_KELUARAN',
-                'no' => '4.a.v.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-5-2',
+            'no' => '4.a.v.2',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Buku harian, yang memuat semua kejadian, perintah/petunjuk yang penting dari Pemimpin Pelaksana Kegiatan, Kontraktor Pelaksana dan Konsultan MK',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-5'
+        ]);
 
-        // 5. Dokumen Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)
-        // a. Laporan Harian
-        $laporanHarian = DocumentType::create([
-            'code' => 'PENUNJANG_LAPORAN_HARIAN',
-            'no' => '5.a',
-            'tahapan' => 'Penunjang',
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-5-3',
+            'no' => '4.a.v.3',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
             'uraian' => 'Laporan Harian',
-            'is_file_required' => false
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-5'
         ]);
 
-        $laporanHarianItems = [
-            ['no' => 'i', 'uraian' => 'Jenis dan kuantitas bahan yang berada di lokasi pekerjaan'],
-            ['no' => 'ii', 'uraian' => 'Penempatan tenaga kerja untuk tiap macam tugasnya'],
-            ['no' => 'iii', 'uraian' => 'Jenis, jumlah, dan kondisi lapangan'],
-            ['no' => 'iv', 'uraian' => 'Jenis dan kuantitas pekerjaan yang dilaksanakan'],
-            ['no' => 'v', 'uraian' => 'Keadaan cuaca termasuk hujan, banjir, dan peristiwa alam lainnya yang berpengaruh terhadap kelancaran pekerjaan'],
-            ['no' => 'vi', 'uraian' => 'Catatan-catatan lain yang berkenaan dengan pelaksanaan']
-        ];
-
-        foreach ($laporanHarianItems as $item) {
-            DocumentType::create([
-                'code' => 'PENUNJANG_LAPORAN_HARIAN_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PENUNJANG_LAPORAN_HARIAN',
-                'no' => '5.a.' . $item['no'],
-                'tahapan' => 'Penunjang',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-        // b. Laporan Mingguan
-        $laporanMingguan = DocumentType::create([
-            'code' => 'PENUNJANG_LAPORAN_MINGGUAN',
-            'no' => '5.b',
-            'tahapan' => 'Penunjang',
-            'uraian' => 'Laporan Mingguan berisi rangkuman laporan harian dan hasil kemajuan fisik pekerjaan dalam periode satu minggu, serta hal-hal penting yang perlu ditonjolkan',
-            'is_file_required' => false
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-5-4',
+            'no' => '4.a.v.4',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Laporan Mingguan dan bulanan sesuai resume laporan harian',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-5'
         ]);
 
-        $laporanMingguanItems = [
-            ['no' => 'i', 'uraian' => 'Rangkuman capaian pekerjaan fisik berupa hasil pembandingan capaian minggu sebelumnya dengan capaian pada minggu berjalan dan sasaran capaian pada minggu berikutnya'],
-            ['no' => 'ii', 'uraian' => 'Hambatan dan kendala yang dihadapi pada kurun waktu 1 (satu) minggu berserta tindakan penanggulangan yang telah dilakukan dan potensi kendala pada minggu berikutnya'],
-            ['no' => 'iii', 'uraian' => 'Dukungan yang diperlukan dari Pemimpin unit kerja Pelaksana Kegiatan/Penanggung Jawa Kegiatan, Direksi Teknis/Konsultan Pengawas, dan pihak-pihak lain yang terkait'],
-            ['no' => 'iv', 'uraian' => 'Ringkasan permohonan persetujuan atas usulan dan dokumen yang diajukan beserta statusnya'],
-            ['no' => 'v', 'uraian' => 'Ringkasan kegiatan pemeriksaan dan pengujian yang dilakukan'],
-            ['no' => 'vi', 'uraian' => 'Ringkasan aktivitas dan hasil pengendalian Keselamatan Konstruksi, termasuk kejadian kecelakaan kerja, catatan tentang kejadian nyaris terjadi kecelakaan kerja (nearmiss record), dan lain-lain']
-        ];
-
-        foreach ($laporanMingguanItems as $item) {
-            DocumentType::create([
-                'code' => 'PENUNJANG_LAPORAN_MINGGUAN_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PENUNJANG_LAPORAN_MINGGUAN',
-                'no' => '5.b.' . $item['no'],
-                'tahapan' => 'Penunjang',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-        // c. Laporan Bulanan
-        $laporanBulanan = DocumentType::create([
-            'code' => 'PENUNJANG_LAPORAN_BULANAN',
-            'no' => '5.c',
-            'tahapan' => 'Penunjang',
-            'uraian' => 'Laporan Bulanan berisi hasil kemajuan fisik pekerjaan dalam periode satu bulan, serta hal-hal penting yang perlu ditonjolkan',
-            'is_file_required' => false
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-5-5',
+            'no' => '4.a.v.5',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Berita Acara Kemajuan Pekerjaan untuk pembayaran angsuran',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-5'
         ]);
 
-        $laporanBulananItems = [
-            ['no' => 'i', 'uraian' => 'Capaian pekerjaan fisik, ringkasan status capaian pekerjaan fisik dengan membandingkan capaian di bulan sebelumnya, capaian pada bulan berjalan serta target capaian di bulan berikutnya'],
-            ['no' => 'ii', 'uraian' => 'Foto dokumentasi pekerjaan'],
-            ['no' => 'iii', 'uraian' => 'Ringkasan status kondisi keuangan Penyedia Jasa Pekerjaan Konstruksi, status pembayaran dari Pengguna jasa'],
-            ['no' => 'iv', 'uraian' => 'Perubahan kontrak dan perubahan pekerjaan'],
-            ['no' => 'v', 'uraian' => 'Masalah dan kendala yang dihadapi, termasuk statusnya, tindakan penanggulangan yang telah dilakukan dan rencana tindakan selanjutnya'],
-            ['no' => 'vi', 'uraian' => 'Hambatan dan kendala yang dihadapi pada kurun waktu 1 (satu) minggu berserta tindakan penanggulangan yang telah dilakukan dan potensi kendala pada minggu berikutnya'],
-            ['no' => 'vii', 'uraian' => 'Hambatan dan kendala yang berpotensi terjadi di bulan berikutnya, beserta rencana pencegahan atau penanggulangan yang akan dilakukan'],
-            ['no' => 'viii', 'uraian' => 'Status persetujuan atas usulan dan permohonan dokumen'],
-            ['no' => 'ix', 'uraian' => 'Ringkasan aktivitas dan hasil pengendalian Keselamatan Konstruksi, termasuk kejadian kecelakaan kerja, catatan tentang kejadian nyaris terjadi kecelakaan kerja (nearmiss record), dan lain-lain']
-        ];
-
-        foreach ($laporanBulananItems as $item) {
-            DocumentType::create([
-                'code' => 'PENUNJANG_LAPORAN_BULANAN_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PENUNJANG_LAPORAN_BULANAN',
-                'no' => '5.c.' . $item['no'],
-                'tahapan' => 'Penunjang',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-        // d. Data-data dukung dan pengujian untuk Kelengkapan Dokumen Sertifikat Laik Fungsi (SLF) Bangunan
-        $dataDukungSLF = DocumentType::create([
-            'code' => 'PENUNJANG_DATA_DUKUNG_SLF',
-            'no' => '5.d',
-            'tahapan' => 'Penunjang',
-            'uraian' => 'Data-data dukung dan pengujian untuk Kelengkapan Dokumen Sertifikat Laik Fungsi (SLF) Bangunan',
-            'is_file_required' => false
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-5-6',
+            'no' => '4.a.v.6',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Surat Perintah Perubahan Pekerjaan untuk pembayaran angsuran',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-5'
         ]);
 
-        // i. Hasil uji mutu
-        $hasilUjiMutu = DocumentType::create([
-            'code' => 'PENUNJANG_DATA_DUKUNG_SLF_I',
-            'parent_code' => 'PENUNJANG_DATA_DUKUNG_SLF',
-            'no' => '5.d.i',
-            'tahapan' => 'Penunjang',
-            'uraian' => 'Hasil uji mutu',
-            'is_file_required' => false
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-5-7',
+            'no' => '4.a.v.7',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Gambar-gambar sesuai dengan pelaksanaan (as-built drawing) dan manual peralatan-peralatan yang dibuat oleh kontraktor pelaksana',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-5'
         ]);
 
-        $hasilUjiMutuItems = [
-            ['no' => '1', 'uraian' => 'Uji tarik besi'],
-            ['no' => '2', 'uraian' => 'Uji tekan beton'],
-            ['no' => '3', 'uraian' => 'Pembebanan pondasi dalam']
-        ];
-
-        foreach ($hasilUjiMutuItems as $item) {
-            DocumentType::create([
-                'code' => 'PENUNJANG_DATA_DUKUNG_SLF_I_' . $item['no'],
-                'parent_code' => 'PENUNJANG_DATA_DUKUNG_SLF_I',
-                'no' => '5.d.i.' . $item['no'],
-                'tahapan' => 'Penunjang',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-        // Remaining SLF documents
-        $remainingSLFDocs = [
-            ['no' => 'ii', 'uraian' => 'Sertifikat mutu, brosur, katalog'],
-            ['no' => 'iii', 'uraian' => 'Sertifikat garansi / surat jaminan peralatan dan perlengkapan mekanikal, elektrikal, dan perpipaan (plumbing)'],
-            ['no' => 'iv', 'uraian' => 'Sertifikat Laik Operasi (SLO) Penyambungan Baru Instalasi Listrik'],
-            ['no' => 'v', 'uraian' => 'Perijinan Sumur Dalam dari Dinas ESDM/Instansi Terkait'],
-            ['no' => 'vi', 'uraian' => 'Uji Kualitas Air Sumur dari Dinas Kesehatan/Instansi Terkait'],
-            ['no' => 'vii', 'uraian' => 'Pengujian Instalasi Pemadam Kebakaran (Hidran, APAR, dll) dari Dinas Pemadam Kebakaran/BPDB/Instansi Terkait'],
-            ['no' => 'viii', 'uraian' => 'Pengujian K3 Instalasi Penyalur Petir dari Dinas Tenaga Kerja/Instansi Terkait'],
-            ['no' => 'ix', 'uraian' => 'Hasil Test Commisioning Mekanikal Elektrikal'],
-            ['no' => 'x', 'uraian' => 'Dokumen K3 atau SMK3'],
-            ['no' => 'xi', 'uraian' => 'Sertifikat Bangunan Gedung Hijau (jika ada)'],
-            ['no' => 'xii', 'uraian' => 'Gambar Kerja (Shop Drawing)'],
-            ['no' => 'xiii', 'uraian' => 'Gambar Hasil Pelaksanaan (As Bulit Drawing)'],
-            ['no' => 'xiv', 'uraian' => 'Pedoman/Manual pengoperasian dan perawatan/pemeliharaan Bangunan Gedung Negara, termasuk peralatan dan perlengkapan mekanikal, elektrikal, dan plumbing, yang disusun bersama konsultan perencana dan konsultan pengawas/MK'],
-            ['no' => 'xv', 'uraian' => 'Surat Penjaminan atas Kegagalan Bangunan diTTD Penyedia Jasa Pelaksana dan Pengawas Konstruksi/MK']
-        ];
-
-        foreach ($remainingSLFDocs as $doc) {
-            DocumentType::create([
-                'code' => 'PENUNJANG_DATA_DUKUNG_SLF_' . strtoupper(str_replace(' ', '_', $doc['no'])),
-                'parent_code' => 'PENUNJANG_DATA_DUKUNG_SLF',
-                'no' => '5.d.' . $doc['no'],
-                'tahapan' => 'Penunjang',
-                'uraian' => $doc['uraian']
-            ]);
-        }
-
-        // e. Berita Acara Hasil Perbaikan Cacat Mutu
-        DocumentType::create([
-            'code' => 'PENUNJANG_BA_PERBAIKAN_CACAT',
-            'no' => '5.e',
-            'tahapan' => 'Penunjang',
-            'uraian' => 'Berita Acara Hasil Perbaikan Cacat Mutu (Jika Ada)'
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-5-8',
+            'no' => '4.a.v.8',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Laporan rapat di lapangan (site meeting)',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-5'
         ]);
 
-        // f. Laporan Dokumentasi Pelaksanaan Konstruksi
-        $dokumentasiKonstruksi = DocumentType::create([
-            'code' => 'PENUNJANG_DOKUMENTASI',
-            'no' => '5.f',
-            'tahapan' => 'Penunjang',
-            'uraian' => 'Laporan Dokumentasi Pelaksanaan Konstruksi, Berupa foto dan/atau video sebagai berikut:',
-            'is_file_required' => false
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-5-9',
+            'no' => '4.a.v.9',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Gambar rincian pelaksanaan (shop drawing) dan time schedule yang dibuat oleh kontraktor pelaksana',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-5'
         ]);
 
-        $dokumentasiItems = [
-            ['no' => 'i', 'uraian' => 'Dokumentasi pelaksanaan pada saat progress 0%, 50%, 100% yang diambil dari sudut pandang'],
-            ['no' => 'ii', 'uraian' => 'Dokumentasi pelaksanaan pada saat progress 0% dan progress pelaksanaan sesuai permintaan pembayaran = ........ % yang diambil dari satu sudut pandang']
-        ];
-
-        foreach ($dokumentasiItems as $item) {
-            DocumentType::create([
-                'code' => 'PENUNJANG_DOKUMENTASI_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PENUNJANG_DOKUMENTASI',
-                'no' => '5.f.' . $item['no'],
-                'tahapan' => 'Penunjang',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-        // g. Laporan Kemajuan Hasil Pekerjaan Pelaksanaan Konstruksi
-        DocumentType::create([
-            'code' => 'PENUNJANG_LAPORAN_KEMAJUAN',
-            'no' => '5.g',
-            'tahapan' => 'Penunjang',
-            'uraian' => 'Laporan Kemajuan Hasil Pekerjaan Pelaksanaan Konstruksi\nUntuk pembayaran termin sesuai kontrak, maka prosentase progres pada laporan minimal sebesar prosentase termin.\nUntuk pembayaran sesuai progres dapat dilakukan beberapa kali termin, contohnya: Termin I, Termin II, Termin III, dan seterusnya hingga Termin terakhir pada saat Serah Terima Hasil Pekerjaan Pertama Pelaksanaan Konstruksi (ST 1) dengan progress pelaksanaan sebesar 100%'
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-5-10',
+            'no' => '4.a.v.10',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Foto dokumentasi (0%, 30%, 50%, 75%, 100%)',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-5'
         ]);
 
-        // 6. PERUBAHAN KONTRAK (ADDENDUM)
-        // a. Bentuk perubahan kontrak
-        $bentukPerubahan = DocumentType::create([
-            'code' => 'PERUBAHAN_BENTUK',
-            'no' => '6.a',
-            'tahapan' => 'Perubahan Kontrak',
-            'uraian' => 'Bentuk perubahan kontrak',
-            'is_file_required' => false
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-A-5-11',
+            'no' => '4.a.v.11',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Laporan akhir pekerjaan manajemen',
+            'is_file_required' => true,
+            'parent_code' => 'PK-A-5'
         ]);
 
-        $bentukItems = [
-            ['no' => 'i', 'uraian' => 'MC perubahan'],
-            ['no' => 'ii', 'uraian' => 'CCO'],
-            ['no' => 'iii', 'uraian' => 'Addendum']
-        ];
-
-        foreach ($bentukItems as $bentuk) {
-            DocumentType::create([
-                'code' => 'PERUBAHAN_BENTUK_' . strtoupper(str_replace(' ', '_', $bentuk['no'])),
-                'parent_code' => 'PERUBAHAN_BENTUK',
-                'no' => '6.a.' . $bentuk['no'],
-                'tahapan' => 'Perubahan Kontrak',
-                'uraian' => $bentuk['uraian']
-            ]);
-        }
-
-        // b. Dokumen pendukung perubahan kontrak
-        $dokumenPendukung = DocumentType::create([
-            'code' => 'PERUBAHAN_PENDUKUNG',
-            'no' => '6.b',
-            'tahapan' => 'Perubahan Kontrak',
-            'uraian' => 'Dokumen pendukung perubahan kontrak',
-            'is_file_required' => false
-        ]);
-
-        $pendukungItems = [
-            ['no' => 'i', 'uraian' => 'Berita Acara Rapat Lapangan'],
-            ['no' => 'ii', 'uraian' => 'Usulan Perubahan dari Penyedia/Perintah tertulis perubahan kontrak oleh Pengguna Jasa (PA/KPA/PPK)'],
-            ['no' => 'iii', 'uraian' => 'Kajian/Justifikasi Teknis Konsultan Pengawas/MK'],
-            ['no' => 'iv', 'uraian' => 'Rekomendasi Konsultan Perencana']
-        ];
-
-        foreach ($pendukungItems as $item) {
-            DocumentType::create([
-                'code' => 'PERUBAHAN_PENDUKUNG_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PERUBAHAN_PENDUKUNG',
-                'no' => '6.b.' . $item['no'],
-                'tahapan' => 'Perubahan Kontrak',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-        // c. Dokumen negosiasi dan persetujuan
-        $negosiasiDoc = DocumentType::create([
-            'code' => 'PERUBAHAN_NEGOSIASI',
-            'no' => '6.c',
-            'tahapan' => 'Perubahan Kontrak',
-            'uraian' => 'Dokumen negosiasi dan persetujuan',
-            'is_file_required' => false
-        ]);
-
-        $negosiasiItems = [
-            ['no' => 'i', 'uraian' => 'Berita Acara Negosiasi'],
-            ['no' => 'ii', 'uraian' => 'Persetujuan Perubahan Kontrak']
-        ];
-
-        foreach ($negosiasiItems as $item) {
-            DocumentType::create([
-                'code' => 'PERUBAHAN_NEGOSIASI_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PERUBAHAN_NEGOSIASI',
-                'no' => '6.c.' . $item['no'],
-                'tahapan' => 'Perubahan Kontrak',
-                'uraian' => $item['uraian']
-            ]);
-        };
-
-        $keluaranMKItems = [
-            ['no' => '1', 'uraian' => 'Laporan dan Berita Acara Persiapan Pelaksanaan'],
-            ['no' => '2', 'uraian' => 'Buku harian, yang memuat semua kejadian, perintah/petunjuk yang penting dari Pemimpin Pelaksana Kegiatan, Kontraktor Pelaksana dan Konsultan MK'],
-            ['no' => '3', 'uraian' => 'Laporan Harian'],
-            ['no' => '4', 'uraian' => 'Laporan Mingguan dan bulanan sesuai resume laporan harian'],
-            ['no' => '5', 'uraian' => 'Berita Acara Kemajuan Pekerjaan untuk pembayaran angsuran'],
-            ['no' => '6', 'uraian' => 'Surat Perintah Perubahan Pekerjaan untuk pembayaran angsuran'],
-            ['no' => '7', 'uraian' => 'Gambar-gambar sesuai dengan pelaksanaan (as-built drawing) dan manual peralatan-peralatan yang dibuat oleh kontraktor pelaksana'],
-            ['no' => '8', 'uraian' => 'Laporan rapat di lapangan (site meeting)'],
-            ['no' => '9', 'uraian' => 'Gambar rincian pelaksanaan (shop drawing) dan time schedule yang dibuat oleh kontraktor pelaksana'],
-            ['no' => '10', 'uraian' => 'Foto dokumentasi (0%, 30%, 50%, 75%, 100%)'],
-            ['no' => '11', 'uraian' => 'Laporan akhir pekerjaan manajemen']
-        ];
-
-        foreach ($keluaranMKItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_KAK_MK_KELUARAN_' . $item['no'],
-                'parent_code' => 'PELAKSANAAN_KAK_MK_KELUARAN',
-                'no' => '4.a.v.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-        // 4.b. Pemeriksaan Dokumen
+        // b. Pemeriksaan Dokumen
         $pemeriksaanDokumen = DocumentType::create([
-            'code' => 'PELAKSANAAN_PEMERIKSAAN_DOKUMEN',
+            'code' => 'PK-B',
             'no' => '4.b',
-            'tahapan' => 'Pelaksanaan',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
             'uraian' => 'Pemeriksaan Dokumen',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        // Pemeriksaan Dokumen items
-        $pemeriksaanDokumenItems = [
-            ['no' => 'i', 'uraian' => 'Gambar kerja'],
-            ['no' => 'ii', 'uraian' => 'Metode kerja konstruksi'],
-            ['no' => 'iii', 'uraian' => 'Rencana Pemeriksaan dan Pengujian']
-        ];
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-B-1',
+            'no' => '4.b.i',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Gambar kerja',
+            'is_file_required' => true,
+            'parent_code' => 'PK-B'
+        ]);
 
-        foreach ($pemeriksaanDokumenItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_PEMERIKSAAN_DOKUMEN_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PELAKSANAAN_PEMERIKSAAN_DOKUMEN',
-                'no' => '4.b.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-B-2',
+            'no' => '4.b.ii',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Metode kerja konstruksi',
+            'is_file_required' => true,
+            'parent_code' => 'PK-B'
+        ]);
 
-        // 4.c. Pemeriksaan Bersama (Mutual Check/MC-0)
-        $mc0 = DocumentType::create([
-            'code' => 'PELAKSANAAN_MC0',
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-B-3',
+            'no' => '4.b.iii',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Rencana Pemeriksaan dan Pengujian',
+            'is_file_required' => true,
+            'parent_code' => 'PK-B'
+        ]);
+
+        // c. Pemeriksaan Bersama (Mutual Check/MC-0)
+        $pemeriksaanBersama = DocumentType::create([
+            'code' => 'PK-C',
             'no' => '4.c',
-            'tahapan' => 'Pelaksanaan',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
             'uraian' => 'Pemeriksaan Bersama (Mutual Check/MC-0)',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        // MC-0 items
-        $mc0Items = [
-            ['no' => 'i', 'uraian' => 'Pemeriksaan terhadap desain awal'],
-            ['no' => 'ii', 'uraian' => 'Penyesuaian desain/review desain (Jika Diperlukan)'],
-            ['no' => 'iii', 'uraian' => 'Penyesuaian kuantitas (volume) berdasarkan review desain (Jika Diperlukan)'],
-            ['no' => 'iv', 'uraian' => 'Berita Acara Hasil Pemeriksaan Bersama (Mutual Check/MC-0) beserta dokumentasi'],
-            ['no' => 'v', 'uraian' => 'Perubahan/Addendum Kontrak (jika ada)', 'is_file_required' => false]
-        ];
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-C-1',
+            'no' => '4.c.i',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Pemeriksaan terhadap desain awal',
+            'is_file_required' => true,
+            'parent_code' => 'PK-C'
+        ]);
 
-        foreach ($mc0Items as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_MC0_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PELAKSANAAN_MC0',
-                'no' => '4.c.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian'],
-                'is_file_required' => $item['is_file_required'] ?? true
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-C-2',
+            'no' => '4.c.ii',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Penyesuaian desain/review desain (Jika Diperlukan)',
+            'is_file_required' => true,
+            'parent_code' => 'PK-C'
+        ]);
 
-        // Site Instruction
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_MC0_V_SITE_INSTRUCTION',
-            'parent_code' => 'PELAKSANAAN_MC0_V',
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-C-3',
+            'no' => '4.c.iii',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Penyesuaian kuantitas (volume) berdasarkan review desain (Jika Diperlukan)',
+            'is_file_required' => true,
+            'parent_code' => 'PK-C'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-C-4',
+            'no' => '4.c.iv',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Berita Acara Hasil Pemeriksaan Bersama (Mutual Check/MC-0) beserta dokumentasi',
+            'is_file_required' => true,
+            'parent_code' => 'PK-C'
+        ]);
+
+        // v. Perubahan/Addendum Kontrak (jika ada)
+        $perubahanKontrak = DocumentType::create([
+            'code' => 'PK-C-5',
+            'no' => '4.c.v',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Perubahan/Addendum Kontrak (jika ada)',
+            'is_file_required' => false,
+            'parent_code' => 'PK-C'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-C-5-1',
             'no' => '4.c.v.1',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Site Instruction'
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Site Instruction',
+            'is_file_required' => true,
+            'parent_code' => 'PK-C-5'
         ]);
 
         // d. Kaji ulang dan persetujuan pertama jadwal dan metodologi pelaksanaan pekerjaan
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_KAJI_ULANG',
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-D',
             'no' => '4.d',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Kaji ulang dan persetujuan pertama jadwal dan metodologi pelaksanaan pekerjaan'
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Kaji ulang dan persetujuan pertama jadwal dan metodologi pelaksanaan pekerjaan',
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
         // e. Pengajuan Izin Mulai Kerja
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_IZIN_KERJA',
-            'parent_code' => 'PELAKSANAAN',
+        $pengajuanIzin = DocumentType::create([
+            'code' => 'PK-E',
             'no' => '4.e',
-            'tahapan' => 'Pelaksanaan',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
             'uraian' => 'Pengajuan Izin Mulai Kerja',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
         // i. Permohonan Izin Memulai Pekerjaan (Request of Work)
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_IZIN_KERJA_PERMOHONAN',
-            'parent_code' => 'PELAKSANAAN_IZIN_KERJA',
+        $permohonanIzin = DocumentType::create([
+            'code' => 'PK-E-1',
             'no' => '4.e.i',
-            'tahapan' => 'Pelaksanaan',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
             'uraian' => 'Permohonan Izin Memulai Pekerjaan (Request of Work)',
-            'is_file_required' => false
+            'is_file_required' => true,
+            'parent_code' => 'PK-E'
         ]);
 
-        // Prosedur Permohonan Izin items
-        $prosedurItems = [
-            ['no' => '1', 'uraian' => 'Gambar Kerja (Shop Drawing) mengacu pada Prosedur (P-03)'],
-            ['no' => '2', 'uraian' => 'Rencana Pelaksanaan Pekerjaan (Work Method Statement)', 'is_file_required' => false],
-            ['no' => '3', 'uraian' => 'Rencana Pemeriksaan dan Pengujian (Inspection and Test Plan/ ITP)']
-        ];
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-E-1-1',
+            'no' => '4.e.i.1',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Gambar Kerja (Shop Drawing) mengacu pada Prosedur (P-03)',
+            'is_file_required' => true,
+            'parent_code' => 'PK-E-1'
+        ]);
 
-        foreach ($prosedurItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_IZIN_KERJA_PERMOHONAN_' . $item['no'],
-                'parent_code' => 'PELAKSANAAN_IZIN_KERJA_PERMOHONAN',
-                'no' => '4.e.i.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian'],
-                'is_file_required' => $item['is_file_required'] ?? true
-            ]);
-        }
+        // Rencana Pelaksanaan Pekerjaan (Work Method Statement)
+        $rencanaPelaksanaan = DocumentType::create([
+            'code' => 'PK-E-1-2',
+            'no' => '4.e.i.2',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Rencana Pelaksanaan Pekerjaan (Work Method Statement)',
+            'is_file_required' => false,
+            'parent_code' => 'PK-E-1'
+        ]);
 
-        // Work Method Statement items
-        $wmsItems = [
-            ['no' => '1', 'uraian' => 'Metode Kerja'],
-            ['no' => '2', 'uraian' => 'Tenaga Kerja yang Dibutuhkan'],
-            ['no' => '3', 'uraian' => 'Peralatan yang Dibutuhkan'],
-            ['no' => '4', 'uraian' => 'Material yang Digunakan, Pengajuan persetujuan material sesuai dengan Prosedur (P-02)'],
-            ['no' => '5', 'uraian' => 'Aspek Keselamatan Konstruksi'],
-            ['no' => '6', 'uraian' => 'Jadwal Mobilisasi tiap-tiap Sumber Daya']
-        ];
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-E-1-2-1',
+            'no' => '4.e.i.2.1',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Metode Kerja',
+            'is_file_required' => true,
+            'parent_code' => 'PK-E-1-2'
+        ]);
 
-        foreach ($wmsItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_IZIN_KERJA_PERMOHONAN_2_' . $item['no'],
-                'parent_code' => 'PELAKSANAAN_IZIN_KERJA_PERMOHONAN_2',
-                'no' => '4.e.i.2.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-E-1-2-2',
+            'no' => '4.e.i.2.2',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Tenaga Kerja yang Dibutuhkan',
+            'is_file_required' => true,
+            'parent_code' => 'PK-E-1-2'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-E-1-2-3',
+            'no' => '4.e.i.2.3',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Peralatan yang Dibutuhkan',
+            'is_file_required' => true,
+            'parent_code' => 'PK-E-1-2'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-E-1-2-4',
+            'no' => '4.e.i.2.4',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Material yang Digunakan, Pengajuan persetujuan material sesuai dengan Prosedur (P-02)',
+            'is_file_required' => true,
+            'parent_code' => 'PK-E-1-2'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-E-1-2-5',
+            'no' => '4.e.i.2.5',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Aspek Keselamatan Konstruksi',
+            'is_file_required' => true,
+            'parent_code' => 'PK-E-1-2'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-E-1-2-6',
+            'no' => '4.e.i.2.6',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Jadwal Mobilisasi tiap-tiap Sumber Daya',
+            'is_file_required' => true,
+            'parent_code' => 'PK-E-1-2'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-E-1-3',
+            'no' => '4.e.i.3',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Rencana Pemeriksaan dan Pengujian (Inspection and Test Plan/ ITP)',
+            'is_file_required' => true,
+            'parent_code' => 'PK-E-1'
+        ]);
 
         // ii. Pemeriksaan terhadap Permohonan Izin Memulai Pekerjaan
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_IZIN_KERJA_PEMERIKSAAN',
-            'parent_code' => 'PELAKSANAAN_IZIN_KERJA',
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-E-2',
             'no' => '4.e.ii',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Pemeriksaan terhadap Permohonan Izin Memulai Pekerjaan (Request of Work)'
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Pemeriksaan terhadap Permohonan Izin Memulai Pekerjaan (Request of Work)',
+            'is_file_required' => true,
+            'parent_code' => 'PK-E'
         ]);
 
         // f. Surat Persetujuan Memulai Pekerjaan
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_PERSETUJUAN_KERJA',
-            'parent_code' => 'PELAKSANAAN',
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-F',
             'no' => '4.f',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Surat Persetujuan Memulai Pekerjaan (Approval of Work)'
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Surat Persetujuan Memulai Pekerjaan (Approval of Work)',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
         // g. Pengawasan Mutu Pekerjaan
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_PENGAWASAN_MUTU',
+        $pengawasanMutu = DocumentType::create([
+            'code' => 'PK-G',
             'no' => '4.g',
-            'tahapan' => 'Pelaksanaan',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
             'uraian' => 'Pengawasan Mutu Pekerjaan',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
+        ]);
+
+        // i. Pengawasan Mutu Pekerjaan dilakukan melalui pemeriksaan pengujian
+        $pengawasanMutuPekerjaan = DocumentType::create([
+            'code' => 'PK-G-1',
+            'no' => '4.g.i',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Pengawasan Mutu Pekerjaan dilakukan melalui pemeriksaan pengujian',
+            'is_file_required' => false,
+            'parent_code' => 'PK-G'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-G-1-1',
+            'no' => '4.g.i.1',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Metode Kerja',
+            'is_file_required' => true,
+            'parent_code' => 'PK-G-1'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-G-1-2',
+            'no' => '4.g.i.2',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Tenaga Kerja yang Terlibat',
+            'is_file_required' => true,
+            'parent_code' => 'PK-G-1'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-G-1-3',
+            'no' => '4.g.i.3',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Peralatan yang Dibutuhkan, Pemeriksaan terkait ketersediaan SILO dan SIO',
+            'is_file_required' => true,
+            'parent_code' => 'PK-G-1'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-G-1-4',
+            'no' => '4.g.i.4',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Material yang Digunakan, Pengawasan terkait spesifikasi dan jumlah material dasar dan material olahan sesuai dengan dokumen pengajuan material',
+            'is_file_required' => true,
+            'parent_code' => 'PK-G-1'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-G-1-5',
+            'no' => '4.g.i.5',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Aspek Keselamatan Konstruksi, implementasi per pekerjaan pada IBPRP',
+            'is_file_required' => true,
+            'parent_code' => 'PK-G-1'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-G-1-6',
+            'no' => '4.g.i.6',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Jadwal Mobilisasi tiap-tiap Sumber Daya',
+            'is_file_required' => true,
+            'parent_code' => 'PK-G-1'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-G-1-7',
+            'no' => '4.g.i.7',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Rencana Pemeriksaan dan Pengujian (Inspection and Test Plan/ ITP)',
+            'is_file_required' => true,
+            'parent_code' => 'PK-G-1'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-G-1-8',
+            'no' => '4.g.i.8',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Hasil Pekerjaan, Pengawasan terkait hasil tiap-tiap pekerjaan sesuai dengan persyaratan',
+            'is_file_required' => true,
+            'parent_code' => 'PK-G-1'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-G-2',
+            'no' => '4.g.ii',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Pengawasan terhadap proses tiap-tiap kegiatan dilakukan berdasarkan spesifikasi dan metode kerja yang diajukan',
+            'is_file_required' => true,
+            'parent_code' => 'PK-G'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-G-3',
+            'no' => '4.g.iii',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Pengawasan terhadap hasil pekerjaaan dilakukan berdasarkan spesifikasi',
+            'is_file_required' => true,
+            'parent_code' => 'PK-G'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-G-4',
+            'no' => '4.g.iv',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Pemeriksaan material pada saat penerimaan dilakukan sesuai Prosedur (P-04)',
+            'is_file_required' => true,
+            'parent_code' => 'PK-G'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-G-5',
+            'no' => '4.g.v',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Pemeriksaan dan Pengujian berkala material dilaksanakan sesuai dengan rencana pengujian pada dokumen Pemeriksaan dan Pengujian (ITP) yang terkait dengan material tersebut dengan peraturan yang berlaku sesuai dengan Prosedur (P-05)',
+            'is_file_required' => true,
+            'parent_code' => 'PK-G'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-G-6',
+            'no' => '4.g.vi',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Pemeriksaan hasil pekerjaan dilakukan pada setiap pekerjaan maupun sub pekerjaan baik fisik maupun administrasi Jika hasil pekerjaan sudah sesuai spesfikasi, maka Penyedia Jasa Pekerjaan Konstruksi mengajukan permohonan pemeriksaan kepada penanggung jawab kegiatan sesuai dengan prosedur (P-06)',
+            'is_file_required' => true,
+            'parent_code' => 'PK-G'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-G-7',
+            'no' => '4.g.vii',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Jika dalam pelaksanaan pekerjaan diperlukan adanya penyesuaian atau perubahan di lapangan, maka perubahan di lapangan dilaksanakan sesuai Prosedur (P-07)',
+            'is_file_required' => true,
+            'parent_code' => 'PK-G'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-G-8',
+            'no' => '4.g.viii',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Pengendalian ketidaksesuaian hasil pekerjaan dilakukan oleh Penyedia Jasa Pekerjaan Konstruksi dan Pengawas Pekerjaan, dan membuat laporan ketidaksesuaian sesuai Prosedur (P-08) dan (P-09)',
+            'is_file_required' => true,
+            'parent_code' => 'PK-G'
         ]);
 
         // h. Penerimaan dan Pembayaran Hasil Pekerjaan
         $penerimaanPembayaran = DocumentType::create([
-            'code' => 'PELAKSANAAN_PENERIMAAN_PEMBAYARAN',
+            'code' => 'PK-H',
             'no' => '4.h',
-            'tahapan' => 'Pelaksanaan',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
             'uraian' => 'Penerimaan dan Pembayaran Hasil Pekerjaan',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        // Penerimaan dan Pembayaran items
-        $penerimaanPembayaranItems = [
-            ['no' => 'i', 'uraian' => 'Penerimaan hasil pekerjaan dilakukan setelah seluruh persyaratan mutu pekerjaan dalam kontrak dipenuhi'],
-            ['no' => 'ii', 'uraian' => 'Persetujuan dokumen penagihan didahului dengan pemeriksaan mutu dan volume hasil pekerjaan yang telah selesai dikerjakan oleh pengawas pekerjaan'],
-            ['no' => 'iii', 'uraian' => 'Penyedia Jasa Pekerjaan Konstruksi menyampaikan dokumen tagihan sesuai dalam kontrak'],
-            ['no' => 'iv', 'uraian' => 'Jika hasil pemeriksaan menunjukkan ketidaksesuaian spesifikasi dan volume yang tertulis dalam dokumen penagihan, maka penanggung jawab kegiatan berhak untuk tidak menyetujui dokumen tersebut dan Penyedia Jasa Pekerjaan Konstruksi wajib melakukan perbaikan terhadap hasil pekerjaan maupun dokumen penagihannya'],
-            ['no' => 'v', 'uraian' => 'Pembayaran dapat dilakukan setelah hasil pemeriksaan telah disetujui']
-        ];
-
-        foreach ($penerimaanPembayaranItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_PENERIMAAN_PEMBAYARAN_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PELAKSANAAN_PENERIMAAN_PEMBAYARAN',
-                'no' => '4.h.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-        // i. Pengawasan Mutu Pekerjaan dilakukan melalui
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_PENGAWASAN_MUTU_METODE',
-            'parent_code' => 'PELAKSANAAN_PENGAWASAN_MUTU',
-            'no' => '4.g.i',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Pengawasan Mutu Pekerjaan dilakukan melalui:',
-            'is_file_required' => false
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-H-1',
+            'no' => '4.h.i',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Penerimaan hasil pekerjaan dilakukan setelah seluruh persyaratan mutu pekerjaan dalam kontrak dipenuhi',
+            'is_file_required' => false,
+            'parent_code' => 'PK-H'
         ]);
 
-        $pengawasanMutuItems = [
-            ['no' => '1', 'uraian' => 'Metode Kerja'],
-            ['no' => '2', 'uraian' => 'Tenaga Kerja yang Terlibat'],
-            ['no' => '3', 'uraian' => 'Peralatan yang Dibutuhkan, Pemeriksaan terkait ketersediaan SILO dan SIO'],
-            ['no' => '4', 'uraian' => 'Material yang Digunakan, Pengawasan terkait spesifikasi dan jumlah material dasar dan material olahan sesuai dengan dokumen pengajuan material'],
-            ['no' => '5', 'uraian' => 'Aspek Keselamatan Konstruksi, implementasi per pekerjaan pada IBPRP'],
-            ['no' => '6', 'uraian' => 'Jadwal Mobilisasi tiap-tiap Sumber Daya'],
-            ['no' => '7', 'uraian' => 'Rencana Pemeriksaan dan Pengujian (Inspection and Test Plan/ ITP)'],
-            ['no' => '8', 'uraian' => 'Hasil Pekerjaan, Pengawasan terkait hasil tiap-tiap pekerjaan sesuai dengan persyaratan.']
-        ];
-
-        foreach ($pengawasanMutuItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_PENGAWASAN_MUTU_METODE_' . $item['no'],
-                'parent_code' => 'PELAKSANAAN_PENGAWASAN_MUTU_METODE',
-                'no' => '4.g.i.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-        // Additional Pengawasan Mutu items
-        $additionalPengawasanItems = [
-            ['no' => 'ii', 'uraian' => 'Pengawasan terhadap proses tiap-tiap kegiatan dilakukan berdasarkan spesifikasi dan metode kerja yang diajukan'],
-            ['no' => 'iii', 'uraian' => 'Pengawasan terhadap hasil pekerjaaan dilakukan berdasarkan spesifikasi'],
-            ['no' => 'iv', 'uraian' => 'Pemeriksaan material pada saat penerimaan dilakukan sesuai Prosedur (P-04)'],
-            ['no' => 'v', 'uraian' => 'Pemeriksaan dan Pengujian berkala material dilaksanakan sesuai dengan rencana pengujian pada dokumen Pemeriksaan dan Pengujian (ITP) yang terkait dengan material tersebut dengan peraturan yang berlaku sesuai dengan Prosedur (P-05)'],
-            ['no' => 'vi', 'uraian' => 'Pemeriksaan hasil pekerjaan dilakukan pada setiap pekerjaan maupun sub pekerjaan baik fisik maupun administrasi Jika hasil pekerjaan sudah sesuai spesfikasi, maka Penyedia Jasa Pekerjaan Konstruksi mengajukan permohonan pemeriksaan kepada penanggung jawab kegiatan sesuai dengan prosedur (P-06)'],
-            ['no' => 'vii', 'uraian' => 'Jika dalam pelaksanaan pekerjaan diperlukan adanya penyesuaian atau perubahan di lapangan, maka perubahan di lapangan dilaksanakan sesuai Prosedur (P-07)'],
-            ['no' => 'viii', 'uraian' => 'Pengendalian ketidaksesuaian hasil pekerjaan dilakukan oleh Penyedia Jasa Pekerjaan Konstruksi dan Pengawas Pekerjaan, dan membuat laporan ketidaksesuaian sesuai Prosedur (P-08) dan (P-09).']
-        ];
-
-        foreach ($additionalPengawasanItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_PENGAWASAN_MUTU_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PELAKSANAAN_PENGAWASAN_MUTU',
-                'no' => '4.g.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-        // h. Penerimaan dan Pembayaran Hasil Pekerjaan
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_PENERIMAAN',
-            'parent_code' => 'PELAKSANAAN',
-            'no' => '4.h',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Penerimaan dan Pembayaran Hasil Pekerjaan',
-            'is_file_required' => false
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-H-2',
+            'no' => '4.h.ii',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Persetujuan dokumen penagihan didahului dengan pemeriksaan mutu dan volume hasil pekerjaan yang telah selesai dikerjakan oleh pengawas pekerjaan',
+            'is_file_required' => false,
+            'parent_code' => 'PK-H'
         ]);
 
-        $penerimaanItems = [
-            ['no' => 'i', 'uraian' => 'Penerimaan hasil pekerjaan dilakukan setelah seluruh persyaratan mutu pekerjaan dalam kontrak dipenuhi'],
-            ['no' => 'ii', 'uraian' => 'Persetujuan dokumen penagihan didahului dengan pemeriksaan mutu dan volume hasil pekerjaan yang telah selesai dikerjakan oleh pengawas pekerjaan'],
-            ['no' => 'iii', 'uraian' => 'Penyedia Jasa Pekerjaan Konstruksi menyampaikan dokumen tagihan sesuai dalam kontrak'],
-            ['no' => 'iv', 'uraian' => 'Jika hasil pemeriksaan menunjukkan ketidaksesuaian spesifikasi dan volume yang tertulis dalam dokumen penagihan, maka penanggung jawab kegiatan berhak untuk tidak menyetujui dokumen tersebut dan Penyedia Jasa Pekerjaan Konstruksi wajib melakukan perbaikan terhadap hasil pekerjaan maupun dokumen penagihannya'],
-            ['no' => 'v', 'uraian' => 'Pembayaran dapat dilakukan setelah hasil pemeriksaan telah disetujui']
-        ];
-
-        foreach ($penerimaanItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_PENERIMAAN_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PELAKSANAAN_PENERIMAAN',
-                'no' => '4.h.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-        // Tenaga Ahli
-        DocumentType::create([
-            'code' => 'TENDER_MK_TENAGA_AHLI',
-            'parent_code' => 'TENDER_MK_III',
-            'no' => '2.a.iii.1',
-            'tahapan' => 'Tender',
-            'uraian' => 'Tenaga Ahli',
-            'is_file_required' => false
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-H-3',
+            'no' => '4.h.iii',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Penyedia Jasa Pekerjaan Konstruksi menyampaikan dokumen tagihan sesuai dalam kontrak',
+            'is_file_required' => false,
+            'parent_code' => 'PK-H'
         ]);
 
-        $tenagaAhli = [
-            ['no' => '1', 'uraian' => 'Team Leader'],
-            ['no' => '2', 'uraian' => 'Tenaga Ahli Teknik Arsitektur'],
-            ['no' => '3', 'uraian' => 'Tenaga Ahli Struktur/Sipil'],
-            ['no' => '4', 'uraian' => 'Tenaga Ahli Mekanikal/Elektrikal'],
-            ['no' => '5', 'uraian' => 'Tenaga Ahli K3 Konstruksi']
-        ];
-
-        foreach ($tenagaAhli as $ahli) {
-            DocumentType::create([
-                'code' => 'TENDER_MK_TENAGA_AHLI_' . $ahli['no'],
-                'parent_code' => 'TENDER_MK_TENAGA_AHLI',
-                'no' => '2.a.iii.1.' . $ahli['no'],
-                'tahapan' => 'Tender',
-                'uraian' => $ahli['uraian']
-            ]);
-        }
-
-
-        
-
-        // Tenaga Pengawas
-        DocumentType::create([
-            'code' => 'TENDER_MK_TENAGA_PENGAWAS',
-            'parent_code' => 'TENDER_MK_III',
-            'no' => '2.a.iii.2',
-            'tahapan' => 'Tender',
-            'uraian' => 'Tenaga Pengawas',
-            'is_file_required' => false
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-H-4',
+            'no' => '4.h.iv',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Jika hasil pemeriksaan menunjukkan ketidaksesuaian spesifikasi dan volume yang tertulis dalam dokumen penagihan, maka penanggung jawab kegiatan berhak untuk tidak menyetujui dokumen tersebut dan Penyedia Jasa Pekerjaan Konstruksi wajib melakukan perbaikan terhadap hasil pekerjaan maupun dokumen penagihannya',
+            'is_file_required' => false,
+            'parent_code' => 'PK-H'
         ]);
 
-        $tenagaPengawas = [
-            ['no' => '1', 'uraian' => 'Site Engineer'],
-            ['no' => '2', 'uraian' => 'Pengawas Arsitektur'],
-            ['no' => '3', 'uraian' => 'Pengawas Struktur'],
-            ['no' => '4', 'uraian' => 'Pengawas MEP']
-        ];
-
-        foreach ($tenagaPengawas as $pengawas) {
-            DocumentType::create([
-                'code' => 'TENDER_MK_TENAGA_PENGAWAS_' . $pengawas['no'],
-                'parent_code' => 'TENDER_MK_TENAGA_PENGAWAS',
-                'no' => '2.a.iii.2.' . $pengawas['no'],
-                'tahapan' => 'Tender',
-                'uraian' => $pengawas['uraian']
-            ]);
-        }
-
-
-        
-
-        // Tenaga Pendukung
-        DocumentType::create([
-            'code' => 'TENDER_MK_TENAGA_PENDUKUNG',
-            'parent_code' => 'TENDER_MK_III',
-            'no' => '2.a.iii.3',
-            'tahapan' => 'Tender',
-            'uraian' => 'Tenaga Pendukung',
-            'is_file_required' => false
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PK-H-5',
+            'no' => '4.h.v',
+            'tahapan' => 'Pelaksanaan Pekerjaan Konstruksi',
+            'uraian' => 'Pembayaran dapat dilakukan setelah hasil pemeriksaan telah disetujui',
+            'is_file_required' => false,
+            'parent_code' => 'PK-H'
         ]);
 
-        $tenagaPendukung = [
-            ['no' => '1', 'uraian' => 'Juru Gambar/Drafter BIM'],
-            ['no' => '2', 'uraian' => 'Administrasi + Surveyor']
-        ];
-
-        foreach ($tenagaPendukung as $pendukung) {
-            DocumentType::create([
-                'code' => 'TENDER_MK_TENAGA_PENDUKUNG_' . $pendukung['no'],
-                'parent_code' => 'TENDER_MK_TENAGA_PENDUKUNG',
-                'no' => '2.a.iii.3.' . $pendukung['no'],
-                'tahapan' => 'Tender',
-                'uraian' => $pendukung['uraian']
-            ]);
-        }
-
-        // ===================================
-        // 6. PERUBAHAN KONTRAK (ADDENDUM)
-        // ===================================
-
-        // a. Bentuk Perubahan Kontrak/Addendum
-        $bentukPerubahan = DocumentType::create([
-            'code' => 'ADDENDUM_BENTUK',
-            'no' => '6.a',
-            'tahapan' => 'Addendum',
-            'uraian' => 'Bentuk Perubahan Kontrak/Addendum',
-            'is_file_required' => false
-        ]);
-
-        $bentukAddendum = [
-            ['no' => 'i', 'uraian' => 'Mutual Check (MC) perubahan'],
-            ['no' => 'ii', 'uraian' => 'Contract Change Order (CCO)'],
-            ['no' => 'iii', 'uraian' => 'Addendum Kontrak']
-        ];
-
-        foreach ($bentukAddendum as $bentuk) {
-            DocumentType::create([
-                'code' => 'ADDENDUM_BENTUK_' . strtoupper(str_replace(' ', '_', $bentuk['no'])),
-                'parent_code' => 'ADDENDUM_BENTUK',
-                'no' => '6.a.' . $bentuk['no'],
-                'tahapan' => 'Addendum',
-                'uraian' => $bentuk['uraian']
-            ]);
-        }
-
-        // b. Dokumen pendukung perubahan kontrak
-        $dokumenPendukung = DocumentType::create([
-            'code' => 'PERUBAHAN_PENDUKUNG',
-            'no' => '6.b',
-            'tahapan' => 'Perubahan Kontrak',
-            'uraian' => 'Dokumen pendukung perubahan kontrak',
-            'is_file_required' => false
-        ]);
-
-        $pendukungItems = [
-            ['no' => 'i', 'uraian' => 'Berita Acara Rapat Lapangan'],
-            ['no' => 'ii', 'uraian' => 'Usulan Perubahan dari Penyedia/Perintah tertulis perubahan kontrak oleh Pengguna Jasa (PA/KPA/PPK)'],
-            ['no' => 'iii', 'uraian' => 'Kajian/Justifikasi Teknis Konsultan Pengawas/MK'],
-            ['no' => 'iv', 'uraian' => 'Rekomendasi Konsultan Perencana']
-        ];
-
-        foreach ($pendukungItems as $item) {
-            DocumentType::create([
-                'code' => 'PERUBAHAN_PENDUKUNG_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PERUBAHAN_PENDUKUNG',
-                'no' => '6.b.' . $item['no'],
-                'tahapan' => 'Addendum',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-        // c. Berita Acara Negosiasi
-        DocumentType::create([
-            'code' => 'ADDENDUM_NEGOSIASI',
-            'no' => '6.c',
-            'tahapan' => 'Addendum',
-            'uraian' => 'Berita Acara Negosiasi Teknis dan Harga (jika ada penambahan item pekerjaan baru)'
-        ]);
-
-        // d. Berita Acara Persetujuan
-        DocumentType::create([
-            'code' => 'ADDENDUM_PERSETUJUAN',
-            'no' => '6.d',
-            'tahapan' => 'Addendum',
-            'uraian' => 'Berita Acara Persetujuan Perubahan'
-        ]);
-
-        // e. Persetujuan Program Mutu
-        DocumentType::create([
-            'code' => 'ADDENDUM_PROGRAM_MUTU',
-            'no' => '6.e',
-            'tahapan' => 'Addendum',
-            'uraian' => 'Persetujuan Perubahan atau Permutakhiran Program Mutu oleh PPK (jika ada)'
-        ]);
-
-        // Bentuk perubahan kontrak
-        $bentukPerubahan = [
-            ['no' => 'i', 'uraian' => 'Perubahan spesifikasi teknis'],
-            ['no' => 'ii', 'uraian' => 'Perubahan jadwal pelaksanaan'],
-            ['no' => 'iii', 'uraian' => 'Perubahan harga kontrak']
-        ];
-
-        foreach ($bentukPerubahan as $bentuk) {
-            DocumentType::create([
-                'code' => 'ADDENDUM_BENTUK_' . strtoupper(str_replace(' ', '_', $bentuk['no'])),
-                'parent_code' => 'ADDENDUM_PROGRAM_MUTU',
-                'no' => '6.e.' . $bentuk['no'],
-                'tahapan' => 'Addendum',
-                'uraian' => $bentuk['uraian'],
-                'is_file_required' => false
-            ]);
-        }
-
-        // b. Dokumen pendukung perubahan kontrak
-        DocumentType::create([
-            'code' => 'ADDENDUM_DOKUMEN_PENDUKUNG',
-            'no' => '6.b',
-            'tahapan' => 'Addendum',
-            'uraian' => 'Dokumen pendukung perubahan kontrak',
-            'is_file_required' => false
-        ]);
-
-        $dokumenPendukung = [
-            ['no' => 'i', 'uraian' => 'Berita Acara Rapat Lapangan'],
-            ['no' => 'ii', 'uraian' => 'Usulan Perubahan dari Penyedia/Perintah tertulis perubahan kontrak oleh Pengguna Jasa (PA/KPA/PPK)'],
-            ['no' => 'iii', 'uraian' => 'Kajian/Justifikasi Teknis Konsultan Pengawas/MK'],
-            ['no' => 'iv', 'uraian' => 'Rekomendasi Konsultan Perencana']
-        ];
-
-        foreach ($dokumenPendukung as $dokumen) {
-            DocumentType::create([
-                'code' => 'ADDENDUM_DOKUMEN_PENDUKUNG_' . strtoupper(str_replace(' ', '_', $dokumen['no'])),
-                'parent_code' => 'ADDENDUM_DOKUMEN_PENDUKUNG',
-                'no' => '6.b.' . $dokumen['no'],
-                'tahapan' => 'Addendum',
-                'uraian' => $dokumen['uraian'],
-                'is_file_required' => false
-            ]);
-        }
-
-        // c. Berita Acara Negosiasi Teknis dan Harga
-        DocumentType::create([
-            'code' => 'ADDENDUM_BA_NEGOSIASI',
-            'no' => '6.c',
-            'tahapan' => 'Addendum',
-            'uraian' => 'Berita Acara Negosiasi Teknis dan Harga (jika ada penambahan item pekerjaan baru)'
-        ]);
-
-        // d. Berita Acara Persetujuan Perubahan
-        DocumentType::create([
-            'code' => 'ADDENDUM_BA_PERSETUJUAN',
-            'no' => '6.d',
-            'tahapan' => 'Addendum',
-            'uraian' => 'Berita Acara Persetujuan Perubahan'
-        ]);
-
-        // e. Persetujuan Perubahan atau Permutakhiran Program Mutu
-        DocumentType::create([
-            'code' => 'ADDENDUM_PERSETUJUAN_MUTU',
-            'no' => '6.e',
-            'tahapan' => 'Addendum',
-            'uraian' => 'Persetujuan Perubahan atau Permutakhiran Program Mutu oleh PPK (jika ada)',
-            'is_file_required' => false
-        ]);
-
-        // ===================================
-        // 7. KONTRAK KRITIS
-        // ===================================
-
-        // a. Surat Teguran
-        DocumentType::create([
-            'code' => 'KONTRAK_KRITIS_TEGURAN',
-            'no' => '7.a',
-            'tahapan' => 'Kontrak Kritis',
-            'uraian' => 'Surat Teguran'
-        ]);
-
-        // b. Berita Acara Show Cause Meeting (SCM)
-        DocumentType::create([
-            'code' => 'KONTRAK_KRITIS_SCM',
-            'no' => '7.b',
-            'tahapan' => 'Kontrak Kritis',
-            'uraian' => 'Berita Acara Show Cause Meeting (SCM)',
-            'is_file_required' => false
-        ]);
-
-        // Sub-dokumen SCM
-        $scmDocs = [
-            ['no' => 'i', 'uraian' => 'Berita Acara Show Cause Meeting (SCM) I'],
-            ['no' => 'ii', 'uraian' => 'Berita Acara Show Cause Meeting (SCM) II'],
-            ['no' => 'iii', 'uraian' => 'Berita Acara Show Cause Meeting (SCM) III']
-        ];
-
-        foreach ($scmDocs as $doc) {
-            DocumentType::create([
-                'code' => 'KONTRAK_KRITIS_SCM_' . strtoupper(str_replace(' ', '_', $doc['no'])),
-                'parent_code' => 'KONTRAK_KRITIS_SCM',
-                'no' => '7.b.' . $doc['no'],
-                'tahapan' => 'Kontrak Kritis',
-                'uraian' => $doc['uraian']
-            ]);
-        }
-
-        // c. Surat Peringatan
-        DocumentType::create([
-            'code' => 'KONTRAK_KRITIS_PERINGATAN',
-            'no' => '7.c',
-            'tahapan' => 'Kontrak Kritis',
-            'uraian' => 'Surat Peringatan',
-            'is_file_required' => false
-        ]);
-
-        // ===================================
-        // 8. PEMUTUSAN KONTRAK
-        // ===================================
-
-        // a. Berita Acara Pemeriksaan Lapangan
-        DocumentType::create([
-            'code' => 'PEMUTUSAN_BA_PEMERIKSAAN_LAPANGAN',
-            'no' => '8.a',
-            'tahapan' => 'Pemutusan Kontrak',
-            'uraian' => 'Berita Acara Pemeriksaan Lapangan untuk melakukan Penilaian Progress Lapangan Kondisi Kritis oleh Penyedia Jasa, Konsultan Pengawas/MK, Pejabat Pembuat Komitmen (PPK), dan tim teknis/tim ahli (jika ada/diperlukan)'
-        ]);
-
-        // b. Berita Acara Pemeriksaan Administratif
-        DocumentType::create([
-            'code' => 'PEMUTUSAN_BA_PEMERIKSAAN_ADMIN',
-            'no' => '8.b',
-            'tahapan' => 'Pemutusan Kontrak',
-            'uraian' => 'Berita Acara Pemeriksaan Administratif untuk melakukan Penelitian Dokumen Pelaksanaan Kontrak oleh Penyedia Jasa, Konsultan Pengawas/MK, Penjabat Pembuat Komitmen (PPK), dan tim teknis/tim ahli (jika ada, diperlukan)'
-        ]);
-
-        // c. Surat Penghentian Pekerjaan/Pemutusan Kontrak
-        DocumentType::create([
-            'code' => 'PEMUTUSAN_SURAT_PENGHENTIAN',
-            'no' => '8.c',
-            'tahapan' => 'Pemutusan Kontrak',
-            'uraian' => 'Surat Penghentian Pekerjaan/Pemutusan Kontrak oleh PPK'
-        ]);
-
-        // d. Surat Usulan Penetapan Sanksi Daftar Hitam
-        DocumentType::create([
-            'code' => 'PEMUTUSAN_SURAT_USULAN_SANKSI',
-            'no' => '8.d',
-            'tahapan' => 'Pemutusan Kontrak',
-            'uraian' => 'Surat Usulan Penetapan Sanksi Daftar Hitam dari PPK ke PA/KPA atau K/L/Pemerintah Daerah'
-        ]);
-
-        // e. Surat Pemberitahuan Usulan Penetapan Sanksi
-        DocumentType::create([
-            'code' => 'PEMUTUSAN_SURAT_PEMBERITAHUAN_SANKSI',
-            'no' => '8.e',
-            'tahapan' => 'Pemutusan Kontrak',
-            'uraian' => 'Surat Pemberitahuan Usulan Penetapan Sanski Daftar Hitam dari PA/KPA atau K/L/Pemerintah Daerah'
-        ]);
-
-        // f. Surat Keberatan dari Penyedia Jasa
-        DocumentType::create([
-            'code' => 'PEMUTUSAN_SURAT_KEBERATAN',
-            'no' => '8.f',
-            'tahapan' => 'Pemutusan Kontrak',
-            'uraian' => 'Surat Keberatan dari Penyedia Jasa (jika ada)'
-        ]);
-
-        // g. Surat Rekomendasi Penetapan Sanksi
-        DocumentType::create([
-            'code' => 'PEMUTUSAN_SURAT_REKOMENDASI_SANKSI',
-            'no' => '8.g',
-            'tahapan' => 'Pemutusan Kontrak',
-            'uraian' => 'Surat Rekomendasi Penetapan Sanksi Daftar Hitam dari APIP'
-        ]);
-
-        // h. Surat Keputusan Penetapan Sanksi
-        DocumentType::create([
-            'code' => 'PEMUTUSAN_SURAT_KEPUTUSAN_SANKSI',
-            'no' => '8.h',
-            'tahapan' => 'Pemutusan Kontrak',
-            'uraian' => 'Surat Keputusan Penetapan Sanksi Daftar Hitam dari PA/KPA atau K/L/Pemerintah Daerah'
-        ]);
-
-        // Sub-dokumen Surat Peringatan
-        $peringatanDocs = [
-            ['no' => 'i', 'uraian' => 'Surat Peringatan I'],
-            ['no' => 'ii', 'uraian' => 'Surat Peringatan II'],
-            ['no' => 'iii', 'uraian' => 'Surat Peringatan III']
-        ];
-
-        foreach ($peringatanDocs as $doc) {
-            DocumentType::create([
-                'code' => 'KONTRAK_KRITIS_PERINGATAN_' . strtoupper(str_replace(' ', '_', $doc['no'])),
-                'parent_code' => 'KONTRAK_KRITIS_PERINGATAN',
-                'no' => '7.c.' . $doc['no'],
-                'tahapan' => 'Kontrak Kritis',
-                'uraian' => $doc['uraian']
-            ]);
-        }
-
-        // Keluaran Konsultan MK
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_KELUARAN_MK',
-            'parent_code' => 'PELAKSANAAN',
-            'no' => '4.a',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Keluaran Konsultan MK',
-            'is_file_required' => false
-        ]);
-
-        $keluaranMK = [
-            ['no' => 'i', 'uraian' => 'Laporan dan Berita Acara Persiapan Pelaksanaan'],
-            ['no' => 'ii', 'uraian' => 'Buku harian, yang memuat semua kejadian, perintah/petunjuk yang penting dari Pemimpin Pelaksana Kegiatan, Kontraktor Pelaksana dan Konsultan MK'],
-            ['no' => 'iii', 'uraian' => 'Laporan Harian'],
-            ['no' => 'iv', 'uraian' => 'Laporan Mingguan dan bulanan sesuai resume laporan harian'],
-            ['no' => 'v', 'uraian' => 'Berita Acara Kemajuan Pekerjaan untuk pembayaran angsuran'],
-            ['no' => 'vi', 'uraian' => 'Surat Perintah Perubahan Pekerjaan untuk pembayaran angsuran'],
-            ['no' => 'vii', 'uraian' => 'Gambar-gambar sesuai dengan pelaksanaan (as-built drawing) dan manual peralatan-peralatan yang dibuat oleh kontraktor pelaksana'],
-            ['no' => 'viii', 'uraian' => 'Laporan rapat di lapangan (site meeting)'],
-            ['no' => 'ix', 'uraian' => 'Gambar rincian pelaksanaan (shop drawing) dan time schedule yang dibuat oleh kontraktor pelaksana'],
-            ['no' => 'x', 'uraian' => 'Foto dokumentasi (0%, 30%, 50%, 75%, 100%)'],
-            ['no' => 'xi', 'uraian' => 'Laporan akhir pekerjaan manajemen']
-        ];
-
-        foreach ($keluaranMK as $keluaran) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_KELUARAN_MK_' . strtoupper(str_replace(' ', '_', $keluaran['no'])),
-                'parent_code' => 'PELAKSANAAN_KELUARAN_MK',
-                'no' => '4.a.' . $keluaran['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $keluaran['uraian']
-            ]);
-        }
-
-
-        
-
-        // Tujuan adanya Konsultan MK
-        DocumentType::create([
-            'code' => 'TENDER_MK_TUJUAN',
-            'parent_code' => 'TENDER_MK_III',
-            'no' => '2.a.iv',
-            'tahapan' => 'Tender',
-            'uraian' => 'Tujuan adanya Konsultan MK',
-            'is_file_required' => false
-        ]);
-
-        $tujuanMK = [
-            ['no' => '1', 'uraian' => 'BA Aanwjzing'],
-            ['no' => '2', 'uraian' => 'Notulen Rapat Persiapan Pelaksanaan Kontrak'],
-            ['no' => '3', 'uraian' => 'Kontrak Pelaksanaan Pekerjaan'],
-            ['no' => '4', 'uraian' => 'Rencana Pre Construction Meeting'],
-            ['no' => '5', 'uraian' => 'Rencana Pekerjaan Persiapan Konstruksi'],
-            ['no' => '6', 'uraian' => 'Berita Acara Serah Terima Lahan'],
-            ['no' => '7', 'uraian' => 'Berita Acara Pengukuran Kembali Lokasi Pekerjaan (Uitzet) dan Mutual Check']
-        ];
-
-        foreach ($tujuanMK as $tujuan) {
-            DocumentType::create([
-                'code' => 'TENDER_MK_TUJUAN_' . $tujuan['no'],
-                'parent_code' => 'TENDER_MK_TUJUAN',
-                'no' => '2.a.iv.' . $tujuan['no'],
-                'tahapan' => 'Tender',
-                'uraian' => $tujuan['uraian']
-            ]);
-        }
-
-
-        
-
-
-
-        // ===================================
-        // 5. PENUNJANG TAHAPAN PELAKSANAAN KONSTRUKSI (PELAPORAN)
-        // ===================================
-
+        // 5. Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)
         // a. Laporan Harian
-        DocumentType::create([
-            'code' => 'PELAPORAN_HARIAN',
+        $laporanHarian = DocumentType::create([
+            'code' => 'PTP-A',
             'no' => '5.a',
-            'tahapan' => 'Pelaporan',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
             'uraian' => 'Laporan Harian',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        $laporanHarianItems = [
-            ['no' => 'i', 'uraian' => 'jenis dan kuantitas bahan yang berada di lokasi pekerjaan'],
-            ['no' => 'ii', 'uraian' => 'penempatan tenaga kerja untuk tiap macam tugasnya'],
-            ['no' => 'iii', 'uraian' => 'jenis, jumlah, dan kondisi lapangan'],
-            ['no' => 'iv', 'uraian' => 'jenis dan kuantitas pekerjaan yang dilaksanakan'],
-            ['no' => 'v', 'uraian' => 'keadaan cuaca termasuk hujan, banjir, dan peristiwa alam lainnya yang berpengaruh terhadap kelancaran pekerjaan'],
-            ['no' => 'vi', 'uraian' => 'catatan-catatan lain yang berkenaan dengan pelaksanaan']
-        ];
+        // Sub-dokumen Laporan Harian
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-A-1',
+            'no' => '5.a.i',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Jenis dan kuantitas bahan yang berada di lokasi pekerjaan',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-A'
+        ]);
 
-        foreach ($laporanHarianItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAPORAN_HARIAN_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PELAPORAN_HARIAN',
-                'no' => '5.a.' . $item['no'],
-                'tahapan' => 'Pelaporan',
-                'uraian' => $item['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-A-2',
+            'no' => '5.a.ii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Penempatan tenaga kerja untuk tiap macam tugasnya',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-A'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-A-3',
+            'no' => '5.a.iii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Jenis, jumlah, dan kondisi lapangan',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-A'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-A-4',
+            'no' => '5.a.iv',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Jenis dan kuantitas pekerjaan yang dilaksanakan',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-A'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-A-5',
+            'no' => '5.a.v',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Keadaan cuaca termasuk hujan, banjir, dan peristiwa alam lainnya yang berpengaruh terhadap kelancaran pekerjaan',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-A'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-A-6',
+            'no' => '5.a.vi',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Catatan-catatan lain yang berkenaan dengan pelaksanaan',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-A'
+        ]);
 
         // b. Laporan Mingguan
-        DocumentType::create([
-            'code' => 'PELAPORAN_MINGGUAN',
+        $laporanMingguan = DocumentType::create([
+            'code' => 'PTP-B',
             'no' => '5.b',
-            'tahapan' => 'Pelaporan',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
             'uraian' => 'Laporan Mingguan',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        $laporanMingguanItems = [
-            ['no' => 'i', 'uraian' => 'rangkuman capaian pekerjaan fisik berupa hasil pembandingan capaian minggu sebelumnya dengan capaian pada minggu berjalan dan sasaran capaian pada minggu berikutnya'],
-            ['no' => 'ii', 'uraian' => 'hambatan dan kendala yang dihadapi pada kurun waktu 1 (satu) minggu berserta tindakan penanggulangan yang telah dilakukan dan potensi kendala pada minggu berikutnya'],
-            ['no' => 'iii', 'uraian' => 'dukungan yang diperlukan dari Pemimpin unit kerja Pelaksana Kegiatan/Penanggung Jawa Kegiatan, Direksi Teknis/Konsultan Pengawas, dan pihak-pihka lain yang terkait'],
-            ['no' => 'iv', 'uraian' => 'ringkasan permohonan persetujuan atas usulan dan dokumen yang diajukan beserta statusnya'],
-            ['no' => 'v', 'uraian' => 'ringkasan kegiatan pemeriksaan dan pengujian yang dilakukan'],
-            ['no' => 'vi', 'uraian' => 'ringkasan aktivitas dan hasil pengendalian Keselamatan Konstruksi, termasuk kejadian kecelakaan kerja, catatan tentang kejadian nyaris terjadi kecelakaan kerja (nearmiss record), dan lain-lain']
-        ];
+        // Sub-dokumen Laporan Mingguan
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-B-1',
+            'no' => '5.b.i',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Rangkuman capaian pekerjaan fisik berupa hasil pembandingan capaian minggu sebelumnya dengan capaian pada minggu berjalan dan sasaran capaian pada minggu berikutnya',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-B'
+        ]);
 
-        foreach ($laporanMingguanItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAPORAN_MINGGUAN_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PELAPORAN_MINGGUAN',
-                'no' => '5.b.' . $item['no'],
-                'tahapan' => 'Pelaporan',
-                'uraian' => $item['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-B-2',
+            'no' => '5.b.ii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Hambatan dan kendala yang dihadapi pada kurun waktu 1 (satu) minggu berserta tindakan penanggulangan yang telah dilakukan dan potensi kendala pada minggu berikutnya',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-B'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-B-3',
+            'no' => '5.b.iii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Dukungan yang diperlukan dari Pemimpin unit kerja Pelaksana Kegiatan/Penanggung Jawa Kegiatan, Direksi Teknis/Konsultan Pengawas, dan pihak-pihka lain yang terkait',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-B'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-B-4',
+            'no' => '5.b.iv',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Ringkasan permohonan persetujuan atas usulan dan dokumen yang diajukan beserta statusnya',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-B'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-B-5',
+            'no' => '5.b.v',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Ringkasan kegiatan pemeriksaan dan pengujian yang dilakukan',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-B'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-B-6',
+            'no' => '5.b.vi',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Ringkasan aktivitas dan hasil pengendalian Keselamatan Konstruksi, termasuk kejadian kecelakaan kerja, catatan tentang kejadian nyaris terjadi kecelakaan kerja (nearmiss record), dan lain-lain',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-B'
+        ]);
 
         // c. Laporan Bulanan
-        DocumentType::create([
-            'code' => 'PELAPORAN_BULANAN',
+        $laporanBulanan = DocumentType::create([
+            'code' => 'PTP-C',
             'no' => '5.c',
-            'tahapan' => 'Pelaporan',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
             'uraian' => 'Laporan Bulanan',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        $laporanBulananItems = [
-            ['no' => 'i', 'uraian' => 'capaian pekerjaan fisik, ringkasan status capaian pekerjaan fisik dengan membandingkan capaian di bulan sebelumnya, capaian pada bulan berjalan serta target capaian di bulan berikutnya'],
-            ['no' => 'ii', 'uraian' => 'foto dokumentasi pekerjaan'],
-            ['no' => 'iii', 'uraian' => 'ringkasan status kondisi keuangan Penyedia Jasa Pekerjaan Konstruksi, status pembayaran dari Pengguna jasa'],
-            ['no' => 'iv', 'uraian' => 'perubahan kontrak dan perubahan pekerjaan'],
-            ['no' => 'v', 'uraian' => 'masalah dan kendala yang dihadapi, termasuk statusnya, tindakan penanggulangan yang telah dilakukan dan rencana tindakan selanjutnya'],
-            ['no' => 'vi', 'uraian' => 'hambatan dan kendala yang dihadapi pada kurun waktu 1 (satu) minggu berserta tindakan penanggulangan yang telah dilakukan dan potensi kendala pada minggu berikutnya'],
-            ['no' => 'vii', 'uraian' => 'hambatan dan kendala yang berpotensi terjadi di bulan berikutnya, beserta rencana pencegahan atau penanggulangan yang akan dilakukan'],
-            ['no' => 'viii', 'uraian' => 'status persetujuan atas usulan dan permohonan dokumen'],
-            ['no' => 'ix', 'uraian' => 'ringkasan aktivitas dan hasil pengendalian Keselamatan Konstruksi, termasuk kejadian kecelakaan kerja, catatan tentang kejadian nyaris terjadi kecelakaan kerja (nearmiss record), dan lain-lain']
-        ];
+        // Sub-dokumen Laporan Bulanan
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-C-1',
+            'no' => '5.c.i',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Capaian pekerjaan fisik, ringkasan status capaian pekerjaan fisik dengan membandingkan capaian di bulan sebelumnya, capaian pada bulan berjalan serta target capaian di bulan berikutnya',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-C'
+        ]);
 
-        foreach ($laporanBulananItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAPORAN_BULANAN_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PELAPORAN_BULANAN',
-                'no' => '5.c.' . $item['no'],
-                'tahapan' => 'Pelaporan',
-                'uraian' => $item['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-C-2',
+            'no' => '5.c.ii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Foto dokumentasi pekerjaan',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-C'
+        ]);
 
-        // d. Data-data dukung dan pengujian untuk Kelengkapan Dokumen SLF
-        DocumentType::create([
-            'code' => 'PELAPORAN_SLF',
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-C-3',
+            'no' => '5.c.iii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Ringkasan status kondisi keuangan Penyedia Jasa Pekerjaan Konstruksi, status pembayaran dari Pengguna jasa',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-C'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-C-4',
+            'no' => '5.c.iv',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Perubahan kontrak dan perubahan pekerjaan',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-C'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-C-5',
+            'no' => '5.c.v',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Masalah dan kendala yang dihadapi, termasuk statusnya, tindakan penanggulangan yang telah dilakukan dan rencana tindakan selanjutnya',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-C'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-C-6',
+            'no' => '5.c.vi',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Hambatan dan kendala yang dihadapi pada kurun waktu 1 (satu) minggu berserta tindakan penanggulangan yang telah dilakukan dan potensi kendala pada minggu berikutnya',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-C'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-C-7',
+            'no' => '5.c.vii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Hambatan dan kendala yang berpotensi terjadi di bulan berikutnya, beserta rencana pencegahan atau penanggulangan yang akan dilakukan',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-C'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-C-8',
+            'no' => '5.c.viii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Status persetujuan atas usulan dan permohonan dokumen',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-C'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-C-9',
+            'no' => '5.c.ix',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Ringkasan aktivitas dan hasil pengendalian Keselamatan Konstruksi, termasuk kejadian kecelakaan kerja, catatan tentang kejadian nyaris terjadi kecelakaan kerja (nearmiss record), dan lain-lain',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-C'
+        ]);
+
+        // d. Data-data dukung dan pengujian untuk Kelengkapan Dokumen Sertifikat Laik Fungsi (SLF) Bangunan
+        $dataDukungSLF = DocumentType::create([
+            'code' => 'PTP-D',
             'no' => '5.d',
-            'tahapan' => 'Pelaporan',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
             'uraian' => 'Data-data dukung dan pengujian untuk Kelengkapan Dokumen Sertifikat Laik Fungsi (SLF) Bangunan',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
         // i. Hasil uji mutu
-        DocumentType::create([
-            'code' => 'PELAPORAN_SLF_UJI_MUTU',
-            'parent_code' => 'PELAPORAN_SLF',
+        $hasilUjiMutu = DocumentType::create([
+            'code' => 'PTP-D-1',
             'no' => '5.d.i',
-            'tahapan' => 'Pelaporan',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
             'uraian' => 'Hasil uji mutu',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => 'PTP-D'
         ]);
 
-        $ujiMutuItems = [
-            ['no' => '1', 'uraian' => 'Uji tarik besi'],
-            ['no' => '2', 'uraian' => 'Uji tekan beton'],
-            ['no' => '3', 'uraian' => 'Pembebanan pondasi dalam']
-        ];
+        // Sub-dokumen Hasil uji mutu
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-1-1',
+            'no' => '5.d.i.1',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Uji tarik besi',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-D-1'
+        ]);
 
-        foreach ($ujiMutuItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAPORAN_SLF_UJI_MUTU_' . $item['no'],
-                'parent_code' => 'PELAPORAN_SLF_UJI_MUTU',
-                'no' => '5.d.i.' . $item['no'],
-                'tahapan' => 'Pelaporan',
-                'uraian' => $item['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-1-2',
+            'no' => '5.d.i.2',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Uji tekan beton',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-D-1'
+        ]);
 
-        $slfItems = [
-            ['no' => 'ii', 'uraian' => 'Sertifikat mutu, brosur, katalog'],
-            ['no' => 'iii', 'uraian' => 'Sertifikat garansi / surat jaminan peralatan dan perlengkapan mekanikal, elektrikal, dan perpipaan (plumbing)'],
-            ['no' => 'iv', 'uraian' => 'Sertifikat Laik Operasi (SLO) Penyambungan Baru Instalasi Listrik'],
-            ['no' => 'v', 'uraian' => 'Perijinan Sumur Dalam dari Dinas ESDM/Instansi Terkait'],
-            ['no' => 'vi', 'uraian' => 'Uji Kualitas Air Sumur dari Dinas Kesehatan/Instansi Terkait'],
-            ['no' => 'vii', 'uraian' => 'Pengujian Instalasi Pemadam Kebakaran (Hidran, APAR, dll) dari Dinas Pemadam Kebakaran/BPDB/Instansi Terkait'],
-            ['no' => 'viii', 'uraian' => 'Pengujian K3 Instalasi Penyalur Petir dari Dinas Tenaga Kerja/Instansi Terkait'],
-            ['no' => 'ix', 'uraian' => 'Hasil Test Commisioning Mekanikal Elektrikal'],
-            ['no' => 'x', 'uraian' => 'Dokumen K3 atau SMK3'],
-            ['no' => 'xi', 'uraian' => 'Sertifikat Bangunan Gedung Hijau (jika ada)'],
-            ['no' => 'xii', 'uraian' => 'Gambar Kerja (Shop Drawing)'],
-            ['no' => 'xiii', 'uraian' => 'Gambar Hasil Pelaksanaan (As Bulit Drawing)'],
-            ['no' => 'xiv', 'uraian' => 'Pedoman/Manual pengoperasian dan perawatan/pemeliharaan Bangunan Gedung Negara, termasuk peralatan dan perlengkapan mekanikal, elektrikal, dan plumbing, yang disusun bersama konsultan perencana dan konsultan pengawas/MK'],
-            ['no' => 'xv', 'uraian' => 'Surat Penjaminan atas Kegagalan Bangunan diTTD Penyedia Jasa Pelaksana dan Pengawas Konstruksi/MK']
-        ];
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-1-3',
+            'no' => '5.d.i.3',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Pembebanan pondasi dalam',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-D-1'
+        ]);
 
-        foreach ($slfItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAPORAN_SLF_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PELAPORAN_SLF',
-                'no' => '5.d.' . $item['no'],
-                'tahapan' => 'Pelaporan',
-                'uraian' => $item['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-2',
+            'no' => '5.d.ii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Sertifikat mutu, brosur, katalog',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-D'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-3',
+            'no' => '5.d.iii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Sertifikat garansi / surat jaminan peralatan dan perlengkapan mekanikal, elektrikal, dan perpipaan (plumbing)',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-D'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-4',
+            'no' => '5.d.iv',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Sertifikat Laik Operasi (SLO) Penyambungan Baru Instalasi Listrik',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-D'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-5',
+            'no' => '5.d.v',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Perijinan Sumur Dalam dari Dinas ESDM/Instansi Terkait',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-D'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-6',
+            'no' => '5.d.vi',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Uji Kualitas Air Sumur dari Dinas Kesehatan/Instansi Terkait',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-D'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-7',
+            'no' => '5.d.vii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Pengujian Instalasi Pemadam Kebakaran (Hidran, APAR, dll) dari Dinas Pemadam Kebakaran/BPDB/Instansi Terkait',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-D'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-8',
+            'no' => '5.d.viii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Pengujian K3 Instalasi Penyalur Petir dari Dinas Tenaga Kerja/Instansi Terkait',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-D'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-9',
+            'no' => '5.d.ix',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Hasil Test Commisioning Mekanikal Elektrikal',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-D'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-10',
+            'no' => '5.d.x',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Dokumen K3 atau SMK3',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-D'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-11',
+            'no' => '5.d.xi',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Sertifikat Bangunan Gedung Hijau (jika ada)',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-D'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-12',
+            'no' => '5.d.xii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Gambar Kerja (Shop Drawing)',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-D'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-13',
+            'no' => '5.d.xiii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Gambar Hasil Pelaksanaan (As Bulit Drawing)',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-D'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-14',
+            'no' => '5.d.xiv',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Pedoman/Manual pengoperasian dan perawatan/pemeliharaan Bangunan Gedung Negara, termasuk peralatan dan perlengkapan mekanikal, elektrikal, dan plumbing, yang disusun bersama konsultan perencana dan konsultan pengawas/MK',
+            'is_file_required' => false,
+            'parent_code' => 'PTP-D'
+        ]);
+
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-D-15',
+            'no' => '5.d.xv',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Surat Penjaminan atas Kegagalan Bangunan diTTD Penyedia Jasa Pelaksana dan Pengawas Konstruksi/MK',
+            'is_file_required' => false,
+            'parent_code' => 'PTP-D'
+        ]);
 
         // e. Berita Acara Hasil Perbaikan Cacat Mutu
-        DocumentType::create([
-            'code' => 'PELAPORAN_PERBAIKAN_CACAT',
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-E',
             'no' => '5.e',
-            'tahapan' => 'Pelaporan',
-            'uraian' => 'Berita Acara Hasil Perbaikan Cacat Mutu (Jika Ada)'
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Berita Acara Hasil Perbaikan Cacat Mutu (Jika Ada)',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
         // f. Laporan Dokumentasi Pelaksanaan Konstruksi
-        DocumentType::create([
-            'code' => 'PELAPORAN_DOKUMENTASI',
+        $laporanDokumentasi = DocumentType::create([
+            'code' => 'PTP-F',
             'no' => '5.f',
-            'tahapan' => 'Pelaporan',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
             'uraian' => 'Laporan Dokumentasi Pelaksanaan Konstruksi',
-            'is_file_required' => false
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        $dokumentasiItems = [
-            ['no' => 'i', 'uraian' => 'Dokumentasi pelaksanaan pada saat progress 0%, 50%, 100% yang diambil dari sudut pandang'],
-            ['no' => 'ii', 'uraian' => 'Dokumentasi pelaksanaan pada saat progress 0% dan progress pelaksanaan sesuai permintaan pembayaran = ........ % yang diambil dari satu sudut pandang']
-        ];
+        // Sub-dokumen Laporan Dokumentasi
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-F-1',
+            'no' => '5.f.i',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Dokumentasi pelaksanaan pada saat progress 0%, 50%, 100% yang diambil dari sudut pandang',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-F'
+        ]);
 
-        foreach ($dokumentasiItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAPORAN_DOKUMENTASI_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PELAPORAN_DOKUMENTASI',
-                'no' => '5.f.' . $item['no'],
-                'tahapan' => 'Pelaporan',
-                'uraian' => $item['uraian']
-            ]);
-        }
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-F-2',
+            'no' => '5.f.ii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Dokumentasi pelaksanaan pada saat progress 0% dan progress pelaksanaan sesuai permintaan pembayaran = ........ % yang diambil dari satu sudut pandang',
+            'is_file_required' => true,
+            'parent_code' => 'PTP-F'
+        ]);
 
-        // g. Laporan Kemajuan Hasil Pekerjaan
-        DocumentType::create([
-            'code' => 'PELAPORAN_KEMAJUAN',
+        // g. Laporan Kemajuan Hasil Pekerjaan Pelaksanaan Konstruksi
+        $laporanKemajuan = DocumentType::create([
+            'code' => 'PTP-G',
             'no' => '5.g',
-            'tahapan' => 'Pelaporan',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
             'uraian' => 'Laporan Kemajuan Hasil Pekerjaan Pelaksanaan Konstruksi',
-            'is_file_required' => false
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        // Dokumen tambahan tender
-        $additionalDocs = [
-            ['code' => 'TENDER_REVIEW_PAGU', 'no' => '2.b', 'uraian' => 'Hasil Review Pagu Anggaran Konstruksi'],
-            ['code' => 'TENDER_DED_FOR_TENDER', 'no' => '2.c', 'uraian' => 'Dokumen DED for Tender'],
-            ['code' => 'TENDER_PENILAIAN_PENYEDIA', 'no' => '2.d', 'uraian' => 'Hasil Penilaian Calon Penyedia Jasa sebagai Rekomendasi kepada Pemberi Tugas'],
-            ['code' => 'TENDER_SUPPLIER_CHECK', 'no' => '2.e', 'uraian' => 'Pengecekan kesanggupan supplier material'],
-            ['code' => 'TENDER_SPESIFIKASI_REVIEW', 'no' => '2.f', 'uraian' => 'Reviu spesifikasi material']
-        ];
-
-        foreach ($additionalDocs as $doc) {
-            DocumentType::create([
-                'code' => $doc['code'],
-                'no' => $doc['no'],
-                'tahapan' => 'Tender',
-                'uraian' => $doc['uraian']
-            ]);
-        }
-
-
-        
-
-        // 3. Persiapan Pelaksanaan Pekerjaan Konstruksi
-        DocumentType::create([
-            'code' => 'PERSIAPAN',
-            'no' => '3',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Persiapan Pelaksanaan Pekerjaan Konstruksi',
-            'is_file_required' => false
+        // Sub-dokumen Laporan Kemajuan
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-G-1',
+            'no' => '5.g.i',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Untuk pembayaran termin sesuai kontrak, maka prosentase progres pada laporan minimal sebesar prosentase termin',
+            'is_file_required' => false,
+            'parent_code' => 'PTP-G'
         ]);
 
-        // a. Jaminan Pelaksanaan
-        DocumentType::create([
-            'code' => 'PERSIAPAN_JAMINAN',
-            'parent_code' => 'PERSIAPAN',
-            'no' => '3.a',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Jaminan Pelaksanaan (jika ada)'
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PTP-G-2',
+            'no' => '5.g.ii',
+            'tahapan' => 'Penunjang Tahapan Pelaksanaan Konstruksi (PELAPORAN)',
+            'uraian' => 'Untuk pembayaran sesuai progres dapat dilakukan beberapa kali termin, contohnya: Termin I, Termin II, Termin III, dan seterusnya hingga Termin terakhir pada saat Serah Terima Hasil Pekerjaan Pertama Pelaksanaan Konstruksi (ST 1) dengan progress pelaksanaan sebesar 100%',
+            'is_file_required' => false,
+            'parent_code' => 'PTP-G'
         ]);
 
-        // b. Pengelolaan Kesehatan Kerja
-        DocumentType::create([
-            'code' => 'PERSIAPAN_K3',
-            'parent_code' => 'PERSIAPAN',
-            'no' => '3.b',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Pengelolaan Kesehatan Kerja - Perlindungan Sosial Tenaga Kerja'
+        // 6. Perubahan Kontrak (Addendum)
+        // a. Bentuk Perubahan Kontrak/Addendum
+        $bentukPerubahan = DocumentType::create([
+            'code' => 'PKA-A',
+            'no' => '6.a',
+            'tahapan' => 'Perubahan Kontrak (Addendum)',
+            'uraian' => 'Bentuk Perubahan Kontrak/Addendum',
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        // c. Dokumen Kontrak
-        DocumentType::create([
-            'code' => 'PERSIAPAN_KONTRAK',
-            'parent_code' => 'PERSIAPAN',
-            'no' => '3.c',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Dokumen Kontrak Pelaksana Konstruksi'
+        // Sub-dokumen Bentuk Perubahan
+        DocumentType::firstOrCreate(['code' => 'PKA-A-1'], [
+            'code' => 'PKA-A-1',
+            'no' => '6.a.i',
+            'tahapan' => 'Perubahan Kontrak (Addendum)',
+            'uraian' => 'Mutual Check (MC) perubahan',
+            'is_file_required' => true,
+            'parent_code' => 'PKA-A'
         ]);
 
-        // d. Berita Acara Penyerahan Lokasi
-        DocumentType::create([
-            'code' => 'PERSIAPAN_BA_LOKASI',
-            'parent_code' => 'PERSIAPAN',
-            'no' => '3.d',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Surat / Berita Acara Penyerahan Lokasi Pekerjaan dari PPK kepada Kontraktor Pelaksana beserta dokumentasi'
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKA-A-2',
+            'no' => '6.a.ii',
+            'tahapan' => 'Perubahan Kontrak (Addendum)',
+            'uraian' => 'Contract Change Order (CCO)',
+            'is_file_required' => true,
+            'parent_code' => 'PKA-A'
         ]);
 
-        // ===================================
-        // 4. PELAKSANAAN PEKERJAAN
-        // ===================================
-
-        // 4.a. SPMK
-        DocumentType::create([
-            'code' => 'PERSIAPAN_SPMK',
-            'parent_code' => 'PERSIAPAN', 
-            'no' => '3.e',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Surat Perintah Mulai Kerja (SPMK) Kontraktor Pelaksana'
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKA-A-3',
+            'no' => '6.a.iii',
+            'tahapan' => 'Perubahan Kontrak (Addendum)',
+            'uraian' => 'Addendum Kontrak',
+            'is_file_required' => true,
+            'parent_code' => 'PKA-A'
         ]);
 
-        // f. PCM
-        DocumentType::create([
-            'code' => 'PERSIAPAN_PCM',
-            'parent_code' => 'PERSIAPAN',
-            'no' => '3.f',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Kegiatan Rapat Persiapan Pelaksanaan Kontrak (Pre Construction Meeting (PCM))',
-            'is_file_required' => false
+        // b. Dokumen pendukung perubahan kontrak
+        $dokumenPendukung = DocumentType::create([
+            'code' => 'PKA-B',
+            'no' => '6.b',
+            'tahapan' => 'Perubahan Kontrak (Addendum)',
+            'uraian' => 'Dokumen pendukung perubahan kontrak',
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        // PCM Sub-documents
-        $pcmDocs = [
-            ['no' => 'i', 'uraian' => 'Berita Acara PCM'],
-            ['no' => 'ii', 'uraian' => 'Struktur Organisasi Proyek', 'is_file_required' => false],
-            ['no' => 'iii', 'uraian' => 'Pendelegasian Kewenangan'],
-            ['no' => 'iv', 'uraian' => 'Alur Komunikasi dan Persetujuan'],
-            ['no' => 'v', 'uraian' => 'Mekanisme Pengawasan'],
-            ['no' => 'vi', 'uraian' => 'Jadwal Pelaksanaan'],
-            ['no' => 'vii', 'uraian' => 'Mobilisasi personil inti, peralatan, dan material'],
-            ['no' => 'viii', 'uraian' => 'Metode Pelaksanaan', 'is_file_required' => false],
-            ['no' => 'ix', 'uraian' => 'Pembahasan Dokumen SMKK', 'is_file_required' => false],
-            ['no' => 'x', 'uraian' => 'Rencana Pemeriksaan Lapangan Bersama'],
-            ['no' => 'xi', 'uraian' => 'Tugas Konsultan MK', 'is_file_required' => false]
-        ];
-
-        foreach ($pcmDocs as $doc) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_PCM_' . strtoupper(str_replace(' ', '_', $doc['no'])),
-                'parent_code' => 'PERSIAPAN_PCM',
-                'no' => '3.f.' . $doc['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $doc['uraian'],
-                'is_file_required' => $doc['is_file_required'] ?? true
-            ]);
-        }
-
-
-        
-
-        // Struktur Organisasi sub-items
-        $orgItems = [
-            ['no' => '1', 'uraian' => 'Penanggung Jawab Kegiatan'],
-            ['no' => '2', 'uraian' => 'Pengawas Pekerjaan'],
-            ['no' => '3', 'uraian' => 'Penyedia Jasa Pekerjaan Konstruksi']
-        ];
-
-        foreach ($orgItems as $item) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_PCM_II_' . $item['no'],
-                'parent_code' => 'PERSIAPAN_PCM_II',
-                'no' => '3.f.ii.' . $item['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-
-        
-
-        // Metode Pelaksanaan sub-items
-        $metodeItems = [
-            ['no' => '1', 'uraian' => 'Gambaran umum tiap tahapan pelaksaan pekerjaan'],
-            ['no' => '2', 'uraian' => 'Metode pelaksanaan pekerjaan tertentu yang beresiko besar']
-        ];
-
-        foreach ($metodeItems as $item) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_PCM_VIII_' . $item['no'],
-                'parent_code' => 'PERSIAPAN_PCM_VIII',
-                'no' => '3.f.viii.' . $item['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-
-        
-
-        // SMKK sub-items
-        $smkkItems = [
-            ['no' => '1', 'uraian' => 'Dokumen RKK'],
-            ['no' => '2', 'uraian' => 'Dokumen RMPK'],
-            ['no' => '3', 'uraian' => 'Dokumen RKPPL (Jika Ada)'],
-            ['no' => '4', 'uraian' => 'Dokumen RMLLP (Jika Ada)']
-        ];
-
-        foreach ($smkkItems as $item) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_PCM_IX_' . $item['no'],
-                'parent_code' => 'PERSIAPAN_PCM_IX',
-                'no' => '3.f.ix.' . $item['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-
-        
-
-        // Tugas Konsultan MK sub-items
-        $tugasMKItems = [
-            ['no' => '1', 'uraian' => 'Mengecek kesanggupan suplier dan reviu spesifikasi material dengan konsultan perencana'],
-            ['no' => '2', 'uraian' => 'Mengarahkan mutu pekerjaan dan spesifikasi material'],
-            ['no' => '3', 'uraian' => 'Mengawasi terhadap aspek K3'],
-            ['no' => '4', 'uraian' => 'Membantu proses koordinasi dan sosialisasi dengan aparat kewilayahan dan warga setempat'],
-            ['no' => '5', 'uraian' => 'Menganalisa master schedule dan daftar tenaga kerja kontraktor pelaksana']
-        ];
-
-        foreach ($tugasMKItems as $item) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_PCM_XI_' . $item['no'],
-                'parent_code' => 'PERSIAPAN_PCM_XI',
-                'no' => '3.f.xi.' . $item['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-        // Pemeriksaan Dokumen
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_PEMERIKSAAN_DOKUMEN',
-            'parent_code' => 'PELAKSANAAN',
-            'no' => '4.b',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Pemeriksaan Dokumen',
-            'is_file_required' => false
+        // Sub-dokumen pendukung
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKA-B-1',
+            'no' => '6.b.i',
+            'tahapan' => 'Perubahan Kontrak (Addendum)',
+            'uraian' => 'Berita Acara Rapat Lapangan',
+            'is_file_required' => true,
+            'parent_code' => 'PKA-B'
         ]);
 
-        $pemeriksaanDokumen = [
-            ['no' => 'i', 'uraian' => 'Gambar kerja'],
-            ['no' => 'ii', 'uraian' => 'Metode kerja konstruksi'],
-            ['no' => 'iii', 'uraian' => 'Rencana Pemeriksaan dan Pengujian']
-        ];
-
-        foreach ($pemeriksaanDokumen as $dokumen) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_PEMERIKSAAN_DOKUMEN_' . strtoupper(str_replace(' ', '_', $dokumen['no'])),
-                'parent_code' => 'PELAKSANAAN_PEMERIKSAAN_DOKUMEN',
-                'no' => '4.b.' . $dokumen['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $dokumen['uraian']
-            ]);
-        }
-
-        // Pemeriksaan Bersama (Mutual Check/MC-0)
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_PEMERIKSAAN_BERSAMA',
-            'parent_code' => 'PELAKSANAAN',
-            'no' => '4.c',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Pemeriksaan Bersama (Mutual Check/MC-0)',
-            'is_file_required' => false
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKA-B-2',
+            'no' => '6.b.ii',
+            'tahapan' => 'Perubahan Kontrak (Addendum)',
+            'uraian' => 'Usulan Perubahan dari Penyedia/Perintah tertulis perubahan kontrak oleh Pengguna Jasa (PA/KPA/PPK)',
+            'is_file_required' => true,
+            'parent_code' => 'PKA-B'
         ]);
 
-        $pemeriksaanBersama = [
-            ['no' => 'i', 'uraian' => 'Pemeriksaan terhadap desain awal'],
-            ['no' => 'ii', 'uraian' => 'Penyesuaian desain/review desain (Jika Diperlukan)'],
-            ['no' => 'iii', 'uraian' => 'Penyesuaian kuantitas (volume) berdasarkan review desain (Jika Diperlukan)'],
-            ['no' => 'iv', 'uraian' => 'Berita Acara Hasil Pemeriksaan Bersama (Mutual Check/MC-0) beserta dokumentasi'],
-            ['no' => 'v', 'uraian' => 'Perubahan/Addendum Kontrak (jika ada)', 'is_file_required' => false]
-        ];
-
-        foreach ($pemeriksaanBersama as $pemeriksaan) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_PEMERIKSAAN_BERSAMA_' . strtoupper(str_replace(' ', '_', $pemeriksaan['no'])),
-                'parent_code' => 'PELAKSANAAN_PEMERIKSAAN_BERSAMA',
-                'no' => '4.c.' . $pemeriksaan['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $pemeriksaan['uraian'],
-                'is_file_required' => $pemeriksaan['is_file_required'] ?? true
-            ]);
-        }
-
-        // Site Instruction
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_PEMERIKSAAN_BERSAMA_SITE_INSTRUCTION',
-            'parent_code' => 'PELAKSANAAN_PEMERIKSAAN_BERSAMA_V',
-            'no' => '4.c.v.1',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Site Instruction'
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKA-B-3',
+            'no' => '6.b.iii',
+            'tahapan' => 'Perubahan Kontrak (Addendum)',
+            'uraian' => 'Kajian/Justifikasi Teknis Konsultan Pengawas/MK',
+            'is_file_required' => true,
+            'parent_code' => 'PKA-B'
         ]);
 
-        
-
-        // g. Kelengkapan Dokumen Perizinan
-        DocumentType::create([
-            'code' => 'PERSIAPAN_PERIZINAN',
-            'parent_code' => 'PERSIAPAN',
-            'no' => '3.g',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Kelengkapan Dokumen Perizinan:',
-            'is_file_required' => false
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKA-B-4',
+            'no' => '6.b.iv',
+            'tahapan' => 'Perubahan Kontrak (Addendum)',
+            'uraian' => 'Rekomendasi Konsultan Perencana',
+            'is_file_required' => true,
+            'parent_code' => 'PKA-B'
         ]);
 
-        $perizinanItems = [
-            ['no' => 'i', 'uraian' => 'Surat Keterangan Rencana Kota/Kab'],
-            ['no' => 'ii', 'uraian' => 'Persetujuan Bangunan Gedung (PBG) (khususnya bangunan baru/perluasan)']
-        ];
-
-        foreach ($perizinanItems as $item) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_PERIZINAN_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PERSIAPAN_PERIZINAN',
-                'no' => '3.g.' . $item['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-
-        
-
-        // i. Pembayaran Uang Muka
-        DocumentType::create([
-            'code' => 'PERSIAPAN_UANG_MUKA',
-            'parent_code' => 'PERSIAPAN',
-            'no' => '3.i',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Pembayaran Uang Muka Berdasarkan SSKK',
-            'is_file_required' => false
+        // c. Berita Acara Negosiasi
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKA-C',
+            'no' => '6.c',
+            'tahapan' => 'Perubahan Kontrak (Addendum)',
+            'uraian' => 'Berita Acara Negosiasi Teknis dan Harga (jika ada penambahan item pekerjaan baru)',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        $uangMukaItems = [
-            ['no' => 'i', 'uraian' => 'Jaminan Uang Muka (Jika Ada)'],
-            ['no' => 'ii', 'uraian' => 'Berita Acara Pembayaran Uang Muka']
-        ];
-
-        foreach ($uangMukaItems as $item) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_UANG_MUKA_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PERSIAPAN_UANG_MUKA',
-                'no' => '3.i.' . $item['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-
-        
-
-        // j. Schedule
-        $schedule = DocumentType::create([
-            'code' => 'PERSIAPAN_SCHEDULE',
-            'parent_code' => 'PERSIAPAN',
-            'no' => '3.j',
-            'tahapan' => 'Persiapan',
-            'uraian' => 'Schedule',
-            'is_file_required' => false
+        // d. Berita Acara Persetujuan
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKA-D',
+            'no' => '6.d',
+            'tahapan' => 'Perubahan Kontrak (Addendum)',
+            'uraian' => 'Berita Acara Persetujuan Perubahan',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        $scheduleItems = [
-            ['no' => 'i', 'uraian' => 'Peralatan'],
-            ['no' => 'ii', 'uraian' => 'Personil Inti dan Pendukung'],
-            ['no' => 'iii', 'uraian' => 'Material']
-        ];
-
-        foreach ($scheduleItems as $item) {
-            DocumentType::create([
-                'code' => 'PERSIAPAN_SCHEDULE_' . strtoupper(str_replace(' ', '_', $item['no'])),
-                'parent_code' => 'PERSIAPAN_SCHEDULE',
-                'no' => '3.j.' . $item['no'],
-                'tahapan' => 'Persiapan',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-
-        
-
-        // 4. Pelaksanaan Pekerjaan Konstruksi
-        DocumentType::create([
-            'code' => 'PELAKSANAAN',
-            'no' => '4',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Pelaksanaan Pekerjaan Konstruksi',
-            'is_file_required' => false
+        // e. Persetujuan Program Mutu
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKA-E',
+            'no' => '6.e',
+            'tahapan' => 'Perubahan Kontrak (Addendum)',
+            'uraian' => 'Persetujuan Perubahan atau Permutakhiran Program Mutu oleh PPK (jika ada)',
+            'is_file_required' => false,
+            'parent_code' => null
         ]);
 
-        // a. Kerangka Acuan Kerja Konsultan MK
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_KAK_MK',
-            'parent_code' => 'PELAKSANAAN',
-            'no' => '4.a',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Kerangka Acuan Kerja Konsultan MK',
-            'is_file_required' => false
+        // 7. Kontrak Kritis
+        // a. Surat Teguran
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'KK-A',
+            'no' => '7.a',
+            'tahapan' => 'Kontrak Kritis',
+            'uraian' => 'Surat Teguran',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        // i. Masukan teknis kepada pengelola proyek
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_KAK_MK_MASUKAN',
-            'parent_code' => 'PELAKSANAAN_KAK_MK',
-            'no' => '4.a.i',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Masukan teknis kepada pengelola proyek',
-            'is_file_required' => false
+        // b. Berita Acara SCM
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'KK-B',
+            'no' => '7.b',
+            'tahapan' => 'Kontrak Kritis',
+            'uraian' => 'Berita Acara Show Cause Meeting (SCM) I, II, dan III',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        $masukanItems = [
-            ['no' => '1', 'uraian' => 'Pengelola Administrasi dan Keuangan'],
-            ['no' => '2', 'uraian' => 'Pengelola Teknis']
-        ];
-
-        foreach ($masukanItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_KAK_MK_MASUKAN_' . $item['no'],
-                'parent_code' => 'PELAKSANAAN_KAK_MK_MASUKAN',
-                'no' => '4.a.i.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-
-        
-
-        // ii. Sasaran Kegiatan Konsultan MK
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_KAK_MK_SASARAN',
-            'parent_code' => 'PELAKSANAAN_KAK_MK',
-            'no' => '4.a.ii',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Sasaran Kegiatan Konsultan MK',
-            'is_file_required' => false
+        // c. Surat Peringatan
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'KK-C',
+            'no' => '7.c',
+            'tahapan' => 'Kontrak Kritis',
+            'uraian' => 'Surat Peringatan I, II, dan III',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        $sasaranItems = [
-            ['no' => '1', 'uraian' => 'Reviu perencanaan'],
-            ['no' => '2', 'uraian' => 'Manajemen kontrak penyedia jasa konstruksi'],
-            ['no' => '3', 'uraian' => 'Pelaksanaan pekerjaan'],
-            ['no' => '4', 'uraian' => 'Pengawasan']
-        ];
-
-        foreach ($sasaranItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_KAK_MK_SASARAN_' . $item['no'],
-                'parent_code' => 'PELAKSANAAN_KAK_MK_SASARAN',
-                'no' => '4.a.ii.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian']
-            ]);
-        }
-
-
-        
-
-        // iii. Waktu Pelaksanaan Konstruksi
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_KAK_MK_WAKTU',
-            'parent_code' => 'PELAKSANAAN_KAK_MK',
-            'no' => '4.a.iii',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Waktu Pelaksanaan Konstruksi'
+        // 8. Pemutusan Kontrak sampai dengan Penetapan Sanksi Daftar Hitam
+        // a. Berita Acara Pemeriksaan Lapangan
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKS-A',
+            'no' => '8.a',
+            'tahapan' => 'Pemutusan Kontrak dan Sanksi',
+            'uraian' => 'Berita Acara Pemeriksaan Lapangan untuk melakukan Penilaian Progress Lapangan Kondisi Kritis oleh Penyedia Jasa, Konsultan Pengawas/MK, Pejabat Pembuat Komitmen (PPK), dan tim teknis/tim ahli (jika ada/diperlukan)',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        // iv. Tujuan adanya Konsultan MK
-        DocumentType::create([
-            'code' => 'PELAKSANAAN_KAK_MK_TUJUAN',
-            'parent_code' => 'PELAKSANAAN_KAK_MK',
-            'no' => '4.a.iv',
-            'tahapan' => 'Pelaksanaan',
-            'uraian' => 'Tujuan adanya Konsultan MK',
-            'is_file_required' => false
+        // b. Berita Acara Pemeriksaan Administratif
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKS-B',
+            'no' => '8.b',
+            'tahapan' => 'Pemutusan Kontrak dan Sanksi',
+            'uraian' => 'Berita Acara Pemeriksaan Administratif untuk melakukan Penelitian Dokumen Pelaksanaan Kontrak oleh Penyedia Jasa, Konsultan Pengawas/MK, Penjabat Pembuat Komitmen (PPK), dan tim teknis/tim ahli (jika ada, diperlukan)',
+            'is_file_required' => true,
+            'parent_code' => null
         ]);
 
-        $tujuanItems = [
-            ['no' => '1', 'uraian' => 'Melakukan pengelolaan/manajemen pelaksanaan konstruksi'],
-            ['no' => '2', 'uraian' => 'Melakukan pengendalian'],
-            ['no' => '3', 'uraian' => 'Monitoring'],
-            ['no' => '4', 'uraian' => 'Evaluasi terhadap pelaksanaan konstruksi'],
-            ['no' => '5', 'uraian' => 'Melakukan pengawasan']
-        ];
+        // c. Surat Penghentian Pekerjaan/Pemutusan Kontrak
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKS-C',
+            'no' => '8.c',
+            'tahapan' => 'Pemutusan Kontrak dan Sanksi',
+            'uraian' => 'Surat Penghentian Pekerjaan/Pemutusan Kontrak oleh PPK',
+            'is_file_required' => true,
+            'parent_code' => null
+        ]);
 
-        foreach ($tujuanItems as $item) {
-            DocumentType::create([
-                'code' => 'PELAKSANAAN_KAK_MK_TUJUAN_' . $item['no'],
-                'parent_code' => 'PELAKSANAAN_KAK_MK_TUJUAN',
-                'no' => '4.a.iv.' . $item['no'],
-                'tahapan' => 'Pelaksanaan',
-                'uraian' => $item['uraian']
-            ]);
-        }
+        // d. Surat Usulan Penetapan Sanksi
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKS-D',
+            'no' => '8.d',
+            'tahapan' => 'Pemutusan Kontrak dan Sanksi',
+            'uraian' => 'Surat Usulan Penetapan Sanksi Daftar Hitam dari PPK ke PA/KPA atau K/L/Pemerintah Daerah',
+            'is_file_required' => true,
+            'parent_code' => null
+        ]);
 
+        // e. Surat Pemberitahuan Usulan Penetapan Sanksi
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKS-E',
+            'no' => '8.e',
+            'tahapan' => 'Pemutusan Kontrak dan Sanksi',
+            'uraian' => 'Surat Pemberitahuan Usulan Penetapan Sanski Daftar Hitam dari PA/KPA atau K/L/Pemerintah Daerah',
+            'is_file_required' => true,
+            'parent_code' => null
+        ]);
 
-        
+        // f. Surat Keberatan
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKS-F',
+            'no' => '8.f',
+            'tahapan' => 'Pemutusan Kontrak dan Sanksi',
+            'uraian' => 'Surat Keberatan dari Penyedia Jasa (jika ada)',
+            'is_file_required' => true,
+            'parent_code' => null
+        ]);
+
+        // g. Surat Rekomendasi Penetapan Sanksi
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKS-G',
+            'no' => '8.g',
+            'tahapan' => 'Pemutusan Kontrak dan Sanksi',
+            'uraian' => 'Surat Rekomendasi Penetapan Sanksi Daftar Hitam dari APIP',
+            'is_file_required' => true,
+            'parent_code' => null
+        ]);
+
+        // h. Surat Keputusan Penetapan Sanksi
+        DocumentType::firstOrCreate(['code' => 'PPK-F-2-1'], [
+            'code' => 'PKS-H',
+            'no' => '8.h',
+            'tahapan' => 'Pemutusan Kontrak dan Sanksi',
+            'uraian' => 'Surat Keputusan Penetapan Sanksi Daftar Hitam dari PA/KPA atau K/L/Pemerintah Daerah',
+            'is_file_required' => true,
+            'parent_code' => null
+        ]);
     }
 }

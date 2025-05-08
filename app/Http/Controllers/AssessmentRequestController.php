@@ -8,6 +8,19 @@ use Illuminate\Support\Facades\Auth;
 
 class AssessmentRequestController extends Controller
 {
+    public function index()
+    {
+        $assessmentRequests = AssessmentRequest::with(['project', 'guest'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('dashboard.user.assessment-requests.index', compact('assessmentRequests'));
+    }
+
+    public function show(AssessmentRequest $assessmentRequest)
+    {
+        return view('dashboard.user.assessment-requests.show', compact('assessmentRequest'));
+    }
     public function store(Request $request)
     {
         $request->validate([

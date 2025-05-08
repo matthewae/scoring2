@@ -28,11 +28,13 @@ class AuthController extends Controller
             Auth::login($user);
             $request->session()->regenerate();
             
-            $user = Auth::user();
-            if ($user->status === 'user') {
-                return redirect()->intended('dashboard/user');
+            // Redirect berdasarkan status user
+            if ($user->status === 'guest') {
+                return redirect()->route('dashboard.guest.index'); // Arahkan ke dashboard guest
+            } elseif ($user->status === 'user') {
+                return redirect()->route('dashboard.user.index'); // Arahkan ke dashboard user
             } else {
-                return redirect()->intended('dashboard/guest');
+                return redirect()->route('dashboard.guest.index'); // Default ke dashboard guest
             }
         }
 
@@ -66,6 +68,12 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        
+        return redirect()->route('login')
+            ->withHeaders([
+                'Cache-Control' => 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0',
+                'Pragma' => 'no-cache',
+                'Expires' => '0'
+            ]);
     }
 }
