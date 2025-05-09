@@ -15,39 +15,24 @@ class DocumentType extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'code',
-        'parent_code',
-        'no',
-        'tahapan',
-        'uraian',
-        'is_file_required'
+        'name',
+        'description',
+        'weight',
+        'is_required'
     ];
 
     protected $casts = [
-        'is_file_required' => 'boolean'
+        'is_required' => 'boolean',
+        'weight' => 'decimal:2'
     ];
 
     /**
-     * Get the documents associated with this document type.
+     * Get the projects associated with this document type.
      */
-    public function documents(): HasMany
+    public function projects()
     {
-        return $this->hasMany(ProjectDocument::class, 'document_type_code', 'code');
-    }
-
-    /**
-     * Get the parent document type.
-     */
-    public function parent()
-    {
-        return $this->belongsTo(DocumentType::class, 'parent_code', 'code');
-    }
-
-    /**
-     * Get the child document types.
-     */
-    public function children()
-    {
-        return $this->hasMany(DocumentType::class, 'parent_code', 'code');
+        return $this->belongsToMany(Project::class, 'project_documents')
+                    ->withPivot(['file_path', 'status', 'score', 'remarks'])
+                    ->withTimestamps();
     }
 }

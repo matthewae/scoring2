@@ -20,6 +20,8 @@ return new class extends Migration
             $table->decimal('contract_value', 15, 2)->after('selection_method');
             $table->date('spmk_date')->after('contract_value');
             $table->integer('duration_days')->after('spmk_date');
+            $table->date('start_date')->nullable()->after('duration_days');
+            $table->date('end_date')->nullable()->after('start_date');
         });
     }
 
@@ -37,7 +39,9 @@ return new class extends Migration
                 'selection_method',
                 'contract_value',
                 'spmk_date',
-                'duration_days'
+                'duration_days',
+                'start_date',
+                'end_date'
             ]);
         });
     }

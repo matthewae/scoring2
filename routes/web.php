@@ -71,6 +71,12 @@ Route::middleware(['auth'])->group(function () {
         // Projects Management
         Route::resource('projects', ProjectController::class);
         
+        // Project Scores
+        Route::prefix('project-scores')->name('project-scores.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Dashboard\User\ProjectScoreController::class, 'index'])->name('index');
+            Route::get('/{projectScore}', [\App\Http\Controllers\Dashboard\User\ProjectScoreController::class, 'show'])->name('show');
+        });
+        
         // Project Documents
         Route::prefix('projects/{project}/documents')->name('project-documents.')->group(function () {
             Route::get('/create', [ProjectDocumentController::class, 'create'])->name('create');

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Project extends Model
 {
@@ -49,9 +51,60 @@ class Project extends Model
     /**
      * Get the user that owns the project.
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the guest user associated with the project.
+     */
+    public function guest(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'guest_id');
+    }
+
+    /**
+     * Get the document types associated with the project.
+     */
+    public function documentTypes(): BelongsToMany
+    {
+        return $this->belongsToMany(DocumentType::class, 'project_documents')
+                    ->withPivot(['file_path', 'status', 'score', 'remarks'])
+                    ->withTimestamps();
+    }
+
+    /**
+     * Calculate the total score of the project based on document scores.
+     */
+    public function getTotalScore(): float
+    {
+        return $this->documentTypes()
+                    ->wherePivotNotNull('score')
+                    ->get()
+                    ->sum(function ($documentType) {
+                        return ($documentType->pivot->score * $documentType->weight) / 100;
+                    });
+    }
+
+    /**
+     * Get the completion status of required documents.
+     */
+    public function getCompletionStatus(): array
+    {
+        $requiredTypes = $this->documentTypes()
+                              ->where('is_required', true)
+                              ->get();
+
+        $completedRequired = $requiredTypes
+                            ->where('pivot.status', 'approved')
+                            ->count();
+
+        return [
+            'total_required' => $requiredTypes->count(),
+            'completed_required' => $completedRequired,
+            'is_complete' => $completedRequired === $requiredTypes->count()
+        ];
     }
 
     /**

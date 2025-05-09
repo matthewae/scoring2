@@ -9,20 +9,23 @@
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
         .gradient-background {
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 50%, #10b981 100%);
             transform: scale(0.98);
-            transition: transform 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: white;
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.2);
         }
         .gradient-background:hover {
             transform: scale(0.99);
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.3);
         }
         .glass-effect {
             background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(14, 165, 233, 0.15);
             transform: scale(0.98);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .sidebar {
             transition: transform 0.3s ease;
@@ -37,7 +40,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gradient-to-br from-sky-50 via-purple-50 to-emerald-50 min-h-screen">
     <!-- Particles Background -->
     <div id="particles-js" class="fixed inset-0 -z-10 opacity-50"></div>
 
@@ -47,37 +50,37 @@
     </button>
 
     <!-- Sidebar -->
-    <aside class="sidebar fixed top-0 left-0 h-full w-56 glass-effect z-40 transform md:translate-x-0">
-        <div class="p-6">
-            <div class="flex items-center justify-center mb-8">
-                <h1 class="text-2xl font-bold text-gray-800">Scoring System</h1>
+    <aside class="sidebar fixed top-0 left-0 h-full w-64 glass-effect z-40 transform md:translate-x-0 border-r border-white/20">
+        <div class="p-8">
+            <div class="flex items-center justify-center mb-10">
+                <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">Scoring System</h1>
             </div>
-            <nav class="space-y-4">
-                <a href="#" class="flex items-center space-x-3 text-gray-800 hover:bg-gray-100 p-3 rounded-lg transition-all duration-300">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
+            <nav class="space-y-5">
+                <a href="#" class="flex items-center space-x-4 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 p-4 rounded-xl transition-all duration-300 group">
+                    <i class="fas fa-home text-lg text-indigo-600 group-hover:scale-110 transition-transform"></i>
+                    <span class="font-medium">Dashboard</span>
                 </a>
-                <a href="{{ route('dashboard.guest.project-documents.create') }}" class="flex items-center space-x-3 text-gray-800 hover:bg-gray-100 p-3 rounded-lg transition-all duration-300">
-                    <i class="fas fa-file-upload"></i>
-                    <span>Pengajuan Dokumen</span>
+                <a href="{{ route('dashboard.guest.project-documents.create') }}" class="flex items-center space-x-4 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 p-4 rounded-xl transition-all duration-300 group">
+                    <i class="fas fa-file-upload text-lg text-purple-600 group-hover:scale-110 transition-transform"></i>
+                    <span class="font-medium">Pengajuan Dokumen</span>
                 </a>
-                <a href="{{ route('dashboard.guest.project-scores.index') }}" class="flex items-center space-x-3 text-gray-800 hover:bg-gray-100 p-3 rounded-lg transition-all duration-300">
-                    <i class="fas fa-star"></i>
-                    <span>Lihat Penilaian</span>
+                <a href="{{ route('dashboard.guest.project-scores.index') }}" class="flex items-center space-x-4 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 p-4 rounded-xl transition-all duration-300 group">
+                    <i class="fas fa-star text-lg text-blue-600 group-hover:scale-110 transition-transform"></i>
+                    <span class="font-medium">Lihat Penilaian</span>
                 </a>
-                <a href="{{ route('dashboard.guest.project-documents.history') }}" class="flex items-center space-x-3 text-gray-800 hover:bg-gray-100 p-3 rounded-lg transition-all duration-300">
-                    <i class="fas fa-history"></i>
-                    <span>Riwayat Pengajuan</span>
+                <a href="{{ route('dashboard.guest.project-documents.history') }}" class="flex items-center space-x-4 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 p-4 rounded-xl transition-all duration-300 group">
+                    <i class="fas fa-history text-lg text-indigo-600 group-hover:scale-110 transition-transform"></i>
+                    <span class="font-medium">Riwayat Pengajuan</span>
                 </a>
-                <a href="{{ route('dashboard.guest.guide') }}" class="flex items-center space-x-3 text-gray-800 hover:bg-gray-100 p-3 rounded-lg transition-all duration-300">
-                    <i class="fas fa-book"></i>
-                    <span>Panduan</span>
+                <a href="{{ route('dashboard.guest.guide') }}" class="flex items-center space-x-4 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 p-4 rounded-xl transition-all duration-300 group">
+                    <i class="fas fa-book text-lg text-violet-600 group-hover:scale-110 transition-transform"></i>
+                    <span class="font-medium">Panduan</span>
                 </a>
                 <form method="POST" action="{{ route('logout') }}" class="mt-auto">
                     @csrf
-                    <button type="submit" class="w-full flex items-center space-x-3 text-red-600 hover:bg-red-50 p-3 rounded-lg transition-all duration-300">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Logout</span>
+                    <button type="submit" class="w-full flex items-center space-x-4 text-red-600 hover:bg-red-50/50 p-4 rounded-xl transition-all duration-300 group">
+                        <i class="fas fa-sign-out-alt text-lg group-hover:scale-110 transition-transform"></i>
+                        <span class="font-medium">Logout</span>
                     </button>
                 </form>
             </nav>
@@ -93,50 +96,52 @@
         </div>
 
         <!-- Video Tutorial Section -->
-        <div class="glass-effect rounded-2xl p-8 mb-12 transform hover:scale-[1.01] transition-all duration-300">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <i class="fas fa-play-circle text-blue-600 mr-3"></i>
+        <div class="glass-effect rounded-2xl p-8 mb-12 transform hover:scale-[1.01] transition-all duration-300 border border-blue-100/20">
+            <h2 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-transparent bg-clip-text mb-6 flex items-center">
+                <i class="fas fa-play-circle text-blue-600 mr-3 animate-pulse"></i>
                 Video Tutorial
             </h2>
-            <div class="aspect-w-16 aspect-h-9">
-                <iframe class="w-full h-96 rounded-xl shadow-lg" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="aspect-w-16 aspect-h-9 relative group overflow-hidden rounded-2xl border-2 border-sky-200/30">
+                <iframe class="w-full h-96 transition-all duration-500 group-hover:scale-105" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <div class="absolute inset-0 bg-gradient-to-r from-sky-500/20 via-purple-500/20 to-emerald-500/20 group-hover:opacity-0 transition-opacity duration-500 rounded-xl"></div>
+                <div class="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
         </div>
 
         <!-- Quick Actions Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Pengajuan Dokumen Card -->
-            <div class="glass-effect rounded-2xl p-8 transform hover:scale-[1.05] transition-all duration-300">
-                <div class="text-4xl text-blue-600 mb-6">
+            <div class="glass-effect rounded-2xl p-8 transform hover:scale-[1.02] transition-all duration-300 border border-indigo-100/20">
+                <div class="text-4xl bg-gradient-to-br from-blue-500 to-indigo-600 text-transparent bg-clip-text mb-6">
                     <i class="fas fa-file-upload"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-4">Pengajuan Dokumen</h3>
+                <h3 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-transparent bg-clip-text mb-4">Pengajuan Dokumen</h3>
                 <p class="text-gray-600 mb-6">Ajukan dokumen konstruksi Anda untuk dinilai oleh tim ahli kami.</p>
-                <a href="{{ route('dashboard.guest.project-documents.create') }}" class="block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-300">
+                <a href="{{ route('dashboard.guest.project-documents.create') }}" class="block text-center bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
                     Ajukan Sekarang
                 </a>
             </div>
 
             <!-- Riwayat Pengajuan Card -->
-            <div class="glass-effect rounded-2xl p-8 transform hover:scale-[1.05] transition-all duration-300">
-                <div class="text-4xl text-green-600 mb-6">
+            <div class="glass-effect rounded-2xl p-8 transform hover:scale-[1.02] transition-all duration-300 border border-purple-100/20">
+                <div class="text-4xl bg-gradient-to-br from-purple-500 to-indigo-600 text-transparent bg-clip-text mb-6">
                     <i class="fas fa-history"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-4">Riwayat Pengajuan</h3>
+                <h3 class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 text-transparent bg-clip-text mb-4">Riwayat Pengajuan</h3>
                 <p class="text-gray-600 mb-6">Pantau status dan riwayat pengajuan dokumen Anda.</p>
-                <a href="{{ route('dashboard.guest.project-documents.history') }}" class="block text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-300">
+                <a href="{{ route('dashboard.guest.project-documents.history') }}" class="block text-center bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
                     Lihat Riwayat
                 </a>
             </div>
 
             <!-- Panduan Card -->
-            <div class="glass-effect rounded-2xl p-8 transform hover:scale-[1.05] transition-all duration-300">
-                <div class="text-4xl text-purple-600 mb-6">
+            <div class="glass-effect rounded-2xl p-8 transform hover:scale-[1.02] transition-all duration-300 border border-violet-100/20">
+                <div class="text-4xl bg-gradient-to-br from-violet-500 to-purple-600 text-transparent bg-clip-text mb-6">
                     <i class="fas fa-book"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-4">Panduan Penggunaan</h3>
+                <h3 class="text-2xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 text-transparent bg-clip-text mb-4">Panduan Penggunaan</h3>
                 <p class="text-gray-600 mb-6">Pelajari cara menggunakan sistem scoring dokumen konstruksi.</p>
-                <a href="{{ route('dashboard.guest.guide') }}" class="block text-center bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-300">
+                <a href="{{ route('dashboard.guest.guide') }}" class="block text-center bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
                     Baca Panduan
                 </a>
             </div>
@@ -147,13 +152,13 @@
         // Initialize Particles.js
         particlesJS('particles-js', {
             particles: {
-                number: { value: 80, density: { enable: true, value_area: 800 } },
-                color: { value: ['#6B7280', '#9CA3AF', '#4B5563'] },
-                shape: { type: ['circle', 'triangle'] },
-                opacity: { value: 0.2, random: true, anim: { enable: true, speed: 0.5, opacity_min: 0.1, sync: false } },
-                size: { value: 2, random: true, anim: { enable: true, speed: 2, size_min: 0.1, sync: false } },
-                line_linked: { enable: true, distance: 150, color: '#6B7280', opacity: 0.15, width: 1 },
-                move: { enable: true, speed: 1.5, direction: 'none', random: true, straight: false, out_mode: 'out', bounce: false, attract: { enable: true, rotateX: 600, rotateY: 1200 } }
+                number: { value: 100, density: { enable: true, value_area: 1000 } },
+                color: { value: ['#4f46e5', '#7c3aed', '#3b82f6'] },
+                shape: { type: ['circle', 'triangle', 'polygon'] },
+                opacity: { value: 0.3, random: true, anim: { enable: true, speed: 0.5, opacity_min: 0.1, sync: false } },
+                size: { value: 3, random: true, anim: { enable: true, speed: 2, size_min: 0.1, sync: false } },
+                line_linked: { enable: true, distance: 150, color: '#4f46e5', opacity: 0.2, width: 1 },
+                move: { enable: true, speed: 2, direction: 'none', random: true, straight: false, out_mode: 'out', bounce: false, attract: { enable: true, rotateX: 600, rotateY: 1200 } }
             },
             interactivity: {
                 detect_on: 'canvas',
