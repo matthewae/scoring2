@@ -13,7 +13,7 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        $projects = Project::where('user_id', Auth::id())
+        $projects = Project::with(['documents', 'documentTypes'])
             ->latest()
             ->paginate(10);
 
@@ -47,17 +47,17 @@ class ProjectController extends Controller
 
         try {
             $project = new Project();
-            $project->name = $request->name;
-            $project->location = $request->location;
-            $project->ministry_institution = $request->ministry_institution;
-            $project->planning_consultant = $request->planning_consultant;
-            $project->mk_consultant = $request->mk_consultant;
-            $project->contractor = $request->contractor;
-            $project->selection_method = $request->selection_method;
-            $project->contract_value = $request->contract_value;
-            $project->spmk_date = $request->spmk_date;
-            $project->duration_days = $request->duration_days;
-            $project->status = 'planning';
+            $project->name = $validated['name'];
+            $project->location = $validated['location'];
+            $project->ministry_institution = $validated['ministry_institution'];
+            $project->planning_consultant = $validated['planning_consultant'];
+            $project->mk_consultant = $validated['mk_consultant'];
+            $project->contractor = $validated['contractor'];
+            $project->selection_method = $validated['selection_method'];
+            $project->contract_value = $validated['contract_value'];
+            $project->spmk_date = $validated['spmk_date'];
+            $project->duration_days = $validated['duration_days'];
+            $project->status = 'active';
             $project->user_id = Auth::id();
             $project->save();
 
@@ -84,13 +84,11 @@ class ProjectController extends Controller
                 ->with('success', 'Project berhasil dibuat beserta dokumen-dokumennya.');
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Terjadi kesalahan saat menyimpan project. Silakan coba lagi.')
+            \Log::error('Error creating project: ' . $e->getMessage());
+            return back()
+                ->with('error', 'Terjadi kesalahan saat menyimpan project. Silakan coba lagi.')
                 ->withInput();
         }
-
-        return redirect()
-            ->route('dashboard.user.projects.index')
-            ->with('success', 'Project berhasil dibuat!');
     }
 
     public function show(Project $project)

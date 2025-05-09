@@ -11,7 +11,6 @@ class ProjectScoreController extends Controller
     public function index()
     {
         $projectScores = Project::with(['documents', 'assessmentRequests'])
-            ->where('user_id', auth()->id())
             ->get();
 
         return view('dashboard.user.project-scores.index', compact('projectScores'));
@@ -19,10 +18,12 @@ class ProjectScoreController extends Controller
 
     public function show($id)
     {
-        $project = Project::with(['documents', 'assessmentRequests'])
-            ->where('user_id', auth()->id())
+        $projectScore = Project::with(['documents', 'assessmentRequests'])
+            ->whereHas('assessmentRequests', function ($query) {
+                $query->where('status', 'completed');
+            })
             ->findOrFail($id);
 
-        return view('dashboard.user.project-scores.show', compact('project'));
+        return view('dashboard.user.project-scores.show', compact('projectScore'));
     }
 }
