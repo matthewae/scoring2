@@ -70,70 +70,66 @@
                     </a>
                 </div>
                 <div class="glass-effect rounded-xl p-6 mb-6">
-                    <h3 class="text-xl font-semibold mb-4 bg-gradient-to-r from-emerald-600 to-sky-600 text-transparent bg-clip-text">{{ $project->name }}</h3>
+                    <h3 class="text-xl font-semibold mb-4 bg-gradient-to-r from-emerald-600 to-sky-600 text-transparent bg-clip-text">{{ $projectScore->name }}</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Status</p>
-                            <p class="font-semibold text-gray-800">{{ ucfirst($project->status) }}</p>
+                            <p class="font-semibold text-gray-800">{{ ucfirst($projectScore->status) }}</p>
                         </div>
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Lokasi</p>
-                            <p class="font-semibold text-gray-800">{{ $project->location }}</p>
+                            <p class="font-semibold text-gray-800">{{ $projectScore->location }}</p>
                         </div>
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Estimasi Biaya</p>
-                            <p class="font-semibold text-gray-800">Rp {{ number_format($project->contract_value, 0, ',', '.') }}</p>
+                            <p class="font-semibold text-gray-800">Rp {{ number_format($projectScore->contract_value, 0, ',', '.') }}</p>
                         </div>
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Tanggal SPMK</p>
-                            <p class="font-semibold text-gray-800">{{ $project->spmk_date ? $project->spmk_date->format('d M Y') : '-' }}</p>
+                            <p class="font-semibold text-gray-800">{{ $projectScore->spmk_date ? $projectScore->spmk_date->format('d M Y') : '-' }}</p>
                         </div>
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Jangka Waktu</p>
-                            <p class="font-semibold text-gray-800">{{ $project->duration_days }}</p>
+                            <p class="font-semibold text-gray-800">{{ $projectScore->duration_days }} hari</p>
                         </div>
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Kementerian/Lembaga</p>
-                            <p class="font-semibold text-gray-800">{{ $project->ministry_institution }}</p>
+                            <p class="font-semibold text-gray-800">{{ $projectScore->ministry_institution }}</p>
                         </div>
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Konsultan Perencana</p>
-                            <p class="font-semibold text-gray-800">{{ $project->planning_consultant }}</p>
+                            <p class="font-semibold text-gray-800">{{ $projectScore->planning_consultant }}</p>
                         </div>
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Konsultan MK</p>
-                            <p class="font-semibold text-gray-800">{{ $project->mk_consultant }}</p>
+                            <p class="font-semibold text-gray-800">{{ $projectScore->mk_consultant }}</p>
                         </div>
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Kontraktor</p>
-                            <p class="font-semibold text-gray-800">{{ $project->contractor }}</p>
+                            <p class="font-semibold text-gray-800">{{ $projectScore->contractor }}</p>
                         </div>
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Metode Pemilihan</p>
-                            <p class="font-semibold text-gray-800">{{ $project->selection_method }}</p>
-                        </div>
-                        <div class="glass-effect rounded-lg p-4">
-                            <p class="text-gray-600">Jangka Waktu</p>
-                            <p class="font-semibold text-gray-800">{{ $project->duration_days }}</p>
+                            <p class="font-semibold text-gray-800">{{ $projectScore->selection_method }}</p>
                         </div>
                     </div>
-                    @if($project->description)
+                    @if($projectScore->description)
                     <div class="glass-effect rounded-lg p-4">
                         <p class="text-gray-600 mb-2">Deskripsi Project</p>
-                        <p class="text-gray-800">{{ $project->description }}</p>
+                        <p class="text-gray-800">{{ $projectScore->description }}</p>
                     </div>
                     @endif
-           
+                </div>
 
                 <!-- Document Scores -->
                 <div class="space-y-4">
                     <h4 class="text-lg font-semibold text-gray-800 mb-4">Hasil Penilaian Dokumen</h4>
-                    @forelse($project->documents as $document)
+                    @forelse($projectScore->documents as $document)
                         <div class="glass-effect rounded-xl p-6 score-card">
                             <div class="flex justify-between items-start mb-4">
                                 <div>
                                     <h5 class="font-semibold text-gray-800">{{ $document->document_type->name }}</h5>
-                                    <p class="text-sm text-gray-600">Submitted: {{ $document->created_at->format('d M Y H:i') }}</p>
+                                    <p class="text-sm text-gray-600">Diajukan: {{ $document->created_at->format('d M Y H:i') }}</p>
                                 </div>
                                 <span class="px-4 py-1 rounded-full text-sm font-medium {{ $document->status === 'approved' ? 'bg-green-100 text-green-800' : ($document->status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
                                     {{ ucfirst($document->status) }}

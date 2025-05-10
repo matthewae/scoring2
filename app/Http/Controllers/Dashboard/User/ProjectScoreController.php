@@ -18,10 +18,7 @@ class ProjectScoreController extends Controller
 
     public function show($id)
     {
-        $projectScore = Project::with(['documents', 'assessmentRequests'])
-            ->whereHas('assessmentRequests', function ($query) {
-                $query->where('status', 'completed');
-            })
+        $projectScore = Project::with(['documents.document_type', 'assessmentRequests'])
             ->findOrFail($id);
 
         return view('dashboard.user.project-scores.show', compact('projectScore'));

@@ -158,7 +158,7 @@
             e.preventDefault();
             const projectId = document.getElementById('projectSelect').value;
             if (projectId) {
-                window.location.href = '{{ route('dashboard.user.project-scores.show', '') }}/' + projectId;
+                window.location.href = `{{ route('dashboard.user.project-scores.show', '') }}/${projectId}`;
             }
         });
     </script>

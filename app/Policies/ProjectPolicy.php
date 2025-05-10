@@ -17,7 +17,7 @@ class ProjectPolicy
 
     public function view(User $user, Project $project)
     {
-        return $user->status === 'user';
+        return true;
     }
 
     public function create(User $user)
