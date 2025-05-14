@@ -37,11 +37,15 @@
             </button>
         </div>
         <nav class="space-y-4">
-            <a href="#" class="flex items-center space-x-3 text-gray-700 hover:text-emerald-600 transition-colors duration-200">
+            <a href="{{ route('dashboard.user.index') }}" class="flex items-center space-x-3 text-gray-700 hover:text-emerald-600 transition-colors duration-200">
                 <i class="fas fa-home"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="{{ route('dashboard.user.documents.upload') }}" class="flex items-center space-x-3 text-gray-700 hover:text-emerald-600 transition-colors duration-200">
+            <a href="{{ route('dashboard.user.projects.index') }}" class="flex items-center space-x-3 text-gray-700 hover:text-emerald-600 transition-colors duration-200">
+                <i class="fas fa-project-diagram"></i>
+                <span>Project</span>
+            </a>
+            <a href="{{ route('dashboard.user.documents.index') }}" class="flex items-center space-x-3 text-gray-700 hover:text-emerald-600 transition-colors duration-200">
                 <i class="fas fa-upload"></i>
                 <span>Upload Dokumen</span>
             </a>
@@ -53,6 +57,15 @@
                 <i class="fas fa-chart-bar"></i>
                 <span>Hasil Penilaian</span>
             </a>
+            <div class="mt-auto pt-8">
+                <form action="{{ route('logout') }}" method="POST" class="w-full">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center space-x-3 text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-xl transition-all duration-300 glass-effect">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+            </div>
         </nav>
     </aside>
 
@@ -74,7 +87,7 @@
                 <h3 class="text-xl font-semibold mb-4 bg-gradient-to-r from-emerald-600 to-sky-600 text-transparent bg-clip-text">Kelola Dokumen</h3>
                 <p class="text-gray-600 mb-6">Upload dan kelola dokumen konstruksi Anda dengan mudah.</p>
                 <div class="space-y-3">
-                    <a href="{{ route('dashboard.user.documents.upload') }}" class="block text-center bg-gradient-to-r from-emerald-500 to-sky-500 text-white px-6 py-3 rounded-xl hover:from-emerald-600 hover:to-sky-600 transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl">
+                    <a href="{{ route('dashboard.user.documents.index') }}" class="block text-center bg-gradient-to-r from-emerald-500 to-sky-500 text-white px-6 py-3 rounded-xl hover:from-emerald-600 hover:to-sky-600 transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl">
                         <i class="fas fa-upload mr-2"></i>Upload Dokumen
                     </a>
                     <a href="#" class="block text-center bg-gradient-to-r from-gray-500 to-gray-600 text-white px-6 py-3 rounded-xl hover:from-gray-600 hover:to-gray-700 transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl">

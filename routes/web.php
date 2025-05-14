@@ -37,11 +37,18 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('dashboard/guest')->name('dashboard.guest.')->group(function () {
         Route::get('/', [DashboardController::class, 'guestDashboard'])->name('index');
         Route::get('/guide', [DashboardController::class, 'guide'])->name('guide');
+
+        // Guest Documents
+        Route::prefix('documents')->name('documents.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Dashboard\Guest\GuestDocumentController::class, 'index'])->name('index');
+            Route::post('/', [\App\Http\Controllers\Dashboard\Guest\GuestDocumentController::class, 'store'])->name('store');
+        });
         
         // Guest Project Scores
         Route::prefix('project-scores')->name('project-scores.')->group(function () {
             Route::get('/', [\App\Http\Controllers\Dashboard\Guest\ProjectScoreController::class, 'index'])->name('index');
-            Route::get('/{projectScore}', [\App\Http\Controllers\Dashboard\Guest\ProjectScoreController::class, 'show'])->name('show');
+            // Route::get('/{projectScore}', [\App\Http\Controllers\Dashboard\Guest\ProjectScoreController::class, 'show'])->name('show');
+            Route::get('/{projectScore}/new', [\App\Http\Controllers\Dashboard\Guest\ProjectScoreController::class, 'showNew'])->name('show.new');
         });
         
         // Guest Project Documents
@@ -65,8 +72,11 @@ Route::middleware(['auth'])->group(function () {
         });
         
         // User Documents
-        Route::get('/documents/upload', [\App\Http\Controllers\Dashboard\User\UserDocumentController::class, 'create'])->name('documents.upload');
-        Route::post('/documents', [\App\Http\Controllers\Dashboard\User\UserDocumentController::class, 'store'])->name('documents.store');
+        Route::prefix('documents')->name('documents.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Dashboard\User\DocumentController::class, 'index'])->name('index');
+            Route::get('/upload', [\App\Http\Controllers\Dashboard\User\DocumentController::class, 'create'])->name('upload');
+            Route::post('/', [\App\Http\Controllers\Dashboard\User\DocumentController::class, 'store'])->name('store');
+        });
         
         // Projects Management
         Route::resource('projects', ProjectController::class);

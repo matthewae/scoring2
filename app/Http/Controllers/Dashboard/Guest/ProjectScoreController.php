@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard\Guest;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\DocumentType;
 use Illuminate\Http\Request;
 
 class ProjectScoreController extends Controller
@@ -30,10 +31,34 @@ class ProjectScoreController extends Controller
      * @param  \App\Models\Project  $projectScore
      * @return \Illuminate\View\View
      */
-    public function show(Project $projectScore)
+    public function showNew(Project $projectScore)
     {
         $project = $projectScore->load(['projectDocuments', 'assessmentRequests']);
+
+        $documentTypes = DocumentType::all();
+        $groupedDocuments = $documentTypes->groupBy('tahapan');
         
-        return view('dashboard.guest.project-scores.show', compact('project'));
+        $tahapanData = [];
+        foreach($project->projectDocuments as $doc) {
+            $tahapan = $doc->documentType->tahapan;
+            if (!isset($tahapanData[$tahapan])) {
+                $tahapanData[$tahapan] = ['approved' => 0, 'pending' => 0];
+            }
+            $doc->score >= 60 ? $tahapanData[$tahapan]['approved']++ : $tahapanData[$tahapan]['pending']++;
+        }
+
+        // Calculate total documents per tahapan for percentage
+        $tahapanPercentages = [];
+        foreach($tahapanData as $tahapan => $data) {
+            $total = $data['approved'] + $data['pending'];
+            $tahapanPercentages[$tahapan] = [
+                'approved' => $total > 0 ? round(($data['approved'] / $total) * 100) : 0,
+                'pending' => $total > 0 ? round(($data['pending'] / $total) * 100) : 0
+            ];
+        }
+        
+        return view('dashboard.guest.project-scores.show-new', compact('project', 'documentTypes', 'groupedDocuments', 'tahapanData', 'tahapanPercentages'));
     }
+
+
 }

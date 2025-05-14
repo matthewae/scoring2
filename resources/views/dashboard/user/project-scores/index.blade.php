@@ -47,7 +47,7 @@
                 <i class="fas fa-home"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="{{ route('dashboard.user.documents.upload') }}" class="flex items-center space-x-3 text-gray-700 hover:text-emerald-600 transition-colors duration-200">
+            <a href="{{ route('dashboard.user.documents.index') }}" class="flex items-center space-x-3 text-gray-700 hover:text-emerald-600 transition-colors duration-200">
                 <i class="fas fa-upload"></i>
                 <span>Upload Dokumen</span>
             </a>

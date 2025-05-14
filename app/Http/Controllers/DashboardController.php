@@ -16,7 +16,7 @@ class DashboardController extends Controller
     public function guestDashboard()
     {
         if (Auth::user()->status !== 'guest') {
-            return redirect()->route('dashboard.user');
+            return redirect()->route('dashboard.user.index');
         }
         return view('dashboard.guest.index');
     }
@@ -24,7 +24,7 @@ class DashboardController extends Controller
     public function userDashboard()
     {
         if (Auth::user()->status !== 'user') {
-            return redirect()->route('dashboard.guest');
+            return redirect()->route('dashboard.user.index');
         }
         $assessmentRequests = AssessmentRequest::with(['project', 'guest'])->get();
         return view('dashboard.user.index', compact('assessmentRequests'));
@@ -33,7 +33,7 @@ class DashboardController extends Controller
     public function guide()
     {
         if (Auth::user()->status !== 'guest') {
-            return redirect()->route('dashboard.user');
+            return redirect()->route('dashboard.guest.index');
         }
         return view('dashboard.guest.guide.index');
     }
@@ -41,7 +41,7 @@ class DashboardController extends Controller
     public function projectDocumentsHistory()
     {
         if (Auth::user()->status !== 'guest') {
-            return redirect()->route('dashboard.user');
+            return redirect()->route('dashboard.user.index');
         }
         return view('dashboard.guest.project-documents.history');
     }

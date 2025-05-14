@@ -75,6 +75,14 @@ class Project extends Model
     }
 
     /**
+     * Get the project documents for the project.
+     */
+    public function projectDocuments(): HasMany
+    {
+        return $this->hasMany(ProjectDocument::class);
+    }
+
+    /**
      * Calculate the total score of the project based on document scores.
      */
     public function getTotalScore(): float
@@ -93,8 +101,8 @@ class Project extends Model
     public function getCompletionStatus(): array
     {
         $requiredTypes = $this->documentTypes()
-                              ->where('is_required', true)
-                              ->get();
+                            ->where('is_required', true)
+                            ->get();
 
         $completedRequired = $requiredTypes
                             ->where('pivot.status', 'approved')

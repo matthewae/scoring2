@@ -8,21 +8,14 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
-        .gradient-background {
-            background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 50%, #10b981 100%);
-            transform: scale(0.98);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            color: white;
-            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.2);
-        }
-        .gradient-background:hover {
-            transform: scale(0.99);
-            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.3);
+        body {
+            background: linear-gradient(135deg, #10B981 0%, #0EA5E9 50%, #6366F1 100%);
+            min-height: 100vh;
         }
         .glass-effect {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 32px rgba(14, 165, 233, 0.15);
             transform: scale(0.98);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -46,7 +39,7 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
     <!-- Particles Background -->
-    <div id="particles-js" class="fixed inset-0 -z-10 opacity-50"></div>
+    <div id="particles-js" class="fixed inset-0 z-0 opacity-30"></div>
 
     <!-- Sidebar Toggle Button (Mobile) -->
     <button id="sidebarToggle" class="fixed top-4 left-4 z-50 md:hidden bg-white p-2 rounded-lg shadow-lg">
@@ -179,23 +172,59 @@
     </main>
 
     <script>
-        // Initialize Particles.js
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 80, density: { enable: true, value_area: 800 } },
-                color: { value: ['#0ea5e9', '#8b5cf6', '#10b981'] },
-                shape: { type: ['circle', 'triangle', 'polygon'], polygon: { nb_sides: 6 } },
-                opacity: { value: 0.4, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } },
-                size: { value: 4, random: true, anim: { enable: true, speed: 2, size_min: 0.1, sync: false } },
-                line_linked: { enable: true, distance: 150, color: '#0ea5e9', opacity: 0.3, width: 1.5 },
-                move: { enable: true, speed: 2, direction: 'none', random: true, straight: false, out_mode: 'out', bounce: false, attract: { enable: true, rotateX: 600, rotateY: 1200 } }
-            },
-            interactivity: {
-                detect_on: 'canvas',
-                events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
-                modes: { repulse: { distance: 150, duration: 0.4 }, push: { particles_nb: 4 } }
-            },
-            retina_detect: true
+        // Initialize Particles.js with enhanced configuration
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    color: { value: '#ffffff' },
+                    shape: { 
+                        type: 'circle',
+                        stroke: { width: 0, color: '#000000' },
+                        polygon: { nb_sides: 5 }
+                    },
+                    opacity: {
+                        value: 0.5,
+                        random: false,
+                        anim: { enable: false }
+                    },
+                    size: {
+                        value: 3,
+                        random: true,
+                        anim: { enable: false }
+                    },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: '#ffffff',
+                        opacity: 0.4,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 3,
+                        direction: 'none',
+                        random: false,
+                        straight: false,
+                        out_mode: 'out',
+                        bounce: false,
+                        attract: { enable: false }
+                    }
+                },
+                interactivity: {
+                    detect_on: 'canvas',
+                    events: {
+                        onhover: { enable: true, mode: 'grab' },
+                        onclick: { enable: true, mode: 'push' },
+                        resize: true
+                    },
+                    modes: {
+                        grab: { distance: 140, line_linked: { opacity: 1 } },
+                        push: { particles_nb: 4 }
+                    }
+                },
+                retina_detect: true
+            });
         });
 
         // Sidebar Toggle

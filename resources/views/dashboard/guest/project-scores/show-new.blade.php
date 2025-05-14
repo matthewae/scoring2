@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,10 +19,12 @@
             color: white;
             box-shadow: 0 10px 30px rgba(14, 165, 233, 0.2);
         }
+
         .gradient-background:hover {
             transform: scale(0.99);
             box-shadow: 0 15px 35px rgba(139, 92, 246, 0.3);
         }
+
         .glass-effect {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px);
@@ -30,18 +33,22 @@
             transform: scale(0.98);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .glass-effect:hover {
             transform: scale(1.01);
             box-shadow: 0 12px 40px rgba(14, 165, 233, 0.25);
         }
+
         .swiper-container {
             padding: 20px 40px;
             margin: 0 -40px;
         }
+
         .swiper-slide {
             width: auto;
             transition: all 0.3s ease;
         }
+
         .swiper-button-next,
         .swiper-button-prev {
             color: #4B5563;
@@ -50,24 +57,29 @@
             border-radius: 50%;
             transition: all 0.3s ease;
         }
+
         .swiper-button-next:hover,
         .swiper-button-prev:hover {
             background: rgba(255, 255, 255, 1);
             color: #1F2937;
         }
+
         .sidebar {
             transition: transform 0.3s ease;
         }
+
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
             }
+
             .sidebar.active {
                 transform: translateX(0);
             }
         }
     </style>
 </head>
+
 <body class="bg-gray-50 min-h-screen">
     <!-- Particles Background -->
     <div id="particles-js" class="fixed inset-0 -z-10 opacity-50"></div>
@@ -178,14 +190,14 @@
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Progress Keseluruhan</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 @php
-                    $totalApproved = 0;
-                    $totalPending = 0;
-                    foreach($tahapanData as $data) {
-                        $totalApproved += $data['approved'];
-                        $totalPending += $data['pending'];
-                    }
-                    $totalDocs = $totalApproved + $totalPending;
-                    $approvedPercentage = $totalDocs > 0 ? round(($totalApproved / $totalDocs) * 100) : 0;
+                $totalApproved = 0;
+                $totalPending = 0;
+                foreach($tahapanData as $data) {
+                $totalApproved += $data['approved'];
+                $totalPending += $data['pending'];
+                }
+                $totalDocs = $totalApproved + $totalPending;
+                $approvedPercentage = $totalDocs > 0 ? round(($totalApproved / $totalDocs) * 100) : 0;
                 @endphp
 
                 <div class="glass-effect rounded-xl p-6 text-center transform hover:scale-105 transition-all duration-300">
@@ -208,20 +220,19 @@
         <!-- Tahapan Slider -->
         <div class="glass-effect rounded-2xl p-6 mb-8">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Status per Tahapan</h2>
-            
+
             <!-- Tahapan Navigation -->
             <div class="swiper-container mb-8">
                 <div class="swiper-wrapper">
                     @foreach($tahapanData as $tahapan => $data)
-                        <div class="swiper-slide">
-                            <button 
-                                onclick="showTahapan('{{ $tahapan }}')"
-                                class="tahapan-tab w-full px-6 py-4 rounded-xl font-semibold transition-all duration-300 bg-gray-100 text-gray-600 hover:bg-blue-500 hover:text-white"
-                                data-tahapan="{{ $tahapan }}"
-                            >
-                                {{ $tahapan }}
-                            </button>
-                        </div>
+                    <div class="swiper-slide">
+                        <button
+                            onclick="showTahapan('{{ $tahapan }}')"
+                            class="tahapan-tab w-full px-6 py-4 rounded-xl font-semibold transition-all duration-300 bg-gray-100 text-gray-600 hover:bg-blue-500 hover:text-white"
+                            data-tahapan="{{ $tahapan }}">
+                            {{ $tahapan }}
+                        </button>
+                    </div>
                     @endforeach
                 </div>
                 <div class="swiper-button-next"></div>
@@ -230,43 +241,43 @@
 
             <!-- Tahapan Content -->
             @foreach($tahapanData as $tahapan => $data)
-                <div id="tahapan-{{ Str::slug($tahapan) }}" class="tahapan-content hidden">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- Pie Chart -->
-                        <div class="glass-effect rounded-xl p-6">
-                            <canvas id="chart-{{ Str::slug($tahapan) }}" class="w-full" style="height: 300px;"></canvas>
+            <div id="tahapan-{{ Str::slug($tahapan) }}" class="tahapan-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Pie Chart -->
+                    <div class="glass-effect rounded-xl p-6">
+                        <canvas id="chart-{{ Str::slug($tahapan) }}" class="w-full" style="height: 300px;"></canvas>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="glass-effect rounded-xl p-6">
+                        <div class="grid grid-cols-2 gap-6 mb-6">
+                            <div class="text-center p-6 rounded-xl bg-green-50 transform hover:scale-105 transition-all duration-300">
+                                <div class="text-3xl font-bold text-green-600">{{ $data['approved'] }}</div>
+                                <div class="text-gray-600 mt-2">Disetujui</div>
+                            </div>
+                            <div class="text-center p-6 rounded-xl bg-yellow-50 transform hover:scale-105 transition-all duration-300">
+                                <div class="text-3xl font-bold text-yellow-600">{{ $data['pending'] }}</div>
+                                <div class="text-gray-600 mt-2">Pending</div>
+                            </div>
                         </div>
 
-                        <!-- Stats -->
-                        <div class="glass-effect rounded-xl p-6">
-                            <div class="grid grid-cols-2 gap-6 mb-6">
-                                <div class="text-center p-6 rounded-xl bg-green-50 transform hover:scale-105 transition-all duration-300">
-                                    <div class="text-3xl font-bold text-green-600">{{ $data['approved'] }}</div>
-                                    <div class="text-gray-600 mt-2">Disetujui</div>
-                                </div>
-                                <div class="text-center p-6 rounded-xl bg-yellow-50 transform hover:scale-105 transition-all duration-300">
-                                    <div class="text-3xl font-bold text-yellow-600">{{ $data['pending'] }}</div>
-                                    <div class="text-gray-600 mt-2">Pending</div>
-                                </div>
+                        @php
+                        $total = $data['approved'] + $data['pending'];
+                        $percentage = $total > 0 ? ($data['approved'] / $total) * 100 : 0;
+                        @endphp
+
+                        <div class="mt-6">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600 font-semibold">Progress Tahapan</span>
+                                <span class="text-blue-600 font-bold">{{ round($percentage) }}%</span>
                             </div>
-
-                            @php
-                                $total = $data['approved'] + $data['pending'];
-                                $percentage = $total > 0 ? ($data['approved'] / $total) * 100 : 0;
-                            @endphp
-
-                            <div class="mt-6">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-gray-600 font-semibold">Progress Tahapan</span>
-                                    <span class="text-blue-600 font-bold">{{ round($percentage) }}%</span>
-                                </div>
-                                <div class="bg-gray-200 rounded-full h-4 overflow-hidden">
-                                    <div class="bg-blue-600 h-full transition-all duration-500" style="width: {{ $percentage }}%"></div>
-                                </div>
+                            <div class="bg-gray-200 rounded-full h-4 overflow-hidden">
+                                <div class="bg-blue-600 h-full transition-all duration-500" style="width: {{ $percentage }}%"></div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
             @endforeach
         </div>
     </main>
@@ -289,9 +300,15 @@
                 prevEl: '.swiper-button-prev',
             },
             breakpoints: {
-                640: { slidesPerView: 2 },
-                768: { slidesPerView: 3 },
-                1024: { slidesPerView: 4 }
+                640: {
+                    slidesPerView: 2
+                },
+                768: {
+                    slidesPerView: 3
+                },
+                1024: {
+                    slidesPerView: 4
+                }
             }
         });
 
@@ -317,7 +334,7 @@
             // Initialize pie chart for the selected tahapan
             const data = @json($tahapanData);
             const tahapanData = data[tahapan];
-            
+
             new Chart(document.getElementById('chart-' + tahapan.toLowerCase().replace(/ /g, '-')), {
                 type: 'pie',
                 data: {
@@ -349,4 +366,5 @@
         });
     </script>
 </body>
+
 </html>

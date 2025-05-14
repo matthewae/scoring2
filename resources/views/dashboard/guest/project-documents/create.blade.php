@@ -4,8 +4,8 @@
 <div class="bg-white rounded-lg shadow-md p-6">
     <div class="flex items-center justify-between mb-6">
         <h2 class="text-2xl font-bold">Upload Dokumen Project</h2>
-        <a href="{{ route('dashboard.guest.index') }}" class="text-gray-600 hover:text-gray-800">
-            <i class="fas fa-arrow-left mr-2"></i>Kembali ke Dashboard
+        <a href="{{ route('dashboard.guest.project-documents.history') }}" class="text-gray-600 hover:text-gray-800">
+            <i class="fas fa-arrow-left mr-2"></i>Kembali ke Riwayat Pengajuan
         </a>
     </div>
 

@@ -113,10 +113,10 @@
 
         <!-- Project Selection -->
         <div class="glass-effect rounded-2xl p-6 max-w-2xl mx-auto mb-8">
-            <form action="{{ route('dashboard.guest.project-scores.show', '') }}" method="GET" class="space-y-4" id="projectForm">
+            <form method="GET" class="space-y-4" id="projectForm">
                 <div class="flex flex-col space-y-2">
                     <label for="project" class="text-gray-700 font-medium">Pilih Project:</label>
-                    <select name="project" id="project" class="form-select rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200">
+                    <select name="projectScore" id="project" class="form-select rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200" onchange="redirectToProject(this.value)">
                         <option value="">-- Pilih Project --</option>
                         @foreach($projects as $project)
                             <option value="{{ $project->id }}" class="py-2">
@@ -126,28 +126,36 @@
                     </select>
                 </div>
             </form>
-        </div>
-                     @if(session('message'))
-             <div class="glass-effect rounded-2xl p-4 mb-8 max-w-2xl mx-auto bg-green-50 text-green-800">
-                 {{ session('message') }}
-             </div>
-         @endif
-         @if($projects->isEmpty())
-             <div class="glass-effect rounded-2xl p-6 max-w-2xl mx-auto text-center text-gray-600">
-                 <i class="fas fa-folder-open text-4xl mb-4"></i>
-                 <p>Belum ada project yang tersedia.</p>
-             </div>
-         @endif
 
-         <!-- Instructions -->
-         <div class="glass-effect rounded-2xl p-6 max-w-2xl mx-auto mt-8 bg-blue-50">
-             <h3 class="text-lg font-semibold text-blue-800 mb-2">Petunjuk:</h3>
-             <ul class="list-disc list-inside text-blue-700 space-y-2">
-                 <li>Pilih project dari dropdown di atas untuk melihat detail penilaian</li>
-                 <li>Status project akan ditampilkan di sebelah nama project</li>
-                 <li>Setelah memilih project, Anda akan diarahkan ke halaman detail penilaian</li>
-             </ul>
-         </div>
+            <script>
+                function redirectToProject(projectId) {
+                    if (projectId) {
+                        window.location.href = '{{ route("dashboard.guest.project-scores.show.new", "__ID__") }}'.replace('__ID__', projectId);
+                    }
+                }
+            </script>
+        </div>
+                    @if(session('message'))
+            <div class="glass-effect rounded-2xl p-4 mb-8 max-w-2xl mx-auto bg-green-50 text-green-800">
+                {{ session('message') }}
+            </div>
+        @endif
+        @if($projects->isEmpty())
+            <div class="glass-effect rounded-2xl p-6 max-w-2xl mx-auto text-center text-gray-600">
+                <i class="fas fa-folder-open text-4xl mb-4"></i>
+                <p>Belum ada project yang tersedia.</p>
+            </div>
+        @endif
+
+        <!-- Instructions -->
+        <div class="glass-effect rounded-2xl p-6 max-w-2xl mx-auto mt-8 bg-blue-50">
+            <h3 class="text-lg font-semibold text-blue-800 mb-2">Petunjuk:</h3>
+            <ul class="list-disc list-inside text-blue-700 space-y-2">
+                <li>Pilih project dari dropdown di atas untuk melihat detail penilaian</li>
+                <li>Status project akan ditampilkan di sebelah nama project</li>
+                <li>Setelah memilih project, Anda akan diarahkan ke halaman detail penilaian</li>
+            </ul>
+        </div>
     </main>
 
     <script>
@@ -179,7 +187,7 @@
             const projectId = this.value;
             if (projectId) {
                 const form = document.getElementById('projectForm');
-                form.action = form.action.replace(/\/$/, '') + '/' + projectId;
+                form.action = '{{ route("dashboard.guest.project-scores.show.new", "") }}/' + projectId;
                 form.submit();
             }
         });
