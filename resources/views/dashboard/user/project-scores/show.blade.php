@@ -6,6 +6,7 @@
     <title>Detail Penilaian Project - Scoring System</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .glass-effect {
             background: rgba(255, 255, 255, 0.7);
@@ -30,6 +31,14 @@
         }
         .score-card:hover {
             transform: translateY(-5px);
+        }
+        .tahapan-tab {
+            background: rgba(255, 255, 255, 0.5);
+            color: #4B5563;
+        }
+        .tahapan-tab.active {
+            background: #3B82F6;
+            color: white;
         }
     </style>
 </head>
@@ -121,43 +130,104 @@
                     @endif
                 </div>
 
-                <!-- Document Scores -->
-                <div class="space-y-4">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-4">Hasil Penilaian Dokumen</h4>
-                    @forelse($projectScore->documents as $document)
-                        <div class="glass-effect rounded-xl p-6 score-card">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <h5 class="font-semibold text-gray-800">{{ $document->document_type->name }}</h5>
-                                    <p class="text-sm text-gray-600">Diajukan: {{ $document->created_at->format('d M Y H:i') }}</p>
+                <!-- Document Scores by Tahapan -->
+                <div class="space-y-8">
+                    <h4 class="text-2xl font-semibold text-gray-800">Hasil Penilaian per Tahapan</h4>
+                    
+                    @php
+                        $documentsByTahapan = $projectScore->documentTypes->groupBy('tahapan');
+                        
+                        $tahapanStats = [];
+                        foreach($documentsByTahapan as $tahapan => $documents) {
+                            // Sort documents by no and parent_code
+                            $documents = $documents->sortBy(['no', 'parent_code']);
+                            
+                            $tahapanStats[$tahapan] = [
+                                'approved' => $documents->where('pivot.status', 'approved')->count(),
+                                'pending' => $documents->where('pivot.status', '!=', 'approved')->count()
+                            ];
+                        }
+                    @endphp
+
+                    <!-- Tahapan Navigation -->
+                    <div class="flex space-x-4 overflow-x-auto pb-4">
+                        @foreach($documentsByTahapan as $tahapan => $documents)
+                            <button 
+                                onclick="showTahapan('{{ Str::slug($tahapan) }}')"
+                                class="tahapan-tab px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap"
+                                data-tahapan="{{ Str::slug($tahapan) }}"
+                            >
+                                {{ $tahapan }}
+                            </button>
+                        @endforeach
+                    </div>
+
+                    <!-- Tahapan Content -->
+                    @foreach($documentsByTahapan as $tahapan => $documents)
+                        <div id="tahapan-{{ Str::slug($tahapan) }}" class="tahapan-content hidden space-y-6">
+                            <div class="flex justify-between items-start">
+                                <div class="space-y-2">
+                                    <h5 class="text-xl font-semibold text-gray-800">{{ $tahapan }}</h5>
+                                    <p class="text-gray-600">Total Dokumen: {{ $documents->count() }}</p>
                                 </div>
-                                <span class="px-4 py-1 rounded-full text-sm font-medium {{ $document->status === 'approved' ? 'bg-green-100 text-green-800' : ($document->status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
-                                    {{ ucfirst($document->status) }}
-                                </span>
+                                <div class="w-64 h-64">
+                                    <canvas id="chart-{{ Str::slug($tahapan) }}"></canvas>
+                                </div>
                             </div>
-                            @if($document->score)
-                                <div class="space-y-3">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-gray-600">Skor Total</span>
-                                        <span class="font-semibold text-gray-800">{{ $document->score }}/100</span>
-                                    </div>
-                                    @if($document->feedback)
-                                        <div class="mt-4">
-                                            <h6 class="text-sm font-medium text-gray-700 mb-2">Feedback:</h6>
-                                            <p class="text-gray-600 text-sm">{{ $document->feedback }}</p>
+
+                            <!-- Documents List -->
+                            @foreach($documents as $document)
+                                <div class="glass-effect rounded-xl p-6 score-card {{ $document->parent_code ? 'ml-8' : '' }}">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div>
+                                            <div class="flex items-center gap-2 mb-2">
+                                                <span class="px-2 py-1 bg-gray-100 rounded text-sm font-mono">{{ $document->code }}</span>
+                                                @if($document->no)
+                                                    <span class="text-gray-500">#{{ $document->no }}</span>
+                                                @endif
+                                            </div>
+                                            <h6 class="font-semibold text-gray-800">{{ $document->uraian }}</h6>
+                                            <p class="text-sm text-gray-600">Diajukan: {{ $document->pivot->created_at->format('d M Y H:i') }}</p>
+                                            @if($document->parent_code)
+                                                <p class="text-xs text-gray-500 mt-1">Parent: {{ $document->parent_code }}</p>
+                                            @endif
                                         </div>
+                                        <div class="flex items-center space-x-4">
+                                            <span class="px-4 py-1 rounded-full text-sm font-medium {{ $document->pivot->status === 'approved' ? 'bg-green-100 text-green-800' : ($document->pivot->status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
+                                                {{ ucfirst($document->pivot->status) }}
+                                            </span>
+                                            <span class="font-mono bg-gray-100 px-3 py-1 rounded-lg">
+                                                Nilai: {{ $document->pivot->status === 'approved' ? '1' : '0' }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    @if($document->pivot->score)
+                                        <div class="space-y-3">
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-gray-600">Skor Total</span>
+                                                <span class="font-semibold text-gray-800">{{ $document->pivot->score }}/100</span>
+                                            </div>
+                                            @if($document->pivot->remarks)
+                                                <div class="mt-4">
+                                                    <h6 class="text-sm font-medium text-gray-700 mb-2">Feedback:</h6>
+                                                    <p class="text-gray-600 text-sm">{{ $document->pivot->remarks }}</p>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @else
+                                        <p class="text-gray-500 italic">Belum ada penilaian</p>
                                     @endif
                                 </div>
-                            @else
-                                <p class="text-gray-500 italic">Belum ada penilaian</p>
-                            @endif
+                            @endforeach
                         </div>
-                    @empty
+                    @endforeach
+
+                    @if($documentsByTahapan->isEmpty())
                         <div class="text-center py-8 text-gray-500">
                             <i class="fas fa-folder-open text-4xl mb-4"></i>
                             <p>Belum ada dokumen yang dinilai</p>
                         </div>
-                    @endforelse
+                    @endif
                 </div>
             </div>
         </div>
@@ -168,6 +238,63 @@
             document.querySelector('.sidebar').classList.toggle('collapsed');
             document.querySelector('.main-content').classList.toggle('ml-0');
         });
+
+        // Show/Hide Tahapan Content
+        function showTahapan(tahapan) {
+            document.querySelectorAll('.tahapan-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.querySelectorAll('.tahapan-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            const selectedContent = document.getElementById('tahapan-' + tahapan);
+            const selectedTab = document.querySelector(`[data-tahapan="${tahapan}"]`);
+
+            if (selectedContent && selectedTab) {
+                selectedContent.classList.remove('hidden');
+                selectedTab.classList.add('active');
+            }
+        }
+
+        // Initialize pie charts for each tahapan
+        const tahapanStats = @json($tahapanStats);
+        
+        Object.entries(tahapanStats).forEach(([tahapan, stats]) => {
+            const ctx = document.getElementById('chart-' + tahapan.toLowerCase().replace(/ /g, '-'))?.getContext('2d');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Disetujui', 'Pending'],
+                        datasets: [{
+                            data: [stats.approved, stats.pending],
+                            backgroundColor: ['#10B981', '#FCD34D'],
+                            borderColor: ['#059669', '#F59E0B'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Status Dokumen'
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        // Show first tahapan by default
+        const firstTahapanTab = document.querySelector('.tahapan-tab');
+        if (firstTahapanTab) {
+            showTahapan(firstTahapanTab.getAttribute('data-tahapan'));
+        }
     </script>
 </body>
 </html>

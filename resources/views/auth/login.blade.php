@@ -31,14 +31,36 @@
         .btn-login:hover {
             transform: translateY(-2px);
         }
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fade-in 0.8s ease-out forwards;
+        }
     </style>
 </head>
 <body>
     <div id="particles-js"></div>
-    <div class="min-h-screen flex items-center justify-center login-container">
-        <div class="bg-white/80 backdrop-blur-md p-8 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] w-96 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_20px_40px_rgba(0,0,0,0.12)]">
+    <div class="min-h-screen flex items-stretch login-container">
+        <!-- Logo Section -->
+        <div class="hidden md:flex md:w-1/2 items-center justify-center p-12 relative z-10">
+            <div class="text-center transform transition-all duration-500 hover:scale-105">
+                <img src="/images/logo.svg" alt="Logo" class="w-72 h-auto mb-6 mx-auto animate-fade-in">
+                <h1 class="text-3xl font-bold text-white mb-2">Scoring Dokumen Konstruksi</h1>
+                <p class="text-white/90">Menuju Lembaga Cyber World Class</p>
+            </div>
+        </div>
+        
+        <!-- Login Form Section -->
+        <div class="w-full md:w-1/2 flex items-center justify-center p-8">
+            <div class="bg-white/80 backdrop-blur-md p-8 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] w-full max-w-md transform transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_20px_40px_rgba(0,0,0,0.12)]">
+                <div class="md:hidden text-center mb-8">
+                    <img src="/images/logo.svg" alt="Logo" class="w-40 h-auto mx-auto mb-4 transform transition-all duration-500 hover:scale-105 animate-fade-in">
+                    <h1 class="text-2xl font-bold text-gray-800">Scoring Dokumen Konstruksi</h1>
+                </div>
 
-            <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+                <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Login to Your Account</h2>
 
             @if (session('success'))
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
@@ -49,29 +71,43 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
-                <div class="mb-4">
-                    <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username</label>
-                    <input type="text" name="username" id="username" class="form-input shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
-                    @error('username')
-                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+                <div class="space-y-6">
+                    <div class="relative">
+                        <label for="username" class="block text-gray-700 text-sm font-semibold mb-2">Your Username</label>
+                        <input type="text" name="username" id="username" class="form-input shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Enter your username" required>
+                        @error('username')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                <div class="mb-6">
-                    <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                    <input type="password" name="password" id="password" class="form-input shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
-                    @error('password')
-                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+                    <div class="relative">
+                        <label for="password" class="block text-gray-700 text-sm font-semibold mb-2">Password</label>
+                        <input type="password" name="password" id="password" class="form-input shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Enter your password" required>
+                        @error('password')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                <div class="flex items-center justify-between">
-                    <button type="submit" class="btn-login bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-500 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline hover:from-cyan-600 hover:via-indigo-600 hover:to-purple-600 shadow-lg hover:shadow-xl transition-all duration-300">
-                        Login
-                    </button>
-                    <a href="{{ route('register') }}" class="inline-block align-baseline font-bold text-sm text-indigo-600 hover:text-indigo-800 transition-colors duration-200">
-                        Daftar
-                    </a>
+                    <div class="flex items-center justify-between text-sm">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-500 rounded border-gray-300 focus:ring-indigo-500">
+                            <span class="ml-2 text-gray-700">Remember me</span>
+                        </label>
+                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-semibold">Recover password</a>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit" class="btn-login w-full bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-500 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline hover:from-cyan-600 hover:via-indigo-600 hover:to-purple-600 shadow-lg hover:shadow-xl transition-all duration-300">
+                            SIGN IN
+                        </button>
+                    </div>
+
+                    <div class="text-center mt-6">
+                        <span class="text-gray-600">Don't have an account?</span>
+                        <a href="{{ route('register') }}" class="ml-1 font-semibold text-indigo-600 hover:text-indigo-800 transition-colors duration-200">
+                            Register here
+                        </a>
+                    </div>
                 </div>
             </form>
         </div>

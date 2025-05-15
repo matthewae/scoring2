@@ -12,55 +12,118 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            background: linear-gradient(135deg, #06B6D4, #6366F1, #A855F7);
+            background: linear-gradient(135deg, #1E40AF, #3730A3, #4C1D95);
+            animation: gradientShift 15s ease infinite;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         .login-container {
             position: relative;
             z-index: 2;
         }
         .form-input {
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .form-input:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
         }
         .btn-login {
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1E40AF, #3730A3);
+        }
+        .btn-login:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
         }
         .btn-login:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        .btn-login:hover:before {
+            left: 100%;
+        }
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-fade-in {
+            animation: fade-in 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(30, 64, 175, 0.15);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(30, 64, 175, 0.35);
+            border-color: rgba(255, 255, 255, 0.4);
         }
     </style>
 </head>
 <body>
     <div id="particles-js"></div>
-    <div class="min-h-screen flex items-center justify-center login-container">
-        <div class="bg-white/80 backdrop-blur-md p-8 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] w-96 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_20px_40px_rgba(0,0,0,0.12)]">
-            <h2 class="text-2xl font-bold mb-6 text-center">Register</h2>
+    <div class="min-h-screen flex items-stretch login-container">
+        <!-- Logo Section -->
+        <div class="hidden md:flex md:w-1/2 items-center justify-center p-12 relative z-10">
+            <div class="text-center transform transition-all duration-500 hover:scale-105">
+                <img src="/images/logo.svg" alt="Logo" class="w-72 h-auto mb-6 mx-auto animate-fade-in">
+                <h1 class="text-3xl font-bold text-white mb-2">Scoring Dokumen Konstruksi</h1>
+                <p class="text-white/90">Menuju Lembaga Cyber World Class</p>
+            </div>
+        </div>
+        
+        <!-- Register Form Section -->
+        <div class="w-full md:w-1/2 flex items-center justify-center p-8">
+            <div class="glass-card p-8 rounded-xl w-full max-w-md">
+                <div class="md:hidden text-center mb-8">
+                    <img src="/images/logo.svg" alt="Logo" class="w-40 h-auto mx-auto mb-4 transform transition-all duration-500 hover:scale-105 animate-fade-in">
+                    <h1 class="text-2xl font-bold text-gray-800">Scoring Dokumen Konstruksi</h1>
+                </div>
+
+                <h2 class="text-2xl font-bold mb-6 text-center text-gray-900">Create Your Account</h2>
 
             <form method="POST" action="{{ route('register') }}">
                 @csrf
 
                 <div class="mb-4">
-                    <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username</label>
-                    <input type="text" name="username" id="username" class="form-input shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ old('username') }}" required>
+                    <label for="username" class="block text-gray-800 text-sm font-bold mb-2">Username</label>
+                    <input type="text" name="username" id="username" class="form-input shadow appearance-none border rounded w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ old('username') }}" required>
                     @error('username')
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div class="mb-4">
-                    <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                    <input type="password" name="password" id="password" class="form-input shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    <label for="password" class="block text-gray-800 text-sm font-bold mb-2">Password</label>
+                    <input type="password" name="password" id="password" class="form-input shadow appearance-none border rounded w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                     @error('password')
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div class="mb-6">
-                    <label for="password_confirmation" class="block text-gray-700 text-sm font-bold mb-2">Konfirmasi Password</label>
-                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-input shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    <label for="password_confirmation" class="block text-gray-800 text-sm font-bold mb-2">Konfirmasi Password</label>
+                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-input shadow appearance-none border rounded w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                 </div>
 
                 <div class="flex items-center justify-between">
