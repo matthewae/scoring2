@@ -77,7 +77,7 @@
             <div class="flex items-center justify-between mb-8">
                 <h1 class="text-3xl font-bold text-gray-900">Upload Dokumen Project</h1>
                 <a href="{{ route('dashboard.guest.project-documents.history') }}" 
-                   class="text-gray-900 hover:text-gray-700 transition-colors duration-200">
+                    class="text-gray-900 hover:text-gray-700 transition-colors duration-200">
                     <i class="fas fa-arrow-left mr-2"></i>Kembali ke Riwayat
                 </a>
             </div>

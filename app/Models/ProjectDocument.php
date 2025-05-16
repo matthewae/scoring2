@@ -12,17 +12,16 @@ class ProjectDocument extends Model
 
     protected $fillable = [
         'project_id',
-        'no',
-        'tahapan',
-        'uraian',
-        'kelengkapan',
-        'catatan',
-        'sumber',
-        'file_path'
+        'document_type_code',
+        'status',
+        'score',
+        'remarks',
+        'file_path',
+        'uploaded_by'
     ];
 
     protected $casts = [
-        'kelengkapan' => 'boolean'
+        'score' => 'decimal:2'
     ];
 
     /**
@@ -31,5 +30,21 @@ class ProjectDocument extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * Get the document type associated with this document.
+     */
+    public function documentType(): BelongsTo
+    {
+        return $this->belongsTo(DocumentType::class, 'document_type_code', 'code');
+    }
+
+    /**
+     * Get the user who uploaded the document.
+     */
+    public function uploadedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'uploaded_by');
     }
 }

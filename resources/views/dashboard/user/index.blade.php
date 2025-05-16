@@ -90,7 +90,7 @@
                     <a href="{{ route('dashboard.user.documents.index') }}" class="block text-center bg-gradient-to-r from-emerald-500 to-sky-500 text-white px-6 py-3 rounded-xl hover:from-emerald-600 hover:to-sky-600 transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl">
                         <i class="fas fa-upload mr-2"></i>Upload Dokumen
                     </a>
-                    <a href="#" class="block text-center bg-gradient-to-r from-gray-500 to-gray-600 text-white px-6 py-3 rounded-xl hover:from-gray-600 hover:to-gray-700 transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl">
+                    <a href="{{ route('dashboard.user.documents.index') }}" class="block text-center bg-gradient-to-r from-gray-500 to-gray-600 text-white px-6 py-3 rounded-xl hover:from-gray-600 hover:to-gray-700 transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl">
                         <i class="fas fa-list mr-2"></i>Daftar Dokumen
                     </a>
                 </div>

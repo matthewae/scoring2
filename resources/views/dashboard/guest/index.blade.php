@@ -136,13 +136,13 @@
 
             <!-- Panduan Card -->
             <div class="glass-effect rounded-2xl p-8 transform hover:scale-[1.02] transition-all duration-300 border border-violet-100/20">
-                <div class="text-4xl bg-gradient-to-br from-violet-500 to-purple-600 text-transparent bg-clip-text mb-6">
+                <div class="text-4xl text-violet-600 mb-6">
                     <i class="fas fa-book"></i>
                 </div>
-                <h3 class="text-2xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 text-transparent bg-clip-text mb-4">Panduan Penggunaan</h3>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Panduan Penggunaan</h3>
                 <p class="text-gray-600 mb-6">Pelajari cara menggunakan sistem scoring dokumen konstruksi.</p>
-                <a href="{{ route('dashboard.guest.guide') }}" class="block text-center bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
-                    Baca Panduan
+                <a href="{{ route('dashboard.guest.guide') }}" class="block text-center bg-gradient-to-r from-violet-600 to-purple-700 hover:from-violet-700 hover:to-purple-800 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02]">
+                    <span class="text-white">Baca Panduan</span>
                 </a>
             </div>
         </div>
