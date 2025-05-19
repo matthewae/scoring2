@@ -10,7 +10,7 @@ class GuestProjectDocumentController extends Controller
 {
     public function history(Request $request)
     {
-        $projectDocuments = ProjectDocument::with(['project', 'document_type'])
+        $projectDocuments = ProjectDocument::with(['project', 'documentType'])
             ->whereHas('project', function ($query) use ($request) {
                 $query->where('guest_id', auth()->id());
             })

@@ -93,7 +93,7 @@
             @endif
 
             <form action="{{ route('dashboard.guest.project-documents.store') }}" method="POST" 
-                  enctype="multipart/form-data" class="space-y-6">
+                enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 
                 <div class="space-y-6">
@@ -101,8 +101,8 @@
                         <label for="project_id" class="block text-lg font-medium text-gray-900 mb-2">Pilih Project</label>
                         <select name="project_id" id="project_id" required
                                 class="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 
-                                       rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none 
-                                       focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-200">
+                                        rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none 
+                                        focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-200">
                             <option value="" class="text-gray-900">Pilih Project</option>
                             @foreach($projects as $project)
                                 <option value="{{ $project->id }}" class="text-gray-900" 
@@ -117,8 +117,8 @@
                         <label for="document_type_id" class="block text-lg font-medium text-gray-900 mb-2">Jenis Dokumen</label>
                         <select name="document_type_id" id="document_type_id" required
                                 class="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 
-                                       rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none 
-                                       focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-200">
+                                        rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none 
+                                        focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-200">
                             <option value="" class="text-gray-900">Pilih Jenis Dokumen</option>
                             @foreach($documentTypes as $type)
                                 <option value="{{ $type->id }}" class="text-gray-900" 
@@ -132,28 +132,28 @@
                     <div class="glass-morphism rounded-lg p-6">
                         <label for="file" class="block text-lg font-medium text-gray-900 mb-2">File Dokumen</label>
                         <input type="file" name="file" id="file" required
-                               class="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 
-                                      rounded-lg text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 
-                                      file:text-gray-900 file:bg-white file:bg-opacity-90 hover:file:bg-opacity-100 
-                                      transition-all duration-200"
-                               accept=".pdf,.doc,.docx,.xls,.xlsx">
+                                class="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 
+                                        rounded-lg text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 
+                                        file:text-gray-900 file:bg-white file:bg-opacity-90 hover:file:bg-opacity-100 
+                                        transition-all duration-200"
+                                accept=".pdf,.doc,.docx,.xls,.xlsx">
                         <p class="mt-2 text-sm text-gray-700 opacity-70">Format yang diperbolehkan: PDF, DOC, DOCX, XLS, XLSX (Max. 10MB)</p>
                     </div>
 
                     <div class="glass-morphism rounded-lg p-6">
                         <label for="sumber" class="block text-lg font-medium text-gray-900 mb-2">Sumber</label>
                         <input type="text" name="sumber" id="sumber" value="{{ old('sumber') }}"
-                               class="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 
-                                      rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none 
-                                      focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-200">
+                                class="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 
+                                        rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none 
+                                        focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-200">
                     </div>
 
                     <div class="glass-morphism rounded-lg p-6">
                         <label for="catatan" class="block text-lg font-medium text-gray-900 mb-2">Catatan</label>
                         <textarea name="catatan" id="catatan" rows="4"
-                                  class="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 
-                                         rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none 
-                                         focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-200"
+                                    class="w-full px-4 py-3 bg-white bg-opacity-90 border border-gray-300 
+                                            rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none 
+                                            focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 transition-all duration-200"
                         >{{ old('catatan') }}</textarea>
                     </div>
                 </div>
@@ -161,7 +161,7 @@
                 <div class="flex justify-end">
                     <button type="submit" 
                             class="px-8 py-3 bg-white bg-opacity-90 text-gray-900 rounded-lg hover:bg-opacity-100 
-                                   transition-all duration-200 flex items-center space-x-2 hover-scale">
+                                    transition-all duration-200 flex items-center space-x-2 hover-scale">
                         <i class="fas fa-upload"></i>
                         <span>Upload Dokumen</span>
                     </button>

@@ -17,6 +17,7 @@ class Project extends Model
         'description',
         'location',
         'ministry_institution',
+        'guest_id',
         'planning_consultant',
         'mk_consultant',
         'contractor',
@@ -49,6 +50,24 @@ class Project extends Model
     }
 
     /**
+     * Get the document types associated with this project.
+     */
+    public function documentTypes(): BelongsToMany
+    {
+        return $this->belongsToMany(DocumentType::class, 'project_document_types', 'project_id', 'document_type_code')
+                    ->withPivot(['custom_code', 'description', 'is_required'])
+                    ->withTimestamps();
+    }
+
+    /**
+     * Get all project document types.
+     */
+    public function projectDocumentTypes(): HasMany
+    {
+        return $this->hasMany(ProjectDocumentType::class);
+    }
+
+    /**
      * Get the user that owns the project.
      */
     public function user(): BelongsTo
@@ -62,16 +81,6 @@ class Project extends Model
     public function guest(): BelongsTo
     {
         return $this->belongsTo(User::class, 'guest_id');
-    }
-
-    /**
-     * Get the document types associated with the project.
-     */
-    public function documentTypes(): BelongsToMany
-    {
-        return $this->belongsToMany(DocumentType::class, 'project_documents')
-                    ->withPivot(['file_path', 'status', 'score', 'remarks'])
-                    ->withTimestamps();
     }
 
     /**

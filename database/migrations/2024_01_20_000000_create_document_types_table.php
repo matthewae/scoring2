@@ -16,9 +16,13 @@ return new class extends Migration
             $table->string('parent_code')->nullable();
             $table->string('no')->nullable();
             $table->string('tahapan');
+            $table->unsignedInteger('tahapan_order')->default(0);
             $table->text('uraian');
             $table->boolean('is_file_required')->default(true);
             $table->timestamps();
+
+            // Menambahkan indeks untuk pengurutan
+            $table->index(['tahapan', 'tahapan_order']);
 
             $table->foreign('parent_code')
                 ->references('code')

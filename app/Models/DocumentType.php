@@ -15,10 +15,13 @@ class DocumentType extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'name',
-        'description',
-        'weight',
-        'is_required'
+        'code',
+        'parent_code',
+        'no',
+        'tahapan',
+        'tahapan_order',
+        'uraian',
+        'is_file_required'
     ];
 
     protected $casts = [
@@ -31,8 +34,16 @@ class DocumentType extends Model
      */
     public function projects()
     {
-        return $this->belongsToMany(Project::class, 'project_documents')
-                    ->withPivot(['file_path', 'status', 'score', 'remarks'])
+        return $this->belongsToMany(Project::class, 'project_document_types', 'document_type_code', 'project_id')
+                    ->withPivot(['custom_code', 'description', 'is_required'])
                     ->withTimestamps();
+    }
+
+    /**
+     * Get all project document types using this document type.
+     */
+    public function projectDocumentTypes()
+    {
+        return $this->hasMany(ProjectDocumentType::class, 'document_type_code', 'code');
     }
 }

@@ -120,10 +120,10 @@
                         @forelse($projectDocuments as $document)
                             <tr class="table-row">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $document->project->name }}
+                                    {{ $document->project ? $document->project->name : 'N/A' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $document->document_type->name }}
+                                    {{ $document->document_type ? $document->document_type->name : 'N/A' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     {{ $document->created_at->format('d M Y H:i') }}

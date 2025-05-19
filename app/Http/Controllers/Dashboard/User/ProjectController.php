@@ -39,7 +39,8 @@ class ProjectController extends Controller
             'contract_value' => 'required|numeric|min:0',
             'spmk_date' => 'required|date',
             'duration_days' => 'required|integer|min:1',
-            'status.*' => 'required|in:approved,rejected',
+            'status.*' => 'nullable|in:approved,rejected',
+            'documents' => 'nullable|array',
             'documents.*.file' => 'nullable|file|max:10240',
             'documents.*.catatan' => 'nullable|string',
             'documents.*.sumber' => 'nullable|string',
@@ -61,23 +62,32 @@ class ProjectController extends Controller
             $project->user_id = Auth::id();
             $project->save();
 
-            // Store document statuses and files
-            foreach ($request->status as $documentTypeCode => $status) {
-                $documentData = [
-                    'document_type_code' => $documentTypeCode,
-                    'status' => $status,
-                    'catatan' => $request->input("documents.{$documentTypeCode}.catatan"),
-                    'sumber' => $request->input("documents.{$documentTypeCode}.sumber"),
-                ];
+            // Store document types and files
+            if ($request->has('status')) {
+                foreach ($request->status as $documentTypeCode => $status) {
+                    // Create project document type record
+                    $project->documentTypes()->create([
+                        'document_type_code' => $documentTypeCode,
+                        'is_required' => true
+                    ]);
 
-                // Handle file upload if exists
-                if ($request->hasFile("documents.{$documentTypeCode}.file")) {
-                    $file = $request->file("documents.{$documentTypeCode}.file");
-                    $path = $file->store('project-documents/' . $project->id, 'public');
-                    $documentData['file_path'] = $path;
+                    $documentData = [
+                        'document_type_code' => $documentTypeCode,
+                        'status' => $status,
+                        'catatan' => $request->input("documents.{$documentTypeCode}.catatan"),
+                        'sumber' => $request->input("documents.{$documentTypeCode}.sumber"),
+                        'uploaded_by' => Auth::id()
+                    ];
+
+                    // Handle file upload if exists
+                    if ($request->hasFile("documents.{$documentTypeCode}.file")) {
+                        $file = $request->file("documents.{$documentTypeCode}.file");
+                        $path = $file->store('project-documents/' . $project->id, 'public');
+                        $documentData['file_path'] = $path;
+                    }
+
+                    $project->documents()->create($documentData);
                 }
-
-                $project->documents()->create($documentData);
             }
 
             return redirect()->route('dashboard.user.projects.index')
@@ -119,7 +129,8 @@ class ProjectController extends Controller
             'contract_value' => 'required|numeric|min:0',
             'spmk_date' => 'required|date',
             'duration_days' => 'required|integer|min:1',
-            'status.*' => 'required|in:approved,rejected',
+            'status.*' => 'nullable|in:approved,rejected',
+            'documents' => 'nullable|array',
             'documents.*.file' => 'nullable|file|max:10240',
             'documents.*.catatan' => 'nullable|string',
             'documents.*.sumber' => 'nullable|string',

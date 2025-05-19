@@ -46,9 +46,9 @@
         <!-- Logo Section -->
         <div class="hidden md:flex md:w-1/2 items-center justify-center p-12 relative z-10">
             <div class="text-center transform transition-all duration-500 hover:scale-105">
-                <img src="/images/logo.svg" alt="Logo" class="w-72 h-auto mb-6 mx-auto animate-fade-in">
+                <img src="/images/logo fix2.png" alt="Logo" class="w-60 h-auto mb-6 mx-auto animate-fade-in">
                 <h1 class="text-3xl font-bold text-white mb-2">Scoring Dokumen Konstruksi</h1>
-                <p class="text-white/90">Menuju Lembaga Cyber World Class</p>
+                <p class="text-white/90">Inovasi Menuju Konsultan Konstruksi Terkemuka</p>
             </div>
         </div>
         
@@ -86,14 +86,6 @@
                         @error('password')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
-                    </div>
-
-                    <div class="flex items-center justify-between text-sm">
-                        <label class="flex items-center">
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-500 rounded border-gray-300 focus:ring-indigo-500">
-                            <span class="ml-2 text-gray-700">Remember me</span>
-                        </label>
-                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-semibold">Recover password</a>
                     </div>
 
                     <div class="pt-2">
