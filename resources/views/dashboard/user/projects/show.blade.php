@@ -307,7 +307,7 @@
 
                                                     @if($document->file_path)
                                                         <a href="{{ asset($document->file_path) }}" target="_blank" 
-                                                           class="inline-flex items-center text-blue-600 hover:text-blue-800">
+                                                            class="inline-flex items-center text-blue-600 hover:text-blue-800">
                                                             <i class="fas fa-download mr-2"></i>
                                                             Download Dokumen
                                                         </a>
