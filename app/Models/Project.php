@@ -80,7 +80,7 @@ class Project extends Model
      */
     public function guest(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'guest_id');
+        return $this->belongsTo(User::class, 'guest_id', 'id');
     }
 
     /**

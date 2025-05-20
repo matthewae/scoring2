@@ -104,7 +104,11 @@ class ProjectController extends Controller
     public function show(Project $project)
     {
         $this->authorize('view', $project);
-        return view('dashboard.user.projects.show', compact('project'));
+        $documentTypes = DocumentType::orderBy('tahapan')
+            ->orderBy('no')
+            ->get()
+            ->groupBy('tahapan');
+        return view('dashboard.user.projects.show', compact('project', 'documentTypes'));
     }
 
     public function edit(Project $project)

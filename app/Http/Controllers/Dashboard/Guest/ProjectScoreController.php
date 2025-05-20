@@ -17,9 +17,8 @@ class ProjectScoreController extends Controller
      */
     public function index(Request $request)
     {
-        $projects = Project::where('guest_id', auth()->id())
-            ->with(['projectDocuments', 'assessmentRequests'])
-            ->latest()
+        $projects = Project::with(['projectDocuments.documentType', 'assessmentRequests', 'guest'])
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('dashboard.guest.project-scores.index', compact('projects'));

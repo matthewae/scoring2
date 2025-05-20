@@ -16,8 +16,10 @@ class ProjectDocumentController extends Controller
 {
     public function create()
     {
-        $documentTypes = DocumentType::all();
-        $projects = Project::where('guest_id', Auth::id())->get();
+        $documentTypes = DocumentType::orderBy('no')->get();
+        $projects = Project::where('guest_id', Auth::id())
+            ->orderBy('name')
+            ->get();
         return view('dashboard.guest.project-documents.create', compact('documentTypes', 'projects'));
     }
 

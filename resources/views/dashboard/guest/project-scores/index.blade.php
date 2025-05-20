@@ -111,29 +111,68 @@
             <p class="text-gray-600 text-lg">Pilih project untuk melihat detail penilaian</p>
         </div>
 
-        <!-- Project Selection -->
-        <div class="glass-effect rounded-2xl p-6 max-w-2xl mx-auto mb-8">
-            <form method="GET" class="space-y-4" id="projectForm">
-                <div class="flex flex-col space-y-2">
-                    <label for="project" class="text-gray-700 font-medium">Pilih Project:</label>
-                    <select name="projectScore" id="project" class="form-select rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200" onchange="redirectToProject(this.value)">
-                        <option value="">-- Pilih Project --</option>
-                        @foreach($projects as $project)
-                            <option value="{{ $project->id }}" class="py-2">
-                                {{ $project->name }} ({{ ucfirst($project->status) }})
-                            </option>
-                        @endforeach
+        <!-- Search Bar -->
+        <div class="glass-effect rounded-2xl p-4 mb-8 max-w-7xl mx-auto">
+            <form action="{{ route('dashboard.guest.project-scores.index') }}" method="GET" class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari project..." 
+                           class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 transition-all duration-300">
+                </div>
+                <div class="w-full md:w-48">
+                    <select name="status" class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 transition-all duration-300">
+                        <option value="">Semua Status</option>
+                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Completed</option>
                     </select>
                 </div>
+                <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-300 flex items-center justify-center">
+                    <i class="fas fa-search mr-2"></i> Cari
+                </button>
             </form>
+        </div>
 
-            <script>
-                function redirectToProject(projectId) {
-                    if (projectId) {
-                        window.location.href = '{{ route("dashboard.guest.project-scores.show.new", "__ID__") }}'.replace('__ID__', projectId);
-                    }
-                }
-            </script>
+        <!-- Project Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-8">
+            @forelse($projects as $project)
+                <div class="glass-effect rounded-2xl p-6 project-card cursor-pointer transform hover:scale-105 transition-all duration-300" 
+                     onclick="window.location.href = '{{ route('dashboard.guest.project-scores.show.new', $project->id) }}'">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800">{{ $project->name }}</h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium {{ $project->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' }}">
+                            {{ ucfirst($project->status) }}
+                        </span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-calendar-alt mr-2"></i>
+                            <span>{{ $project->created_at->format('d M Y') }}</span>
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-file-alt mr-2"></i>
+                            <span>{{ $project->projectDocuments->count() }} dokumen</span>
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-user mr-2"></i>
+                            <span>{{ $project->guest->name }}</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex justify-end">
+                        <button class="text-indigo-600 hover:text-indigo-800 transition-colors duration-200">
+                            Lihat Detail <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-3 glass-effect rounded-2xl p-8 text-center">
+                    <i class="fas fa-folder-open text-6xl text-gray-400 mb-4"></i>
+                    <p class="text-gray-600 text-lg">Tidak ada project yang ditemukan.</p>
+                </div>
+            @endforelse
+        </div>
+
+        <!-- Pagination -->
+        <div class="max-w-7xl mx-auto mb-8">
+            {{ $projects->links() }}
         </div>
                     @if(session('message'))
             <div class="glass-effect rounded-2xl p-4 mb-8 max-w-2xl mx-auto bg-green-50 text-green-800">
@@ -148,13 +187,29 @@
         @endif
 
         <!-- Instructions -->
-        <div class="glass-effect rounded-2xl p-6 max-w-2xl mx-auto mt-8 bg-blue-50">
-            <h3 class="text-lg font-semibold text-blue-800 mb-2">Petunjuk:</h3>
-            <ul class="list-disc list-inside text-blue-700 space-y-2">
-                <li>Pilih project dari dropdown di atas untuk melihat detail penilaian</li>
-                <li>Status project akan ditampilkan di sebelah nama project</li>
-                <li>Setelah memilih project, Anda akan diarahkan ke halaman detail penilaian</li>
-            </ul>
+        <div class="glass-effect rounded-2xl p-6 max-w-2xl mx-auto mt-8">
+            <div class="flex items-center mb-4">
+                <i class="fas fa-info-circle text-2xl text-indigo-600 mr-3"></i>
+                <h3 class="text-lg font-semibold text-gray-800">Petunjuk Penggunaan</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-search text-indigo-500 mt-1"></i>
+                    <p class="text-gray-600">Gunakan kolom pencarian untuk menemukan project berdasarkan nama</p>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-filter text-indigo-500 mt-1"></i>
+                    <p class="text-gray-600">Filter project berdasarkan status (Pending/Completed)</p>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-mouse-pointer text-indigo-500 mt-1"></i>
+                    <p class="text-gray-600">Klik pada project untuk melihat detail penilaian</p>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-clock text-indigo-500 mt-1"></i>
+                    <p class="text-gray-600">Status project ditampilkan dengan indikator warna</p>
+                </div>
+            </div>
         </div>
     </main>
 
