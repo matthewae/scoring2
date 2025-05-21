@@ -54,4 +54,13 @@ class DocumentController extends Controller
         return redirect()->route('dashboard.user.documents.index')
             ->with('success', 'Dokumen berhasil diupload.');
     }
+
+    public function show($id)
+    {
+        $document = ProjectDocument::with(['documentType'])
+            ->where('uploaded_by', auth()->id())
+            ->findOrFail($id);
+
+        return view('dashboard.user.documents.show', compact('document'));
+    }
 }

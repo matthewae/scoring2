@@ -13,6 +13,7 @@ class ProjectDocument extends Model
     protected $fillable = [
         'project_id',
         'document_type_code',
+        'D_ID',
         'status',
         'score',
         'remarks',

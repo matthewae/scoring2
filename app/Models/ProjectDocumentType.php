@@ -13,6 +13,7 @@ class ProjectDocumentType extends Model
     protected $fillable = [
         'project_id',
         'document_type_code',
+        'D_ID',
         'custom_code',
         'description',
         'is_required'

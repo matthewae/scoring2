@@ -149,7 +149,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                                     <a href="{{ route('dashboard.guest.project-documents.show', $document->id) }}" 
-                                       class="text-indigo-600 hover:text-indigo-900 font-medium transition-colors duration-200">
+                                        class="text-indigo-600 hover:text-indigo-900 font-medium transition-colors duration-200">
                                         <i class="fas fa-eye mr-1"></i> Detail
                                     </a>
                                 </td>

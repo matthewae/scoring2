@@ -76,6 +76,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [\App\Http\Controllers\Dashboard\User\DocumentController::class, 'index'])->name('index');
             Route::get('/upload', [\App\Http\Controllers\Dashboard\User\DocumentController::class, 'create'])->name('upload');
             Route::post('/', [\App\Http\Controllers\Dashboard\User\DocumentController::class, 'store'])->name('store');
+            Route::get('/{document}', [\App\Http\Controllers\Dashboard\User\DocumentController::class, 'show'])->name('show');
         });
         
         // Projects Management
@@ -92,6 +93,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/create', [ProjectDocumentController::class, 'create'])->name('create');
             Route::post('/', [ProjectDocumentController::class, 'store'])->name('store');
             Route::get('/{document}', [ProjectDocumentController::class, 'show'])->name('show');
+            Route::get('/{document}/download', [ProjectDocumentController::class, 'download'])->name('download');
             Route::delete('/{document}', [ProjectDocumentController::class, 'destroy'])->name('destroy');
         });
     });

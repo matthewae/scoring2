@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('document_types', function (Blueprint $table) {
             $table->string('code')->primary();
+            $table->string('D_ID')->unique()->after('code');
             $table->string('parent_code')->nullable();
             $table->string('no')->nullable();
             $table->string('tahapan');
