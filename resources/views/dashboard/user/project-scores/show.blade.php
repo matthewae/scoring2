@@ -79,11 +79,16 @@
                     </a>
                 </div>
                 <div class="glass-effect rounded-xl p-6 mb-6">
-                    <h3 class="text-xl font-semibold mb-4 bg-gradient-to-r from-emerald-600 to-sky-600 text-transparent bg-clip-text">{{ $projectScore->name }}</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold bg-gradient-to-r from-emerald-600 to-sky-600 text-transparent bg-clip-text">{{ $projectScore->name }}</h3>
+                        <span class="px-4 py-2 rounded-full {{ $projectScore->status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' }}">
+                            {{ ucfirst($projectScore->status) }}
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div class="glass-effect rounded-lg p-4">
-                            <p class="text-gray-600">Status</p>
-                            <p class="font-semibold text-gray-800">{{ ucfirst($projectScore->status) }}</p>
+                            <p class="text-gray-600">Kementerian/Lembaga</p>
+                            <p class="font-semibold text-gray-800">{{ $projectScore->ministry_institution }}</p>
                         </div>
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Lokasi</p>
@@ -91,7 +96,7 @@
                         </div>
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Estimasi Biaya</p>
-                            <p class="font-semibold text-gray-800">Rp {{ number_format($projectScore->contract_value, 0, ',', '.') }}</p>
+                            <p class="font-semibold text-gray-800">Rp {{ number_format($projectScore->estimated_cost, 0, ',', '.') }}</p>
                         </div>
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Tanggal SPMK</p>
@@ -102,34 +107,69 @@
                             <p class="font-semibold text-gray-800">{{ $projectScore->duration_days }} hari</p>
                         </div>
                         <div class="glass-effect rounded-lg p-4">
-                            <p class="text-gray-600">Kementerian/Lembaga</p>
-                            <p class="font-semibold text-gray-800">{{ $projectScore->ministry_institution }}</p>
-                        </div>
-                        <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Konsultan Perencana</p>
-                            <p class="font-semibold text-gray-800">{{ $projectScore->planning_consultant }}</p>
+                            <p class="font-semibold text-gray-800">{{ $projectScore->planning_consultant ?: '-' }}</p>
                         </div>
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Konsultan MK</p>
-                            <p class="font-semibold text-gray-800">{{ $projectScore->mk_consultant }}</p>
+                            <p class="font-semibold text-gray-800">{{ $projectScore->mk_consultant ?: '-' }}</p>
                         </div>
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Kontraktor</p>
-                            <p class="font-semibold text-gray-800">{{ $projectScore->contractor }}</p>
+                            <p class="font-semibold text-gray-800">{{ $projectScore->contractor ?: '-' }}</p>
                         </div>
                         <div class="glass-effect rounded-lg p-4">
                             <p class="text-gray-600">Metode Pemilihan</p>
-                            <p class="font-semibold text-gray-800">{{ $projectScore->selection_method }}</p>
+                            <p class="font-semibold text-gray-800">{{ ucfirst(str_replace('_', ' ', $projectScore->selection_method)) }}</p>
+                        </div>
+                        <div class="glass-effect rounded-lg p-4 md:col-span-2">
+                            <p class="text-gray-600">Deskripsi Project</p>
+                            <p class="font-semibold text-gray-800">{{ $projectScore->description ?: '-' }}</p>
                         </div>
                     </div>
-                    @if($projectScore->description)
-                    <div class="glass-effect rounded-lg p-4">
-                        <p class="text-gray-600 mb-2">Deskripsi Project</p>
-                        <p class="text-gray-800">{{ $projectScore->description }}</p>
-                    </div>
-                    @endif
                 </div>
 
+                <!-- Ringkasan Statistik -->
+                <div class="glass-effect rounded-xl p-6 mb-8">
+                    <h4 class="text-2xl font-semibold text-gray-800 mb-6">Ringkasan Penilaian</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        @php
+                            $totalDocuments = 0;
+                            $totalApproved = 0;
+                            $totalScore = 0;
+                            $scoredDocuments = 0;
+                            
+                            foreach($documentsByTahapan as $docs) {
+                                $totalDocuments += $docs->count();
+                                $totalApproved += $docs->where('pivot.status', 'approved')->count();
+                                
+                                foreach($docs as $doc) {
+                                    if($doc->pivot->score !== null) {
+                                        $totalScore += $doc->pivot->score;
+                                        $scoredDocuments++;
+                                    }
+                                }
+                            }
+                            
+                            $averageScore = $scoredDocuments > 0 ? round($totalScore / $scoredDocuments, 1) : 0;
+                            $completionRate = $totalDocuments > 0 ? round(($totalApproved / $totalDocuments) * 100) : 0;
+                        @endphp
+                        
+                        <div class="glass-effect rounded-lg p-6 text-center">
+                            <p class="text-4xl font-bold text-blue-600 mb-2">{{ $totalDocuments }}</p>
+                            <p class="text-gray-600">Total Dokumen</p>
+                        </div>
+                        <div class="glass-effect rounded-lg p-6 text-center">
+                            <p class="text-4xl font-bold text-emerald-600 mb-2">{{ $completionRate }}%</p>
+                            <p class="text-gray-600">Tingkat Penyelesaian</p>
+                        </div>
+                        <div class="glass-effect rounded-lg p-6 text-center">
+                            <p class="text-4xl font-bold text-indigo-600 mb-2">{{ $averageScore }}</p>
+                            <p class="text-gray-600">Rata-rata Nilai</p>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Document Scores by Tahapan -->
                 <div class="space-y-8">
                     <h4 class="text-2xl font-semibold text-gray-800">Hasil Penilaian per Tahapan</h4>

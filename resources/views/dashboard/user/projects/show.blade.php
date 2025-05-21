@@ -261,7 +261,7 @@
                         <!-- Document Cards Container -->
                         <div id="documentCardsContainer" class="space-y-6">
                             @foreach($documentTypes as $tahapan => $types)
-                                <div id="tahapan-{{ Str::slug($tahapan) }}" class="tahapan-content hidden">
+                                <div id="tahapan-{{ Str::slug($tahapan) }}" class="tahapan-content {{ $loop->first ? '' : 'hidden' }}">
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4" id="document-grid-{{ Str::slug($tahapan) }}">
                                         @foreach($types as $type)
                                             @php
@@ -380,61 +380,96 @@
     </main>
 
     <script>
-        // Document Statistics Chart
-        const ctx = document.getElementById('documentPieChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: @json(array_keys($stats)),
-                datasets: [{
-                    data: @json(array_column($stats, 'percentage')),
-                    backgroundColor: [
-                        '#3B82F6',
-                        '#10B981',
-                        '#F59E0B',
-                        '#EF4444',
-                        '#8B5CF6'
-                    ],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 20,
-                            font: {
-                                size: 12
+        document.addEventListener('DOMContentLoaded', function() {
+            // Document Statistics Chart
+            const ctx = document.getElementById('documentPieChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: @json(array_keys($stats)),
+                    datasets: [{
+                        data: @json(array_column($stats, 'percentage')),
+                        backgroundColor: [
+                            '#3B82F6',
+                            '#10B981',
+                            '#F59E0B',
+                            '#EF4444',
+                            '#8B5CF6'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 12
+                                }
                             }
                         }
-                    }
-                },
-                cutout: '70%'
-            }
-        });
+                    },
+                    cutout: '70%'
+                }
+            });
 
+        // Pagination Configuration
         // Pagination Configuration
         const itemsPerPage = 6;
         let currentPage = 1;
         let currentTahapan = '';
 
-        function showTahapan(tahapan) {
-            // Hide all tahapan content
+        // Search and Filter Functionality
+        const documentSearch = document.getElementById('documentSearch');
+        const tahapanFilter = document.getElementById('tahapanFilter');
+        const documentCards = document.querySelectorAll('.document-card');
+
+        function filterDocuments() {
+            const searchTerm = documentSearch.value.toLowerCase();
+            const selectedTahapan = tahapanFilter.value;
+
+            documentCards.forEach(card => {
+                const cardText = card.dataset.search;
+                const cardTahapan = card.dataset.tahapan;
+                const matchesSearch = cardText.includes(searchTerm);
+                const matchesTahapan = !selectedTahapan || cardTahapan === selectedTahapan;
+
+                card.style.display = matchesSearch && matchesTahapan ? 'block' : 'none';
+            });
+        }
+
+        documentSearch.addEventListener('input', filterDocuments);
+        tahapanFilter.addEventListener('change', filterDocuments);
+
+                function showTahapan(tahapan) {
+            const tahapanSlug = tahapan.toLowerCase().replace(/\s+/g, '-');
+            const selectedContent = document.getElementById(`tahapan-${tahapanSlug}`);
+            
+            if (!selectedContent) return;
+
+            // Hide all tahapan content with fade out
             document.querySelectorAll('.tahapan-content').forEach(content => {
-                content.classList.add('hidden');
+                content.style.opacity = '0';
+                setTimeout(() => {
+                    content.classList.add('hidden');
+                }, 300);
             });
 
-            // Show selected tahapan
-            const selectedContent = document.getElementById(`tahapan-${tahapan.toLowerCase().replace(/\s+/g, '-')}`);
-            if (selectedContent) {
+            // Show selected tahapan with fade in
+            setTimeout(() => {
                 selectedContent.classList.remove('hidden');
-                currentTahapan = tahapan;
-                currentPage = 1;
-                updatePagination();
-            }
+                setTimeout(() => {
+                    selectedContent.style.opacity = '1';
+                }, 50);
+            }, 300);
+
+            currentTahapan = tahapan;
+            currentPage = 1;
+            updatePagination();
 
             // Update active state of tahapan tabs
             document.querySelectorAll('.tahapan-tab').forEach(tab => {
@@ -628,29 +663,65 @@
         const sidebarToggle = document.getElementById('sidebarToggle');
         const toggleIcon = sidebarToggle.querySelector('i');
 
-        function toggleSidebar() {
+        sidebarToggle.addEventListener('click', function() {
             sidebar.classList.toggle('collapsed');
             mainContent.classList.toggle('expanded');
-            sidebarToggle.classList.toggle('active');
-            toggleIcon.classList.toggle('fa-chevron-left');
-            toggleIcon.classList.toggle('fa-chevron-right');
+            toggleIcon.classList.toggle('fa-rotate-180');
+        });
+
+        // Document search functionality
+        const searchInput = document.getElementById('documentSearch');
+        const tahapanFilter = document.getElementById('tahapanFilter');
+        const documentCards = document.querySelectorAll('.document-card');
+
+        function filterDocuments() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedTahapan = tahapanFilter.value;
+
+            documentCards.forEach(card => {
+                const cardTahapan = card.dataset.tahapan;
+                const cardSearch = card.dataset.search;
+                const matchesTahapan = !selectedTahapan || cardTahapan === selectedTahapan;
+                const matchesSearch = cardSearch.includes(searchTerm);
+
+                card.style.display = matchesTahapan && matchesSearch ? 'block' : 'none';
+            });
         }
 
-        sidebarToggle.addEventListener('click', toggleSidebar);
+        searchInput.addEventListener('input', filterDocuments);
+        tahapanFilter.addEventListener('change', filterDocuments);
 
-        // Handle initial state for mobile
-        function handleResize() {
-            if (window.innerWidth <= 768) {
-                sidebar.classList.add('collapsed');
-                mainContent.classList.add('expanded');
+        // Show first tahapan by default
+        const firstTahapanTab = document.querySelector('.tahapan-tab');
+        if (firstTahapanTab) {
+            const firstTahapan = firstTahapanTab.dataset.tahapan;
+            showTahapan(firstTahapan);
+        }
+    });
+
+    function showTahapan(tahapan) {
+        // Hide all tahapan contents
+        document.querySelectorAll('.tahapan-content').forEach(content => {
+            content.classList.add('hidden');
+        });
+
+        // Show selected tahapan content
+        const selectedContent = document.getElementById('tahapan-' + tahapan.toLowerCase().replace(/ /g, '-'));
+        if (selectedContent) {
+            selectedContent.classList.remove('hidden');
+        }
+
+        // Update active state of tabs
+        document.querySelectorAll('.tahapan-tab').forEach(tab => {
+            if (tab.dataset.tahapan === tahapan) {
+                tab.classList.add('bg-blue-500', 'text-white');
+                tab.classList.remove('bg-gray-100', 'text-gray-600');
             } else {
-                sidebar.classList.remove('collapsed');
-                mainContent.classList.remove('expanded');
+                tab.classList.remove('bg-blue-500', 'text-white');
+                tab.classList.add('bg-gray-100', 'text-gray-600');
             }
-        }
-
-        window.addEventListener('resize', handleResize);
-        handleResize(); // Call on initial load
+        });
+    }
     </script>
 </body>
 </html>

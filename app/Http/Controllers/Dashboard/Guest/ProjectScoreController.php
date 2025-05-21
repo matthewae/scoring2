@@ -34,7 +34,8 @@ class ProjectScoreController extends Controller
     {
         $project = $projectScore->load(['projectDocuments', 'assessmentRequests']);
 
-        $documentTypes = DocumentType::all();
+        // Get document types associated with this project through project_document_types
+        $documentTypes = $project->documentTypes;
         $groupedDocuments = $documentTypes->groupBy('tahapan');
         
         $tahapanData = [];

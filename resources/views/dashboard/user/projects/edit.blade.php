@@ -113,8 +113,8 @@
                         <div>
                             <label for="ministry_institution" class="block text-sm font-medium text-gray-700 mb-1">Kementerian/Lembaga/Perangkat Daerah/Institusi</label>
                             <input type="text" name="ministry_institution" id="ministry_institution" 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('ministry_institution') border-red-500 @enderror" 
-                                   value="{{ old('ministry_institution', $project->ministry_institution) }}" required>
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('ministry_institution') border-red-500 @enderror" 
+                                    value="{{ old('ministry_institution', $project->ministry_institution) }}" required>
                             @error('ministry_institution')
                                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                             @enderror
@@ -123,8 +123,8 @@
                         <div>
                             <label for="planning_consultant" class="block text-sm font-medium text-gray-700 mb-1">Konsultan Perencana</label>
                             <input type="text" name="planning_consultant" id="planning_consultant" 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('planning_consultant') border-red-500 @enderror" 
-                                   value="{{ old('planning_consultant', $project->planning_consultant) }}" required>
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('planning_consultant') border-red-500 @enderror" 
+                                    value="{{ old('planning_consultant', $project->planning_consultant) }}" required>
                             @error('planning_consultant')
                                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                             @enderror
@@ -133,8 +133,8 @@
                         <div>
                             <label for="mk_consultant" class="block text-sm font-medium text-gray-700 mb-1">Konsultan MK</label>
                             <input type="text" name="mk_consultant" id="mk_consultant" 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('mk_consultant') border-red-500 @enderror" 
-                                   value="{{ old('mk_consultant', $project->mk_consultant) }}" required>
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('mk_consultant') border-red-500 @enderror" 
+                                    value="{{ old('mk_consultant', $project->mk_consultant) }}" required>
                             @error('mk_consultant')
                                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                             @enderror
@@ -143,8 +143,8 @@
                         <div>
                             <label for="contractor" class="block text-sm font-medium text-gray-700 mb-1">Kontraktor Pelaksana</label>
                             <input type="text" name="contractor" id="contractor" 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('contractor') border-red-500 @enderror" 
-                                   value="{{ old('contractor', $project->contractor) }}" required>
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('contractor') border-red-500 @enderror" 
+                                    value="{{ old('contractor', $project->contractor) }}" required>
                             @error('contractor')
                                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                             @enderror
@@ -167,8 +167,8 @@
                         <div>
                             <label for="contract_value" class="block text-sm font-medium text-gray-700 mb-1">Nilai Kontrak</label>
                             <input type="number" name="contract_value" id="contract_value" 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('contract_value') border-red-500 @enderror" 
-                                   value="{{ old('contract_value', $project->contract_value) }}" required>
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('contract_value') border-red-500 @enderror" 
+                                    value="{{ old('contract_value', $project->contract_value) }}" required>
                             @error('contract_value')
                                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                             @enderror
@@ -177,8 +177,8 @@
                         <div>
                             <label for="spmk_date" class="block text-sm font-medium text-gray-700 mb-1">Tanggal SPMK</label>
                             <input type="date" name="spmk_date" id="spmk_date" 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('spmk_date') border-red-500 @enderror" 
-                                   value="{{ old('spmk_date', $project->spmk_date) }}" required>
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('spmk_date') border-red-500 @enderror" 
+                                    value="{{ old('spmk_date', $project->spmk_date) }}" required>
                             @error('spmk_date')
                                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                             @enderror
@@ -187,8 +187,8 @@
                         <div>
                             <label for="duration_days" class="block text-sm font-medium text-gray-700 mb-1">Jangka Waktu (Hari)</label>
                             <input type="number" name="duration_days" id="duration_days" 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('duration_days') border-red-500 @enderror" 
-                                   value="{{ old('duration_days', $project->duration_days) }}" required>
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('duration_days') border-red-500 @enderror" 
+                                    value="{{ old('duration_days', $project->duration_days) }}" required>
                             @error('duration_days')
                                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                             @enderror
@@ -327,7 +327,7 @@
                 <div class="flex justify-end">
                     <button type="submit" 
                             class="px-8 py-3 bg-gradient-to-r from-emerald-500 to-sky-500 text-white rounded-lg 
-                                   hover:from-emerald-600 hover:to-sky-600 transition-all duration-200 flex items-center space-x-2">
+                                    hover:from-emerald-600 hover:to-sky-600 transition-all duration-200 flex items-center space-x-2">
                         <i class="fas fa-save"></i>
                         <span>Simpan Perubahan</span>
                     </button>

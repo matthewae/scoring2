@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             ProjectSeeder::class,
+            DocumentTypeSeeder::class,
         ]);
     }
 }
