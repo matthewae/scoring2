@@ -29,7 +29,7 @@ class ProjectDocumentController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'document' => 'required|file|mimes:pdf,doc,docx|max:10240',
+            'document' => 'required|file|mimes:pdf,doc,docx|max:1048576', // 1GB max
         ]);
 
         $project = Project::create([
@@ -40,12 +40,15 @@ class ProjectDocumentController extends Controller
         ]);
 
         if ($request->hasFile('document')) {
-            $path = $request->file('document')->store('project-documents', 'public');
+            $file = $request->file('document');
+            $path = $file->store('project-documents/' . $project->id, 'public');
             
             ProjectDocument::create([
                 'project_id' => $project->id,
-                'file_path' => $path,
-                'original_name' => $request->file('document')->getClientOriginalName()
+                'file_name' => $file->getClientOriginalName(),
+                'file_type' => $file->getClientMimeType(),
+                'file_size' => $file->getSize(),
+                'file_path' => $path
             ]);
         }
 
@@ -104,13 +107,17 @@ class ProjectDocumentController extends Controller
         $this->authorize('view', $document->project);
         $this->authorize('download', $document->project);
 
-        if (!Storage::disk('public')->exists($document->file_path)) {
+        if (!$document->file_path || !Storage::disk('public')->exists($document->file_path)) {
             return back()->with('error', 'File tidak ditemukan.');
         }
 
         return Storage::disk('public')->download(
             $document->file_path,
-            $document->original_name
+            $document->file_name,
+            [
+                'Content-Type' => $document->file_type,
+                'Content-Length' => $document->file_size
+            ]
         );
     }
 
@@ -126,7 +133,7 @@ class ProjectDocumentController extends Controller
             'kelengkapan' => 'required|boolean',
             'catatan' => 'nullable|string',
             'sumber' => 'nullable|string',
-            'file' => 'nullable|file|max:10240'
+            'file' => 'nullable|file|max:1048576' // 1GB max
         ]);
 
         $data = $request->except('file');

@@ -11,13 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('project_document_types', function (Blueprint $table) {
-            $table->string('D_ID')->after('document_type_code');
-            $table->foreign('D_ID')
-                  ->references('D_ID')
-                  ->on('document_types')
-                  ->onDelete('cascade');
-        });
+        // Migration removed since D_ID is already defined in document_types table
     }
 
     /**
@@ -25,9 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('project_document_types', function (Blueprint $table) {
-            $table->dropForeign(['D_ID']);
-            $table->dropColumn('D_ID');
-        });
+        // No rollback needed
     }
 };

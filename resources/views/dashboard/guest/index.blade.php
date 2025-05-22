@@ -28,11 +28,51 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .sidebar {
-            transition: transform 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.9);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.05);
+        }
+        .sidebar .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            margin: 4px 0;
+        }
+        .sidebar .nav-link:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(to bottom, #4f46e5, #7c3aed);
+            border-radius: 4px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .sidebar .nav-link:hover:before,
+        .sidebar .nav-link.active:before {
+            opacity: 1;
+        }
+        .sidebar .nav-link:hover {
+            background: linear-gradient(to right, rgba(79, 70, 229, 0.1), transparent);
+            transform: translateX(4px);
+        }
+        .sidebar .nav-link.active {
+            background: linear-gradient(to right, rgba(124, 58, 237, 0.1), transparent);
+            color: #4f46e5;
+        }
+        .sidebar .nav-icon {
+            transition: all 0.3s ease;
+        }
+        .sidebar .nav-link:hover .nav-icon {
+            transform: scale(1.1) rotate(5deg);
         }
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
+                z-index: 50;
             }
             .sidebar.active {
                 transform: translateX(0);
@@ -56,30 +96,30 @@
                 <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">Scoring System</h1>
             </div>
             <nav class="space-y-5">
-                <a href="#" class="flex items-center space-x-4 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 p-4 rounded-xl transition-all duration-300 group">
-                    <i class="fas fa-home text-lg text-indigo-600 group-hover:scale-110 transition-transform"></i>
+                <a href="#" class="nav-link active flex items-center space-x-4 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 p-4 rounded-xl transition-all duration-300 group">
+                    <i class="nav-icon fas fa-home text-lg text-indigo-600 group-hover:scale-110 transition-transform"></i>
                     <span class="font-medium">Dashboard</span>
                 </a>
-                <a href="{{ route('dashboard.guest.project-documents.create') }}" class="flex items-center space-x-4 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 p-4 rounded-xl transition-all duration-300 group">
-                    <i class="fas fa-file-upload text-lg text-purple-600 group-hover:scale-110 transition-transform"></i>
+                <a href="{{ route('dashboard.guest.project-documents.create') }}" class="nav-link flex items-center space-x-4 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 p-4 rounded-xl transition-all duration-300 group">
+                    <i class="nav-icon fas fa-file-upload text-lg text-purple-600 group-hover:scale-110 transition-transform"></i>
                     <span class="font-medium">Pengajuan Dokumen</span>
                 </a>
-                <a href="{{ route('dashboard.guest.project-scores.index') }}" class="flex items-center space-x-4 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 p-4 rounded-xl transition-all duration-300 group">
-                    <i class="fas fa-star text-lg text-blue-600 group-hover:scale-110 transition-transform"></i>
+                <a href="{{ route('dashboard.guest.project-scores.index') }}" class="nav-link flex items-center space-x-4 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 p-4 rounded-xl transition-all duration-300 group">
+                    <i class="nav-icon fas fa-star text-lg text-blue-600 group-hover:scale-110 transition-transform"></i>
                     <span class="font-medium">Lihat Penilaian</span>
                 </a>
-                <a href="{{ route('dashboard.guest.project-documents.history') }}" class="flex items-center space-x-4 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 p-4 rounded-xl transition-all duration-300 group">
-                    <i class="fas fa-history text-lg text-indigo-600 group-hover:scale-110 transition-transform"></i>
+                <a href="{{ route('dashboard.guest.project-documents.history') }}" class="nav-link flex items-center space-x-4 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 p-4 rounded-xl transition-all duration-300 group">
+                    <i class="nav-icon fas fa-history text-lg text-indigo-600 group-hover:scale-110 transition-transform"></i>
                     <span class="font-medium">Riwayat Pengajuan</span>
                 </a>
-                <a href="{{ route('dashboard.guest.guide') }}" class="flex items-center space-x-4 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 p-4 rounded-xl transition-all duration-300 group">
-                    <i class="fas fa-book text-lg text-violet-600 group-hover:scale-110 transition-transform"></i>
+                <a href="{{ route('dashboard.guest.guide') }}" class="nav-link flex items-center space-x-4 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 p-4 rounded-xl transition-all duration-300 group">
+                    <i class="nav-icon fas fa-book text-lg text-violet-600 group-hover:scale-110 transition-transform"></i>
                     <span class="font-medium">Panduan</span>
                 </a>
                 <form method="POST" action="{{ route('logout') }}" class="mt-auto">
                     @csrf
-                    <button type="submit" class="w-full flex items-center space-x-4 text-red-600 hover:bg-red-50/50 p-4 rounded-xl transition-all duration-300 group">
-                        <i class="fas fa-sign-out-alt text-lg group-hover:scale-110 transition-transform"></i>
+                    <button type="submit" class="nav-link w-full flex items-center space-x-4 text-red-600 hover:bg-red-50/50 p-4 rounded-xl transition-all duration-300 group">
+                        <i class="nav-icon fas fa-sign-out-alt text-lg group-hover:scale-110 transition-transform"></i>
                         <span class="font-medium">Logout</span>
                     </button>
                 </form>

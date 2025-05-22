@@ -48,6 +48,28 @@ class ProjectScoreController extends Controller
      */
     public function showNew(Project $projectScore)
     {
+        $project = $projectScore->load(['projectDocuments.documentType']);
+        
+        // Group documents by tahapan and calculate stats
+        $tahapanData = [];
+        foreach ($project->projectDocuments as $document) {
+            $tahapan = $document->documentType->tahapan ?? 'Lainnya';
+            
+            if (!isset($tahapanData[$tahapan])) {
+                $tahapanData[$tahapan] = [
+                    'approved' => 0,
+                    'pending' => 0
+                ];
+            }
+            
+            if ($document->status === 'approved') {
+                $tahapanData[$tahapan]['approved']++;
+            } else {
+                $tahapanData[$tahapan]['pending']++;
+            }
+        }
+        
+        return view('dashboard.guest.project-scores.show', compact('project', 'tahapanData'));
         $project = $projectScore->load(['projectDocuments', 'assessmentRequests']);
 
         // Get document types associated with this project through project_document_types

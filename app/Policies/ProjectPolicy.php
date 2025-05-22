@@ -27,7 +27,7 @@ class ProjectPolicy
 
     public function update(User $user, Project $project)
     {
-        return $user->id === $project->user_id;
+        return $user->status === 'user' && $user->id === $project->user_id;
     }
 
     public function delete(User $user, Project $project)

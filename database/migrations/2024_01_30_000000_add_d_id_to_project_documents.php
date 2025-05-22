@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -11,12 +12,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Update D_ID values from document_types table
+        DB::table('project_documents')
+            ->join('document_types', 'project_documents.document_type_code', '=', 'document_types.code')
+            ->update(['project_documents.D_ID' => DB::raw('document_types.D_ID')]);
+
+        // Add the foreign key constraint
         Schema::table('project_documents', function (Blueprint $table) {
-            $table->string('D_ID')->after('document_type_code');
             $table->foreign('D_ID')
                   ->references('D_ID')
                   ->on('document_types')
                   ->onDelete('cascade');
+            
+            // Make the column required
+            $table->string('D_ID')->nullable(false)->change();
         });
     }
 

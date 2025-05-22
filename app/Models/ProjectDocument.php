@@ -17,7 +17,10 @@ class ProjectDocument extends Model
         'status',
         'score',
         'remarks',
-        'file_path',
+        'file_content',
+        'file_name',
+        'file_type',
+        'file_size',
         'uploaded_by',
         'notes',
         'source'

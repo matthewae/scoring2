@@ -51,9 +51,9 @@
                             </div>
                         </div>
                         <a href="{{ Storage::url($document->file_path) }}" 
-                           class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200"
-                           target="_blank"
-                           download>
+                            class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200"
+                            target="_blank"
+                            download>
                             <i class="fas fa-download mr-2"></i>
                             Download
                         </a>
