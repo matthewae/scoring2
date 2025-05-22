@@ -121,8 +121,11 @@
                 <div class="w-full md:w-48">
                     <select name="status" class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 transition-all duration-300">
                         <option value="">Semua Status</option>
-                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                        <option value="in_progress" {{ request('status') === 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                        <option value="on_hold" {{ request('status') === 'on_hold' ? 'selected' : '' }}>On Hold</option>
                         <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Completed</option>
+                        <option value="revision" {{ request('status') === 'revision' ? 'selected' : '' }}>Revision</option>
                     </select>
                 </div>
                 <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-300 flex items-center justify-center">
@@ -135,11 +138,16 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-8">
             @forelse($projects as $project)
                 <div class="glass-effect rounded-2xl p-6 project-card cursor-pointer transform hover:scale-105 transition-all duration-300" 
-                     onclick="window.location.href = '{{ route('dashboard.guest.project-scores.show.new', $project->id) }}'">
+                    onclick="window.location.href = '{{ route('dashboard.guest.project-scores.show.new', $project->id) }}'">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-xl font-semibold text-gray-800">{{ $project->name }}</h3>
-                        <span class="px-3 py-1 rounded-full text-sm font-medium {{ $project->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' }}">
-                            {{ ucfirst($project->status) }}
+                        <span class="px-3 py-1 rounded-full text-sm font-medium 
+                            {{ $project->status === 'active' ? 'bg-blue-100 text-blue-800' : 
+                               ($project->status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' : 
+                               ($project->status === 'on_hold' ? 'bg-gray-100 text-gray-800' : 
+                               ($project->status === 'completed' ? 'bg-green-100 text-green-800' : 
+                               'bg-red-100 text-red-800'))) }}">
+                            {{ str_replace('_', ' ', ucfirst($project->status)) }}
                         </span>
                     </div>
                     <div class="space-y-2">

@@ -17,9 +17,25 @@ class ProjectScoreController extends Controller
      */
     public function index(Request $request)
     {
-        $projects = Project::with(['projectDocuments.documentType', 'assessmentRequests', 'guest'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $query = Project::with(['projectDocuments.documentType', 'assessmentRequests', 'guest']);
+
+        // Filter by search term
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = $request->search;
+            $query->where('name', 'like', '%' . $searchTerm . '%');
+        }
+
+        // Filter by status
+        if ($request->has('status') && !empty($request->status)) {
+            $status = $request->status;
+            if (in_array($status, ['planning', 'in_progress', 'completed', 'on_hold'])) {
+                $query->where('status', $status);
+            }
+        }
+
+        $projects = $query->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
 
         return view('dashboard.guest.project-scores.index', compact('projects'));
     }

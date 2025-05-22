@@ -257,7 +257,7 @@
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                     @if($type->is_file_required)
-                                                        <input type="file" name="documents[{{ $type->code }}][file]" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                                        <input type="file" name="documents[{{ $type->code }}][file]" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" onchange="validateFileUpload(this, '{{ $type->code }}')" accept=".pdf,.jpg,.jpeg,.png">
                                                         <input type="text" name="documents[{{ $type->code }}][catatan]" placeholder="Catatan" class="mt-2 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                                         <input type="text" name="documents[{{ $type->code }}][sumber]" placeholder="Sumber" class="mt-2 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                                     @else
@@ -313,18 +313,53 @@
     </main>
 
     <script>
+        function updateKelengkapan(code, status) {
+            const kelengkapanSpan = document.getElementById(`kelengkapan_${code}`);
+            if (kelengkapanSpan) {
+                if (status === 'approved') {
+                    kelengkapanSpan.className = 'px-2 py-1 text-sm rounded-full bg-green-100 text-green-800';
+                    kelengkapanSpan.textContent = 'Ada';
+                } else {
+                    kelengkapanSpan.className = 'px-2 py-1 text-sm rounded-full bg-red-100 text-red-800';
+                    kelengkapanSpan.textContent = 'Tidak Ada';
+                }
+            }
+        }
+
+        function validateFileUpload(input, code) {
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+            const file = input.files[0];
+
+            if (file) {
+                if (file.size > maxSize) {
+                    alert('Ukuran file terlalu besar. Maksimal 5MB.');
+                    input.value = '';
+                    return false;
+                }
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Format file tidak didukung. Gunakan PDF, JPG, atau PNG.');
+                    input.value = '';
+                    return false;
+                }
+                document.querySelector(`select[name="status[${code}]"]`).value = 'approved';
+                updateKelengkapan(code, 'approved');
+            }
+            return true;
+        }
+
         let currentSlideIndex = 0;
-        const totalSlides = 8;
+        const slides = document.querySelectorAll('.slide-content');
 
         function showSlide(index) {
-            const slides = document.querySelectorAll('.slide-content');
-            slides.forEach(slide => slide.style.display = 'none');
-            slides[index].style.display = 'block';
+            slides.forEach((slide, i) => {
+                slide.style.display = i === index ? 'block' : 'none';
+            });
             document.getElementById('currentSlide').textContent = index + 1;
         }
 
         function nextSlide() {
-            if (currentSlideIndex < totalSlides - 1) {
+            if (currentSlideIndex < slides.length - 1) {
                 currentSlideIndex++;
                 showSlide(currentSlideIndex);
             }
@@ -337,20 +372,24 @@
             }
         }
 
-        function updateKelengkapan(code, value) {
-            const kelengkapanEl = document.getElementById(`kelengkapan_${code}`);
-            if (value === 'approved') {
-                kelengkapanEl.textContent = 'Ada';
-                kelengkapanEl.className = 'px-2 py-1 text-sm rounded-full bg-green-100 text-green-800';
-            } else if (value === 'rejected') {
-                kelengkapanEl.textContent = 'Tidak Ada';
-                kelengkapanEl.className = 'px-2 py-1 text-sm rounded-full bg-red-100 text-red-800';
-            }
-        }
-
         document.getElementById('toggleSidebar').addEventListener('click', function() {
-            document.querySelector('.sidebar').classList.toggle('collapsed');
-            document.querySelector('.main-content').classList.toggle('ml-0');
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+            sidebar.classList.toggle('collapsed');
+            mainContent.style.marginLeft = sidebar.classList.contains('collapsed') ? '0' : '15rem';
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('totalSlides').textContent = slides.length;
+            showSlide(0);
+
+            // Add event listeners to all file inputs
+            document.querySelectorAll('input[type="file"]').forEach(input => {
+                const code = input.name.match(/\[(.*?)\]/)[1];
+                input.addEventListener('change', function() {
+                    validateFileUpload(this, code);
+                });
+            });
         });
     </script>
 </body>

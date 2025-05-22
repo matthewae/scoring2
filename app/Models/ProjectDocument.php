@@ -18,7 +18,9 @@ class ProjectDocument extends Model
         'score',
         'remarks',
         'file_path',
-        'uploaded_by'
+        'uploaded_by',
+        'notes',
+        'source'
     ];
 
     protected $casts = [

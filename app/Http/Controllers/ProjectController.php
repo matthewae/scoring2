@@ -37,13 +37,32 @@ class ProjectController extends Controller
             'duration_days' => 'required|integer',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date',
-            'guest_id' => 'nullable|exists:users,id'
+            'guest_id' => 'nullable|exists:users,id',
+            'status.*' => 'nullable|in:approved,rejected',
+            'documents.*.file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'documents.*.catatan' => 'nullable|string',
+            'documents.*.sumber' => 'nullable|string'
         ]);
 
         $project = Project::create($validatedData);
 
-        if ($request->has('document_types')) {
-            $project->documentTypes()->attach($request->document_types);
+        if ($request->has('documents')) {
+            foreach ($request->documents as $code => $document) {
+                if (isset($document['file'])) {
+                    $file = $document['file'];
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $filePath = $file->storeAs('project-documents', $fileName, 'public');
+
+                    $project->documents()->create([
+                        'document_type_code' => $code,
+                        'file_path' => $filePath,
+                        'notes' => $document['catatan'] ?? null,
+                        'source' => $document['sumber'] ?? null,
+                        'status' => $request->input('status.' . $code, 'pending'),
+                        'uploaded_by' => Auth::id()
+                    ]);
+                }
+            }
         }
 
         return redirect()->route('projects.show', $project)
