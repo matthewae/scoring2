@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Guest;
 use App\Http\Controllers\Controller;
 use App\Models\ProjectDocument;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class GuestProjectDocumentController extends Controller
 {
@@ -28,5 +29,20 @@ class GuestProjectDocumentController extends Controller
         }
 
         return view('dashboard.guest.project-documents.show', compact('projectDocument'));
+    }
+
+    public function download(ProjectDocument $projectDocument)
+    {
+        // Authorize that the authenticated guest owns this document
+        if ($projectDocument->project->guest_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // Ensure the file exists
+        if (!Storage::exists($projectDocument->file_path)) {
+            abort(404);
+        }
+
+        return Storage::download($projectDocument->file_path, $projectDocument->original_filename);
     }
 }

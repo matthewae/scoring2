@@ -84,7 +84,7 @@
                         <p class="mt-2 text-gray-600">Informasi lengkap mengenai dokumen yang diajukan.</p>
                     </div>
                     <a href="{{ route('dashboard.guest.project-documents.history') }}" 
-                       class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200">
+                        class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200">
                         <i class="fas fa-arrow-left mr-2"></i>
                         Kembali
                     </a>
@@ -96,18 +96,18 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <h3 class="text-lg font-semibold text-gray-700 mb-2">Informasi Project</h3>
-                        <p class="text-gray-600">Nama Project: <span class="text-gray-900">{{ $document->project->name }}</span></p>
+                        <p class="text-gray-600">Nama Project: <span class="text-gray-900">{{ $projectDocument->project->name }}</span></p>
                     </div>
                     <div>
                         <h3 class="text-lg font-semibold text-gray-700 mb-2">Jenis Dokumen</h3>
-                        <p class="text-gray-600">{{ $document->document_type->name }}</p>
+                        <p class="text-gray-600">{{ $projectDocument->documentType->name }}</p>
                     </div>
                 </div>
 
                 <div class="border-t border-gray-200 pt-6">
                     <h3 class="text-lg font-semibold text-gray-700 mb-4">Status Dokumen</h3>
                     <div class="flex items-center space-x-4">
-                        @switch($document->status)
+                        @switch($projectDocument->status)
                             @case('pending')
                                 <span class="px-4 py-2 inline-flex items-center rounded-full bg-yellow-100 text-yellow-800">
                                     <i class="fas fa-clock mr-2"></i> Pending
@@ -124,44 +124,44 @@
                                 </span>
                                 @break
                         @endswitch
-                        <span class="text-gray-600">Diajukan pada: {{ $document->created_at->format('d M Y H:i') }}</span>
+                        <span class="text-gray-600">Diajukan pada: {{ $projectDocument->created_at->format('d M Y H:i') }}</span>
                     </div>
                 </div>
 
-                @if($document->score)
+                @if($projectDocument->score)
                 <div class="border-t border-gray-200 pt-6">
                     <h3 class="text-lg font-semibold text-gray-700 mb-2">Skor</h3>
-                    <div class="text-2xl font-bold text-emerald-600">{{ $document->score }}</div>
+                    <div class="text-2xl font-bold text-emerald-600">{{ $projectDocument->score }}</div>
                 </div>
                 @endif
 
-                @if($document->remarks)
+                @if($projectDocument->remarks)
                 <div class="border-t border-gray-200 pt-6">
                     <h3 class="text-lg font-semibold text-gray-700 mb-2">Catatan Reviewer</h3>
-                    <p class="text-gray-700 bg-gray-50 rounded-lg p-4">{{ $document->remarks }}</p>
+                    <p class="text-gray-700 bg-gray-50 rounded-lg p-4">{{ $projectDocument->remarks }}</p>
                 </div>
                 @endif
 
                 <div class="border-t border-gray-200 pt-6">
                     <h3 class="text-lg font-semibold text-gray-700 mb-4">File Dokumen</h3>
-                    <a href="{{ route('dashboard.guest.project-documents.download', $document->id) }}" 
+                    <a href="{{ route('dashboard.guest.project-documents.download', $projectDocument->id) }}" 
                        class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200">
                         <i class="fas fa-download mr-2"></i>
                         Download Dokumen
                     </a>
                 </div>
 
-                @if($document->sumber)
+                @if($projectDocument->sumber)
                 <div class="border-t border-gray-200 pt-6">
                     <h3 class="text-lg font-semibold text-gray-700 mb-2">Sumber</h3>
-                    <p class="text-gray-700">{{ $document->sumber }}</p>
+                    <p class="text-gray-700">{{ $projectDocument->sumber }}</p>
                 </div>
                 @endif
 
-                @if($document->catatan)
+                @if($projectDocument->catatan)
                 <div class="border-t border-gray-200 pt-6">
                     <h3 class="text-lg font-semibold text-gray-700 mb-2">Catatan Pengajuan</h3>
-                    <p class="text-gray-700">{{ $document->catatan }}</p>
+                    <p class="text-gray-700">{{ $projectDocument->catatan }}</p>
                 </div>
                 @endif
             </div>

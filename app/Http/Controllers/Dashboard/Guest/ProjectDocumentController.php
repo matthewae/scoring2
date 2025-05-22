@@ -9,6 +9,7 @@ use App\Models\ProjectDocument;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\NewProjectDocumentSubmission;
 
@@ -62,5 +63,24 @@ class ProjectDocumentController extends Controller
         return redirect()
             ->route('dashboard.guest')
             ->with('success', 'Dokumen berhasil diajukan dan akan segera diproses oleh tim kami.');
+    }
+
+    public function download(ProjectDocument $projectDocument)
+    {
+        // Verify if the authenticated user has access to this document
+        $project = Project::where('id', $projectDocument->project_id)
+            ->where('guest_id', Auth::id())
+            ->firstOrFail();
+
+        // Check if file exists
+        if (!Storage::exists($projectDocument->file_path)) {
+            return back()->with('error', 'File tidak ditemukan.');
+        }
+
+        // Get original file name or use a default name
+        $fileName = basename($projectDocument->file_path);
+
+        // Return file download response
+        return Storage::download($projectDocument->file_path, $fileName);
     }
 }

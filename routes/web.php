@@ -57,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/', [\App\Http\Controllers\Dashboard\Guest\ProjectDocumentController::class, 'store'])->name('store');
             Route::get('/history', [\App\Http\Controllers\Guest\GuestProjectDocumentController::class, 'history'])->name('history');
             Route::get('/{projectDocument}', [\App\Http\Controllers\Guest\GuestProjectDocumentController::class, 'show'])->name('show');
+            Route::get('/{projectDocument}/download', [\App\Http\Controllers\Guest\GuestProjectDocumentController::class, 'download'])->name('download');
         });
     });
 
