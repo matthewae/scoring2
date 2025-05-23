@@ -144,19 +144,25 @@
                     <div class="glass-effect rounded-xl p-4 hover:shadow-lg transition-shadow duration-300">
                         <div class="flex justify-between items-center">
                             <span class="text-gray-600">Total Dokumen</span>
-                            <span class="font-semibold text-gray-800">0</span>
+                            <span class="font-semibold text-gray-800">{{ $totalDocuments }}</span>
                         </div>
                     </div>
                     <div class="glass-effect rounded-xl p-4 hover:shadow-lg transition-shadow duration-300">
                         <div class="flex justify-between items-center">
-                            <span class="text-gray-600">Pengajuan Pending</span>
-                            <span class="font-semibold text-gray-800">{{ $assessmentRequests->where('status', 'pending')->count() }}</span>
+                            <span class="text-gray-600">Dokumen Dinilai</span>
+                            <span class="font-semibold text-gray-800">{{ $scoredDocuments }}</span>
                         </div>
                     </div>
                     <div class="glass-effect rounded-xl p-4 hover:shadow-lg transition-shadow duration-300">
                         <div class="flex justify-between items-center">
-                            <span class="text-gray-600">Pengajuan Selesai</span>
-                            <span class="font-semibold text-gray-800">{{ $assessmentRequests->where('status', 'completed')->count() }}</span>
+                            <span class="text-gray-600">Dokumen Pending</span>
+                            <span class="font-semibold text-gray-800">{{ $pendingDocuments }}</span>
+                        </div>
+                    </div>
+                    <div class="glass-effect rounded-xl p-4 hover:shadow-lg transition-shadow duration-300">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Dokumen Disetujui</span>
+                            <span class="font-semibold text-green-600 font-bold">{{ $approvedDocuments }}</span>
                         </div>
                     </div>
                 </div>

@@ -27,7 +27,14 @@ class DashboardController extends Controller
             return redirect()->route('dashboard.user.index');
         }
         $assessmentRequests = AssessmentRequest::with(['project', 'guest'])->get();
-        return view('dashboard.user.index', compact('assessmentRequests'));
+        
+        // Get document statistics
+        $totalDocuments = \App\Models\ProjectDocument::count();
+        $scoredDocuments = \App\Models\ProjectDocument::whereNotNull('score')->count();
+        $pendingDocuments = \App\Models\ProjectDocument::whereNull('score')->count();
+        $approvedDocuments = \App\Models\ProjectDocument::where('score', '>=', 60)->count();
+        
+        return view('dashboard.user.index', compact('assessmentRequests', 'totalDocuments', 'scoredDocuments', 'pendingDocuments', 'approvedDocuments'));
     }
 
     public function guide()

@@ -15,8 +15,13 @@ class GuestProjectDocumentController extends Controller
             ->whereHas('project', function ($query) use ($request) {
                 $query->where('guest_id', auth()->id());
             })
-            ->latest()
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
+
+        // Debug information
+        \Log::info('Guest ID: ' . auth()->id());
+        \Log::info('Total Documents: ' . $projectDocuments->total());
+        \Log::info('Current Page: ' . $projectDocuments->currentPage());
 
         return view('dashboard.guest.project-documents.history', compact('projectDocuments'));
     }

@@ -105,6 +105,12 @@
                                 <td class="px-6 py-4">
                                     <div class="text-sm font-medium text-gray-900">{{ $request->project->name }}</div>
                                     <div class="text-sm text-gray-600">{{ Str::limit($request->project->description, 50) }}</div>
+                                    @if($request->project->projectDocuments->count() > 0)
+                                        <div class="mt-2 text-xs text-emerald-600">
+                                            <i class="fas fa-file-alt mr-1"></i>
+                                            {{ $request->project->projectDocuments->count() }} dokumen terunggah
+                                        </div>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-gray-900">{{ $request->guest->name }}</div>
@@ -113,16 +119,30 @@
                                 <td class="px-6 py-4 text-sm text-gray-600">
                                     {{ $request->project->stage }}
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-600">
-                                    {{ $request->project->document_type->name }}
+                                <td class="px-6 py-4">
+                                    @forelse($request->project->projectDocuments as $document)
+                                        <div class="mb-2 text-sm text-gray-600">
+                                            <i class="fas fa-file mr-1"></i>
+                                            {{ $document->documentType->name ?? 'N/A' }}
+                                            <span class="text-xs {{ $document->status === 'pending' ? 'text-yellow-600' : ($document->status === 'approved' ? 'text-green-600' : 'text-red-600') }}">
+                                                ({{ ucfirst($document->status) }})
+                                            </span>
+                                        </div>
+                                    @empty
+                                        <span class="text-sm text-gray-500">Belum ada dokumen</span>
+                                    @endforelse
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $request->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' }}">
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ 
+                                        $request->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                        ($request->status === 'approved' ? 'bg-green-100 text-green-800' : 
+                                        'bg-red-100 text-red-800')
+                                    }}">
                                         {{ ucfirst($request->status) }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-600">
-                                    {{ $request->created_at->format('d M Y H:i') }}
+                                    {{ $request->created_at ? $request->created_at->format('d M Y H:i') : '-' }}
                                 </td>
                                 <td class="px-6 py-4 text-right text-sm font-medium">
                                     <a href="{{ route('dashboard.user.assessment-requests.show', $request->id) }}" class="text-indigo-600 hover:text-indigo-900 flex items-center justify-end space-x-1">

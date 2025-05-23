@@ -8,11 +8,18 @@ use Illuminate\Support\Facades\Auth;
 
 class AssessmentRequestController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $assessmentRequests = AssessmentRequest::with(['project', 'guest'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $query = AssessmentRequest::with(['project.documentTypes', 'guest', 'project.projectDocuments'])
+            ->orderBy('created_at', 'desc');
+
+        if ($request->has('status')) {
+            if ($request->status !== 'all') {
+                $query->where('status', $request->status);
+            }
+        }
+
+        $assessmentRequests = $query->paginate(10);
 
         return view('dashboard.user.assessment-requests.index', compact('assessmentRequests'));
     }

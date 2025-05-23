@@ -127,8 +127,8 @@
                                         <span class="font-medium">{{ $document->name }}</span>
                                     </div>
                                 </td>
-                                <td class="py-4">{{ $document->stage }}</td>
-                                <td class="py-4">{{ $document->type }}</td>
+                                <td class="py-4">{{ $document->document_type_code }}</td>
+                                <td class="py-4">{{ $document->documentType ? $document->documentType->name : '-' }}</td>
                                 <td class="py-4">
                                     <span class="px-3 py-1 rounded-full text-sm font-medium
                                         {{ $document->status === 'approved' ? 'bg-green-100 text-green-800' : 
