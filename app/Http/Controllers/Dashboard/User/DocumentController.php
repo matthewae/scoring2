@@ -28,15 +28,16 @@ class DocumentController extends Controller
     {
         $request->validate([
             'tahapan' => 'required|string|max:255',
-            'document_type_id' => 'required|exists:document_types,id',
-            'sub_document_type_id' => 'nullable|exists:document_types,id',
-            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:10240',
+            'document_type_code' => 'required|exists:document_types,code',
+            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:1048576', // 1GB max
             'source' => 'required|string|max:255',
-            'notes' => 'nullable|string',
+            'notes' => 'nullable|string|max:1000',
         ]);
 
-        $file = $request->file('file');
-        $path = $file->store('documents/user', 'public');
+        try {
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('documents/user', $fileName, 'public');
 
         $document = new ProjectDocument([
             'tahapan' => $request->tahapan,

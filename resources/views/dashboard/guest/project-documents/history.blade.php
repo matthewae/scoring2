@@ -60,7 +60,7 @@
         </div>
         
         <nav class="space-y-4">
-            <a href="/dashboard/guest" class="flex items-center text-gray-700 hover:text-emerald-600 transition-colors duration-200">
+            <a href="{{ route('dashboard.guest.index') }}" class="flex items-center text-gray-700 hover:text-emerald-600 transition-colors duration-200">
                 <i class="fas fa-home w-6"></i>
                 <span>Dashboard</span>
             </a>
@@ -96,7 +96,7 @@
                     <p class="mt-2 text-gray-600">Berikut adalah daftar dokumen yang telah Anda ajukan beserta statusnya.</p>
                 </div>
                 <a href="{{ route('dashboard.guest.project-documents.create') }}" 
-                   class="inline-flex items-center px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors duration-200">
+                    class="inline-flex items-center px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors duration-200">
                     <i class="fas fa-plus mr-2"></i>
                     Ajukan Dokumen Baru
                 </a>

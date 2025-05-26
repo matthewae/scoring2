@@ -24,20 +24,29 @@ class ProjectDocumentController extends Controller
         $this->authorize('update', $project);
 
         $request->validate([
-            'document_type_id' => 'required|exists:document_types,id',
+            'document_type_code' => 'required|exists:document_types,code',
             'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:10240', // 10MB max
-            'catatan' => 'nullable|string|max:1000',
-            'sumber' => 'nullable|string|max:255'
+            'notes' => 'nullable|string|max:1000',
+            'source' => 'nullable|string|max:255'
         ]);
 
-        $documentType = DocumentType::findOrFail($request->document_type_id);
+        $documentType = DocumentType::where('code', $request->document_type_code)->firstOrFail();
 
         try {
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('project-documents/' . $project->id, $fileName, 'public');
+
             $document = new ProjectDocument([
                 'project_id' => $project->id,
                 'document_type_code' => $documentType->code,
                 'status' => 'pending',
-                'remarks' => $request->catatan,
+                'file_name' => $fileName,
+                'file_type' => $file->getClientMimeType(),
+                'file_size' => $file->getSize(),
+                'file_content' => $filePath,
+                'notes' => $request->notes,
+                'source' => $request->source,
                 'uploaded_by' => auth()->id()
             ]);
 

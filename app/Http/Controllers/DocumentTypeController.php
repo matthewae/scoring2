@@ -21,10 +21,13 @@ class DocumentTypeController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255|unique:document_types',
-            'description' => 'required|string',
-            'weight' => 'required|numeric|min:0|max:100',
-            'is_required' => 'boolean'
+            'code' => 'required|string|max:50|unique:document_types,code',
+            'parent_code' => 'nullable|string|exists:document_types,code',
+            'no' => 'required|integer',
+            'tahapan' => 'required|string|max:255',
+            'tahapan_order' => 'required|integer',
+            'uraian' => 'required|string',
+            'is_file_required' => 'boolean'
         ]);
 
         DocumentType::create($validatedData);
@@ -35,7 +38,7 @@ class DocumentTypeController extends Controller
 
     public function show(DocumentType $documentType)
     {
-        $documentType->load('projects');
+        $documentType->load(['projects', 'projectDocumentTypes']);
         return view('document-types.show', compact('documentType'));
     }
 
@@ -47,10 +50,12 @@ class DocumentTypeController extends Controller
     public function update(Request $request, DocumentType $documentType)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255|unique:document_types,name,' . $documentType->id,
-            'description' => 'required|string',
-            'weight' => 'required|numeric|min:0|max:100',
-            'is_required' => 'boolean'
+            'parent_code' => 'nullable|string|exists:document_types,code',
+            'no' => 'required|integer',
+            'tahapan' => 'required|string|max:255',
+            'tahapan_order' => 'required|integer',
+            'uraian' => 'required|string',
+            'is_file_required' => 'boolean'
         ]);
 
         $documentType->update($validatedData);

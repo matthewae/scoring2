@@ -15,7 +15,7 @@ class DashboardController extends Controller
 
     public function guestDashboard()
     {
-        if (Auth::user()->status !== 'guest') {
+        if (Auth::user()->status === 'user') {
             return redirect()->route('dashboard.user.index');
         }
         return view('dashboard.guest.index');
