@@ -278,35 +278,44 @@
                     </div>
                 </div>
 
-                <!-- Document Types List -->
-                <div class="glass-effect rounded-xl p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-6">Daftar Dokumen {{ $tahapan }}</h3>
+                <!-- Document List Section -->
+                <div class="glass-effect rounded-2xl p-6 mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Daftar Dokumen yang Diperlukan</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        @foreach($documentTypes->where('tahapan', $tahapan) as $docType)
+                        @foreach($documentTypes as $docType)
                         @php
                             $projectDoc = $project->projectDocuments->where('document_type_code', $docType->code)->first();
-                            $status = $projectDoc ? ($projectDoc->score >= 60 ? 'approved' : 'pending') : 'missing';
+                            $status = $projectDoc ? ($projectDoc->score ? ($projectDoc->score >= 60 ? 'approved' : 'pending') : 'unscored') : 'missing';
                         @endphp
                         <div class="glass-effect rounded-lg p-4 transform hover:scale-105 transition-all duration-300">
                             <div class="flex items-start justify-between mb-3">
-                                <h4 class="font-semibold text-gray-800">{{ $docType->uraian }}</h4>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">{{ $docType->uraian }}</h4>
+                                    <p class="text-sm text-gray-600 mt-1">Kode: {{ $docType->code }}</p>
+                                    <p class="text-sm text-gray-600">Tahapan: {{ $docType->tahapan }}</p>
+                                    <div class="mt-2 text-sm text-gray-600">
+                                        <p class="italic">"{{ $docType->description }}"</p>
+                                    </div>
+                                </div>
                                 <span class="px-3 py-1 rounded-full text-xs font-medium {{ 
                                     $status === 'approved' ? 'bg-green-100 text-green-800' : 
                                     ($status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                                    'bg-gray-100 text-gray-800') 
+                                    ($status === 'unscored' ? 'bg-blue-100 text-blue-800' : 
+                                    'bg-gray-100 text-gray-800')) 
                                 }}">
                                     {{ 
                                         $status === 'approved' ? 'Disetujui' : 
                                         ($status === 'pending' ? 'Pending' : 
-                                        'Belum Upload') 
+                                        ($status === 'unscored' ? 'Belum Dinilai' : 
+                                        'Belum Upload')) 
                                     }}
                                 </span>
                             </div>
                             @if($projectDoc)
-                            <div class="text-sm text-gray-600 mb-2">
+                            <div class="text-sm text-gray-600">
                                 <div class="flex items-center space-x-2">
                                     <i class="fas fa-calendar-alt"></i>
-                                    <span>{{ $projectDoc->created_at->format('d M Y') }}</span>
+                                    <span>Upload: {{ $projectDoc->created_at->format('d M Y') }}</span>
                                 </div>
                                 @if($projectDoc->score)
                                 <div class="flex items-center space-x-2 mt-2">

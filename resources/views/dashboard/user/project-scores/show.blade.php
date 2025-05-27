@@ -175,19 +175,84 @@
                     <h4 class="text-2xl font-semibold text-gray-800">Hasil Penilaian per Tahapan</h4>
                     
                     @php
-                        $documentsByTahapan = $projectScore->documentTypes->groupBy('tahapan');
+                        // Get all document types
+                        $allDocumentTypes = App\Models\DocumentType::orderBy('tahapan_order')
+                            ->orderBy('no')
+                            ->orderBy('parent_code')
+                            ->get()
+                            ->groupBy('tahapan');
+                        
+                        // Get project's document types
+                        $projectDocumentTypes = $projectScore->documentTypes->keyBy('code');
                         
                         $tahapanStats = [];
-                        foreach($documentsByTahapan as $tahapan => $documents) {
-                            // Sort documents by no and parent_code
-                            $documents = $documents->sortBy(['no', 'parent_code']);
-                            
+                        foreach($allDocumentTypes as $tahapan => $documents) {
                             $tahapanStats[$tahapan] = [
-                                'approved' => $documents->where('pivot.status', 'approved')->count(),
-                                'pending' => $documents->where('pivot.status', '!=', 'approved')->count()
+                                'total' => $documents->count(),
+                                'uploaded' => $documents->filter(function($doc) use ($projectDocumentTypes) {
+                                    return isset($projectDocumentTypes[$doc->code]);
+                                })->count(),
+                                'approved' => $documents->filter(function($doc) use ($projectDocumentTypes) {
+                                    return isset($projectDocumentTypes[$doc->code]) && 
+                                           $projectDocumentTypes[$doc->code]->pivot->status === 'approved';
+                                })->count()
                             ];
                         }
                     @endphp
+
+                    <!-- Tabel Daftar Dokumen -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white glass-effect rounded-xl overflow-hidden">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis Dokumen</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Upload</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skor</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                @forelse($allDocumentTypes->flatten() as $document)
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $document->no ?: '-' }}</td>
+                                        <td class="px-6 py-4">
+                                            <div class="text-sm font-medium text-gray-900">{{ $document->code }}</div>
+                                            <div class="text-sm text-gray-500">{{ $document->uraian }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            @php
+                                                $projectDocument = $projectDocumentTypes[$document->code] ?? null;
+                                            @endphp
+                                            {{ $projectDocument && $projectDocument->pivot && $projectDocument->pivot->created_at ? $projectDocument->pivot->created_at->format('d M Y') : '-' }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @if(!$projectDocument)
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                                    Belum Upload
+                                                </span>
+                                            @else
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $projectDocument->pivot->status === 'approved' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                                    {{ ucfirst($projectDocument->pivot->status ?: 'pending') }}
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {{ $projectDocument ? ($projectDocument->pivot->score ?: '-') : '-' }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <a href="#" class="text-indigo-600 hover:text-indigo-900">Detail</a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-4 text-center text-gray-500 italic">Belum ada dokumen untuk tahapan ini</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
 
                     <!-- Tahapan Navigation -->
                     <div class="flex space-x-4 overflow-x-auto pb-4">
@@ -227,7 +292,7 @@
                                                 @endif
                                             </div>
                                             <h6 class="font-semibold text-gray-800">{{ $document->uraian }}</h6>
-                                            <p class="text-sm text-gray-600">Diajukan: {{ $document->pivot->created_at->format('d M Y H:i') }}</p>
+                                            <p class="text-sm text-gray-600">Diajukan: {{ $document->pivot->created_at ? $document->pivot->created_at->format('d M Y H:i') : '-' }}</p>
                                             @if($document->parent_code)
                                                 <p class="text-xs text-gray-500 mt-1">Parent: {{ $document->parent_code }}</p>
                                             @endif

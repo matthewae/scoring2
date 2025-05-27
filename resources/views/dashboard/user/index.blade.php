@@ -87,7 +87,7 @@
                 <h3 class="text-xl font-semibold mb-4 bg-gradient-to-r from-emerald-600 to-sky-600 text-transparent bg-clip-text">Kelola Dokumen</h3>
                 <p class="text-gray-600 mb-6">Upload dan kelola dokumen konstruksi Anda dengan mudah.</p>
                 <div class="space-y-3">
-                    <a href="{{ route('dashboard.user.documents.index') }}" class="block text-center bg-gradient-to-r from-emerald-500 to-sky-500 text-white px-6 py-3 rounded-xl hover:from-emerald-600 hover:to-sky-600 transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl">
+                    <a href="{{ route('dashboard.user.documents.upload') }}" class="block text-center bg-gradient-to-r from-emerald-500 to-sky-500 text-white px-6 py-3 rounded-xl hover:from-emerald-600 hover:to-sky-600 transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl">
                         <i class="fas fa-upload mr-2"></i>Upload Dokumen
                     </a>
                     <a href="{{ route('dashboard.user.documents.index') }}" class="block text-center bg-gradient-to-r from-gray-500 to-gray-600 text-white px-6 py-3 rounded-xl hover:from-gray-600 hover:to-gray-700 transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl">

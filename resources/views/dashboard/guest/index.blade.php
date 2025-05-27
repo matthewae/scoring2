@@ -9,21 +9,21 @@
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
         .gradient-background {
-            background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 50%, #10b981 100%);
+            background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%);
             transform: scale(0.98);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             color: white;
-            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.2);
+            box-shadow: 0 10px 30px rgba(30, 58, 138, 0.2);
         }
         .gradient-background:hover {
             transform: scale(0.99);
-            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 15px 35px rgba(30, 64, 175, 0.2);
         }
         .glass-effect {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 8px 32px rgba(14, 165, 233, 0.15);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(30, 58, 138, 0.1);
+            box-shadow: 0 8px 32px rgba(30, 58, 138, 0.1);
             transform: scale(0.98);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -80,7 +80,7 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-sky-50 via-purple-50 to-emerald-50 min-h-screen">
+<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 min-h-screen">
     <!-- Particles Background -->
     <div id="particles-js" class="fixed inset-0 -z-10 opacity-50"></div>
 
@@ -131,8 +131,8 @@
     <main class="md:ml-64 p-8">
         <!-- Welcome Banner -->
         <div class="gradient-background rounded-2xl shadow-lg p-8 mb-12 transform hover:scale-[1.01] transition-all duration-300">
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">Selamat Datang di Dashboard Guest</h1>
-            <p class="text-gray-600 text-lg">Ajukan penilaian dokumen konstruksi Anda dan pantau prosesnya dengan mudah.</p>
+            <h1 class="text-4xl font-bold text-white mb-4">Selamat Datang di Dashboard Guest</h1>
+            <p class="text-slate-100 text-lg leading-relaxed">Ajukan penilaian dokumen konstruksi Anda dan pantau prosesnya dengan mudah melalui sistem kami yang profesional.</p>
         </div>
 
         <!-- Video Tutorial Section -->
@@ -141,10 +141,8 @@
                 <i class="fas fa-play-circle text-blue-600 mr-3 animate-pulse"></i>
                 Video Tutorial
             </h2>
-            <div class="aspect-w-16 aspect-h-9 relative group overflow-hidden rounded-2xl border-2 border-sky-200/30">
-                <iframe class="w-full h-96 transition-all duration-500 group-hover:scale-105" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                <div class="absolute inset-0 bg-gradient-to-r from-sky-500/20 via-purple-500/20 to-emerald-500/20 group-hover:opacity-0 transition-opacity duration-500 rounded-xl"></div>
-                <div class="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="aspect-w-16 aspect-h-9 relative overflow-hidden rounded-2xl border border-slate-200">
+                <iframe class="w-full h-96" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
 

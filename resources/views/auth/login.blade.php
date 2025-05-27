@@ -46,7 +46,7 @@
         <!-- Logo Section -->
         <div class="hidden md:flex md:w-1/2 items-center justify-center p-12 relative z-10">
             <div class="text-center transform transition-all duration-500 hover:scale-105">
-                <img src="/images/logo fix2.png" alt="Logo" class="w-60 h-auto mb-6 mx-auto animate-fade-in">
+                <img src="/images/adbang.png" alt="Logo" class="w-60 h-auto mb-6 mx-auto animate-fade-in">
                 <h1 class="text-3xl font-bold text-white mb-2">Scoring Dokumen Konstruksi</h1>
                 <p class="text-white/90">Inovasi Menuju Konsultan Konstruksi Terkemuka</p>
             </div>

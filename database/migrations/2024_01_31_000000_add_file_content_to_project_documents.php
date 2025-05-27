@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('project_documents', function (Blueprint $table) {
             // Add new BLOB column for storing file content
-            $table->binary('file_content')->after('document_date');
-            $table->string('file_name')->after('document_date');
+            $table->binary('file_content')->after('file_path');
+            $table->string('file_name')->after('file_path');
             $table->string('file_type')->after('file_name');
             $table->integer('file_size')->after('file_type');
             

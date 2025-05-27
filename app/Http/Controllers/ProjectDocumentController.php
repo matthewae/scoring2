@@ -26,31 +26,51 @@ class ProjectDocumentController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'document' => 'required|file|mimes:pdf,doc,docx|max:1048576', // 1GB max
-        ]);
-
-        $project = Project::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'guest_id' => Auth::id(),
-            'status' => 'pending'
-        ]);
-
-        if ($request->hasFile('document')) {
-            $file = $request->file('document');
-            $path = $file->store('project-documents/' . $project->id, 'public');
-            
-            ProjectDocument::create([
-                'project_id' => $project->id,
-                'file_name' => $file->getClientOriginalName(),
-                'file_type' => $file->getClientMimeType(),
-                'file_size' => $file->getSize(),
-                'file_path' => $path
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'required|string',
+                'document' => [
+                    'required',
+                    'file',
+                    'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,zip,rar,7z,txt,jpg,jpeg,png,gif',
+                    'max:1048576', // 1GB max
+                ],
             ]);
-        }
+
+            $project = Project::create([
+                'name' => $request->name,
+                'description' => $request->description,
+                'guest_id' => Auth::id() ?? null,
+                'status' => 'pending'
+            ]);
+
+            if ($request->hasFile('document')) {
+                $file = $request->file('document');
+                
+                // Generate unique filename
+                $filename = uniqid() . '_' . $file->getClientOriginalName();
+                
+                // Store file with unique name
+                $path = $file->storeAs(
+                    'project-documents/' . $project->id,
+                    $filename,
+                    'public'
+                );
+                
+                // Create document record with detailed information
+                ProjectDocument::create([
+                    'project_id' => $project->id,
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_type' => $file->getClientMimeType(),
+                    'file_size' => $file->getSize(),
+                    'file_path' => $path,
+                    'uploaded_by' => Auth::id() ?? 'guest',
+                    'status' => 'pending',
+                    'notes' => 'File uploaded successfully',
+                    'source' => request()->ip()
+                ]);
+            }
 
         // Create assessment request
         AssessmentRequest::create([

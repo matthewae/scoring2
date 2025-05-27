@@ -100,7 +100,7 @@ class ProjectController extends Controller
                 ->withInput();
         }
     }
-
+=
     public function show(Project $project)
     {
         $this->authorize('view', $project);
@@ -178,7 +178,7 @@ class ProjectController extends Controller
             }
 
             return redirect()
-                ->route('dashboard.user.projects.index')
+                ->route(    'dashboard.user.projects.index')
                 ->with('success', 'Project berhasil diperbarui beserta dokumen-dokumennya.');
 
         } catch (\Exception $e) {
